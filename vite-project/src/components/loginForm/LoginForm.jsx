@@ -10,6 +10,7 @@ import Signup from "../../pages/signup/Signup";
 import EmployeeSignupPage from "../../pages/employee/EmployeeSignupPage";
 import { userGoogleLogin } from "../../services/userApis";
 import ForgotPassword from "../../pages/ForgotPassWord";
+import logo from '../../image/profcio__All.png'
 
 
 import {
@@ -27,13 +28,13 @@ import { useGoogleLogin } from "@react-oauth/google";
 export function LoginForm(){
     localStorage.removeItem('token')
     const navigate = useNavigate();
-    const [user,setUser] = useState({email:"",password:"",user_type:""});
+    const [user,setUser] = useState({email:"",password:"",user_type:"user"});
 
-    const SignupButton = () => {
-      localStorage.getItem('token')
-        navigate("/signup")
+    // const SignupButton = () => {
+    //   localStorage.getItem('token')
+    //     navigate("/signup")
+    // }
       
-    }
     
     const handleForgotPassword = () =>{
       const dataTosend = { email:user?.email };
@@ -53,8 +54,8 @@ export function LoginForm(){
     const [guser,setgUser] = useState();
 
     const handleGoogleLogin = useGoogleLogin({
-  onSuccess: (codeResponse) => setgUser(codeResponse),
-  onError: (error) => console.log("Login Failed:", error),
+    onSuccess: (codeResponse) => setgUser(codeResponse),
+    onError: (error) => console.log("Login Failed:", error),
 });
     
 
@@ -81,7 +82,7 @@ export function LoginForm(){
                       last_name : value.family_name,
                       password : value.id,
                   }
-                    const response = await axios.post('http://127.0.0.1:8000/auth/googleauth/',value)
+                    const response = await axios.post('http://127.0.0.1:8000/auth/googleauth/',values)
                     console.log(response);
                     const token = JSON.stringify(response.data);
 
@@ -128,43 +129,35 @@ export function LoginForm(){
         return true;
     };
 
-// Assuming validForm() is a function that checks form validity
-    const handleLogin = async (e) => {
+      const handleLogin = async (e) => {
       if (validForm()) {
-          handleLoading();
+        handleLoading();
 
-          try {
-              const response = await axios.post(UserLoginURL, user);
-              const token = JSON.stringify(response.data);
-              const decoded = jwtDecode(token);
-              console.log(decoded,'minhaaaaaaaaaaaas');
-              toast.success(`Welcome ${decoded.email}....!!`);
-              localStorage.setItem("token", token);
+        try {
+          const response = await axios.post(UserLoginURL, user);
+          const token = JSON.stringify(response.data);
+          const decoded = jwtDecode(token);
 
-              if (decoded.user_type === 'user') {
-                  navigate("/");
-
-              }else if(decoded.user_type === 'employee'){
-                  navigate('/employee/')
-              }else{
-                if(decoded.user_type === 'admin'){
-                  navigate('/admin/')
-                }
-              }
-              
-              console.log(decoded.user_type,'minhaaaaaaaaaaaas');
-
-          } catch (error) {
-              if (error.response && error.response.data.detail) {
-                  toast.error(error.response.data.detail);
-              } else {
-                  toast.error("An Error occurred, please try again");
-              }
-          } finally {
-              handleLoading();
+          if (decoded.user_type !== 'user') {
+            toast.error(`${decoded.user_type} not valid in this Login`);
+          } else {
+            toast.success(`Welcome ${decoded.username}....!!`);
+            localStorage.setItem("token", token);
+            navigate("/");
           }
+
+        } catch (error) {
+          if (error.response && error.response.data.detail) {
+            toast.error(error.response.data.detail);
+          } else {
+            toast.error("An Error occurred, please try again");
+          }
+        } finally {
+          handleLoading();
+        }
       }
     };
+
     const customGoogleLoginButton = (
       <button
         type="button"
@@ -183,80 +176,51 @@ export function LoginForm(){
     );
 
     return (
-    <div className="flex items-center justify-center h-screen">
-      {loading && <Loader />}
-      <Card className="w-96">
-        <CardHeader 
-        variant="gradient" 
-        color="gray" 
-        className="mb-4 grid h-28 place-items-center"  >
-          <Typography variant="h3" color="white">
-            Sign In
-          </Typography>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-4">
-        <Input
+      <div className="flex items-center justify-center h-screen" >
+        {loading && <Loader />}
+        <Card className="w-96"  >
+          <div className="flex justify-center items-center screen" >
+            <img  src={logo} alt="logo" width="130" height="150" className="w-35 h-20" />
+          </div>
+          <CardBody className="flex flex-col gap-4">
+          <Typography style={{ fontWeight: '500' }}>User Login</Typography>
+            <Input
               size="lg"
-              label="Email"
-              name="email"
+              placeholder="Enter Your Email"
               value={user.email}
-              onChange={(e) =>
-                setUser({ ...user, [e.target.name]: e.target.value })
-              }
+              name="email"
+              type="email"
+              onChange={(e) => setUser({ ...user, [e.target.name]: e.target.value })}
             />
-          <Input
+            <Input
+              placeholder="Enter your Password"
               type="password"
               size="lg"
-              label="Password"
+              // label="Password"
               name="password"
               value={user.password}
-              onChange={(e) =>
-                setUser({ ...user, [e.target.name]: e.target.value })
-              }
+              onChange={(e) => setUser({ ...user, [e.target.name]: e.target.value })}
             />
-          {/* <div className="-ml-2.5">
-            <Checkbox label="Remember Me" />
-          </div> */}
-        </CardBody>
-        <CardFooter className="pt-0">
-          <Button variant="gradient" fullWidth onClick={(e)=> handleLogin()}>
+          </CardBody>
+          <CardFooter className="pt-0">
+          <Button
+            variant="White"
+            fullWidth
+            onClick={(e) => handleLogin()}
+            className="bg-rose-500 text-gray-700"
+          >
             Sign In
           </Button>
-          <Typography variant="small" className="mt-6 flex justify-center">
-            Don&apos;t have an account?
-            <Typography onClick={SignupButton}
-              // as="a"
-              // href={SignupButton}
-              variant="small"
-              // color="212121"
-              className="ml-1 font-bold"
-            >
-              Sign up
+            <Typography variant="small" className="mt-6 flex justify-center">
+              Don&apos;t have an account?
+              <Link to='/signup'>Signup</Link>
+              <div className="text-center" style={{ margin: '2.5rem' }}>
+                {customGoogleLoginButton}
+              </div>
             </Typography>
-
-            <br />
-
-            {/* <Link to='forgot_password/'> */}
-            
-            {/* <Typography 
-  
-              onClick={handleForgotPassword}
-              // as="a"
-              // href={handleForgotPassword}
-              variant="small"
-              // color="212121"
-              className="ml-10 font-bold"
-            >
-              forgotpassword
-            </Typography> */}
-            <div className="text-center" style={{margin:"2.5rem"}}>
-              {customGoogleLoginButton}
-            </div>
-           {/* </Link> */}
-          </Typography>
-        </CardFooter>
-      </Card>
-      <Toaster/>
+          </CardFooter>
+        </Card>
+        <Toaster />
       </div>
     );
-} 
+    }    

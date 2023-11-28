@@ -15,13 +15,28 @@ import {
   InboxIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
- 
-export function AdminSidebar() {
+import PeopleIcon from '@mui/icons-material/People';
+import WorkIcon from '@mui/icons-material/Work';
+import { useNavigate } from "react-router-dom";
+
+export function Sidebar() {
+
+  const navigate = useNavigate()
+
+  const handleUserList = () =>{
+    navigate("/admin/users/")
+
+  }
+
+  const handleLogout = () =>{
+    localStorage.removeItem('token')
+    navigate('/admin/admin_login')
+  }
   return (
-    <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
+    <Card className="h-[calc(100vh-2rem)] max-w-[64] p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="mb-2 p-4">
         <Typography variant="h5" color="blue-gray">
-          Sidebar
+          Profcio Admin
         </Typography>
       </div>
       <List>
@@ -31,34 +46,45 @@ export function AdminSidebar() {
           </ListItemPrefix>
           Dashboard
         </ListItem>
-        <ListItem>
+          <ListItem>
+            <ListItemPrefix>
+              <WorkIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Services
+          </ListItem>
+          <ListItem onClick={handleUserList}>
+            <ListItemPrefix>
+              <PeopleIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Users
+          </ListItem>
+          <ListItem>
           <ListItemPrefix>
             <ShoppingBagIcon className="h-5 w-5" />
           </ListItemPrefix>
-          E-Commerce
+          Sales Report
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Inbox
+          Review
           <ListItemSuffix>
-            <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
           </ListItemSuffix>
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Profile
+          Booking
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Settings
+          Banner
         </ListItem>
-        <ListItem>
+        <ListItem onClick={handleLogout}>
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>

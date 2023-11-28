@@ -54,6 +54,7 @@ function ConfirmMail(){
                   </button> */}
                   <button
                     onClick={Gmail}
+                    color="pink"
                     className="text-white bg-purple-400 rounded-full sm:px-6 px-4 ms-5 my-2 xs:me-0 me-3 font-bold"
                   >
                     Go to Gmail inbox

@@ -1,11 +1,17 @@
 import React from "react";
 import AdminHomePage from "../../components/admin/AdminHomePage";
-
+import AdminSideBar from "./AdminSIdeBar";
+import UserLists from "./UserList";
 
 function AdminHome(){
     return(
-        
-        <AdminHomePage></AdminHomePage>
+        <div className="flex">
+
+        <AdminSideBar />
+        <div className="w-full ">
+        </div>
+       
+        </div>
     )
 }
-export default AdminHome
+export default AdminHome;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast,{ Toaster } from "react-hot-toast";
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,Link} from "react-router-dom";
 import axios from 'axios'
 import {Card,
     Input,
@@ -15,12 +15,14 @@ import Loader from '../Loading/Loading'
 export function EmployeeRegistrationForm(){
     const navigate = useNavigate()
 
+    const toLogin = () =>{
+      navigate("/employee/employee_login")
+    }
+
     const [other,setOther] = useState({conf_Password:"",check:false});
 
     // form 
     const [formData,setFormData] =useState({
-        // first_name:"",
-        // last_name:"",
         username:"",
         email:"",
         password:"",
@@ -41,16 +43,7 @@ export function EmployeeRegistrationForm(){
 
     //form data validation error
     const  validForm = (e) => {
-        // if(formData.first_name.trim()==""){
-        //     toast.error("first name not should be empty")
-        //     return false;
-        // }
-        // else if (formData.last_name.trim()==""){
-        //     toast.error("last name not should be empty")
-        //     return false;
-        // }
-
-        // console.log(formData,'mmmmmmmmmmmmmmmm');
+  
 
          if (formData.username.trim()===""){
             toast.error("username not should be empty")
@@ -83,14 +76,7 @@ export function EmployeeRegistrationForm(){
  
 
             return false
-        }
-        // else if(!other.check){
-        //     toast.error("please  agree T&C..!")
-        //     console.log('11111111111111111111111111111111111',);
-
-        //     return false
-        // }
-        
+        } 
         return true;
         
     }
@@ -140,14 +126,14 @@ export function EmployeeRegistrationForm(){
         }
       }
       return (
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex items-center justify-center h-screen" >
            {loading && <Loader />}
         <Card className="text-center" color="transparent" shadow={false}>
          <Typography variant="h4" color="blue-gray">
            Sign Up
          </Typography>
          <Typography color="gray" className="mt-1 font-normal">
-           Nice to meet you! Enter your details to register.
+           Welcome To Profcio ! Enter Employee details.
          </Typography>
          <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
            <div className="mb-1 flex flex-col gap-6">
@@ -214,9 +200,10 @@ export function EmployeeRegistrationForm(){
            </Button>
            <Typography color="gray" className="mt-4 text-center font-normal">
              Already have an account?{" "}
-             <a href="#" className="font-medium text-gray-900">
-               Sign In
-             </a>
+             <Link to="/employee/employee_login">
+                 Login
+              </Link>
+             
            </Typography>
          </form>
        </Card>
