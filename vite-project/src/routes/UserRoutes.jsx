@@ -9,7 +9,9 @@ import EmployeeListUser from "../pages/Home/EmployeeListPage";
 function UserRoutes(){
     return(
         <Routes>
-            
+            {/* <Route path="/forgot_password" element={<ForgotPassword />} /> */}
+            {/* <Route path="/Reset_password" element={<ResetPassword />} /> */}
+
             <Route element={<UserProtected />}>
                 <Route element={<Home />} path='/' />
             </Route>

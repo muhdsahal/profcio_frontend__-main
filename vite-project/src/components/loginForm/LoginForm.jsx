@@ -11,6 +11,7 @@ import EmployeeSignupPage from "../../pages/employee/EmployeeSignupPage";
 import { userGoogleLogin } from "../../services/userApis";
 import ForgotPassword from "../../pages/ForgotPassWord";
 import logo from '../../image/profcio__All.png'
+import login_img from  '../../image/login_illu.png'
 
 
 import {
@@ -30,21 +31,7 @@ export function LoginForm(){
     const navigate = useNavigate();
     const [user,setUser] = useState({email:"",password:"",user_type:"user"});
 
-    // const SignupButton = () => {
-    //   localStorage.getItem('token')
-    //     navigate("/signup")
-    // }
-      
-    
-    const handleForgotPassword = () =>{
-      const dataTosend = { email:user?.email };
-      navigate('/forgot_password',{state:{data:dataTosend}})
-      console.log(state,"forgot_password....<><><><><><><><><><><><>");
-    }
-    // const handleForgotPassword = () =>{
-    //     navigate('/forgot_password/');
-    //     console.log("forgotpassword,<><><><><><><><");
-    // };
+ 
     //for loading 
     const [loading,setLoading] = useState(false);
     const handleLoading = () =>setLoading((cur)=>!cur);
@@ -71,8 +58,10 @@ export function LoginForm(){
                             Authorization: `Bearer ${guser.access_token}`,
                             Accept : "application/json",
                         },
-                    }
-                    )
+                      }
+                      
+                      )
+                    
                     console.log(res.data,"goooogledataaa");
                     const value = res.data
                     const values ={
@@ -137,7 +126,7 @@ export function LoginForm(){
           const response = await axios.post(UserLoginURL, user);
           const token = JSON.stringify(response.data);
           const decoded = jwtDecode(token);
-
+          console.log(response,'data response,.............................');
           if (decoded.user_type !== 'user') {
             toast.error(`${decoded.user_type} not valid in this Login`);
           } else {
@@ -176,51 +165,65 @@ export function LoginForm(){
     );
 
     return (
-      <div className="flex items-center justify-center h-screen" >
-        {loading && <Loader />}
-        <Card className="w-96"  >
-          <div className="flex justify-center items-center screen" >
-            <img  src={logo} alt="logo" width="130" height="150" className="w-35 h-20" />
-          </div>
-          <CardBody className="flex flex-col gap-4">
-          <Typography style={{ fontWeight: '500' }}>User Login</Typography>
-            <Input
-              size="lg"
-              placeholder="Enter Your Email"
-              value={user.email}
-              name="email"
-              type="email"
-              onChange={(e) => setUser({ ...user, [e.target.name]: e.target.value })}
-            />
-            <Input
-              placeholder="Enter your Password"
-              type="password"
-              size="lg"
-              // label="Password"
-              name="password"
-              value={user.password}
-              onChange={(e) => setUser({ ...user, [e.target.name]: e.target.value })}
-            />
-          </CardBody>
-          <CardFooter className="pt-0">
-          <Button
-            variant="White"
-            fullWidth
-            onClick={(e) => handleLogin()}
-            className="bg-rose-500 text-gray-700"
-          >
-            Sign In
-          </Button>
-            <Typography variant="small" className="mt-6 flex justify-center">
-              Don&apos;t have an account?
-              <Link to='/signup'>Signup</Link>
-              <div className="text-center" style={{ margin: '2.5rem' }}>
-                {customGoogleLoginButton}
-              </div>
-            </Typography>
-          </CardFooter>
-        </Card>
-        <Toaster />
+      <div className="flex items-center justify-center h-screen">
+      {loading && <Loader />}
+      <div className="flex flex-col md:flex-row md:max-w-screen-xl">
+        {/* Left side (image) */}
+        <div className="order-2 md:order-1 md:w-1/2">
+          <img src={login_img} alt="Login" className="w-full h-auto" />
+        </div>
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <div className="order-1 md:order-2 md:w-1/2">
+          <Card className="w-full md:max-w-md mx-auto">
+            <div className="flex justify-center items-center mt-4">
+              <img src={logo} alt="logo" width="130" height="150" className="w-35 h-20" />
+            </div>
+            <CardBody className="flex flex-col gap-4 mt-4">
+              <Typography style={{ fontWeight: '500' }}>User Login</Typography>
+              <Input
+                size="lg"
+                placeholder="Enter Your Email"
+                value={user.email}
+                name="email"
+                type="email"
+                onChange={(e) => setUser({ ...user, [e.target.name]: e.target.value })}
+              />
+              <Input
+                placeholder="Enter your Password"
+                type="password"
+                size="lg"
+                name="password"
+                value={user.password}
+                onChange={(e) => setUser({ ...user, [e.target.name]: e.target.value })}
+              />
+            </CardBody>
+            <CardFooter className="pt-0">
+              <Button
+                variant="White"
+                fullWidth
+                onClick={handleLogin}
+                className="bg-rose-500 text-gray-700"
+              >
+                Sign In
+              </Button>
+              <Typography variant="small" className="mt-6 flex justify-center">
+                Don't have an account? <Link to="/signup">Signup</Link>
+                <div className="text-center" style={{ margin: '2.5rem' }}>
+                  {customGoogleLoginButton}
+                </div>
+                <Link to="/forgot_password" className="text-sm sm:mt-0 mt-4 text-black font-bold flex justify-center">
+                  Forgot password
+                </Link>
+              </Typography>
+            </CardFooter>
+          </Card>
+        </div>
       </div>
+      <Toaster />
+    </div>
     );
     }    

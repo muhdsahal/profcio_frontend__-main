@@ -4,7 +4,7 @@ import { EmployeeRegistrationForm } from "../../components/empolyee/EmployeeSign
 function EmployeeSignupPage(){
     return(
         <div>
-            <EmployeeRegistrationForm></EmployeeRegistrationForm>
+            <EmployeeRegistrationForm />
         </div>
     )
 }

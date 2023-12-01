@@ -110,7 +110,8 @@ export function SidebarWithSearch() {
           My Service
         </ListItem>
 
-        <ListItem as={Link} to="/employee/profile/" onClick={toProfile}>
+        <ListItem >
+        {/* as={Link} to="/employee/profile/" onClick={toProfile} */}
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
@@ -123,6 +124,7 @@ export function SidebarWithSearch() {
           </ListItemPrefix>
           Bookings
         </ListItem>
+        
         <ListItem>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />

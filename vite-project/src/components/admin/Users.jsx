@@ -60,8 +60,8 @@ function UserList() {
 
     console.log(userList, '<><><><><><><><><><><><><><><><><><><><><><><>');
     return (
-        <div className="flex flex-col h-screen">
-            <Card className="flex-1">
+        <div className="flex flex-col min-h-screen">
+            <Card className="flex-1 w-full xl:w-[1005px] ">
                 <table className="  text-left">
                     <thead>
                         <tr>

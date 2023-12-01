@@ -97,9 +97,9 @@ const handleLogin = async (e) => {
   }
 };
     return (
-      <div className="flex items-center justify-center h-screen" style={{ backgroundColor: 'black', color: 'white' }}>
+      <div className="flex items-center justify-center h-screen" >
         {loading && <Loader />}
-        <Card className="w-96" style={{ backgroundColor: 'black', color: 'white' }} >
+        <Card className="w-96"  >
           <div className="flex justify-center items-center screen" >
             <img  src={logo} alt="logo" width="130" height="150" className="w-35 h-20" />
           </div>

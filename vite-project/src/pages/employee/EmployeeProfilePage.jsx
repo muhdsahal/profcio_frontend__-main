@@ -1,10 +1,10 @@
-import React from "react";
-import EmployeeProfile from "../../components/empolyee/employeeProfile";
+// import React from "react";
+// import EmployeeProfile from "../../components/empolyee/employeeProfile";
 
-function EmployeeProfilePage(){
-    return(
+// function EmployeeProfilePage(){
+//     return(
 
-    <EmployeeProfile/>
-    )
-}
-export default EmployeeProfilePage;
+//     <EmployeeProfile/>
+//     )
+// }
+// export default EmployeeProfilePage;

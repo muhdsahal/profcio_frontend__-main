@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 import Home from '../../pages/Home/Home'
 import AdminRoutes from '../AdminRoutes'
 import UserRoutes from '../UserRoutes';
-import Login from '../../pages/login/login';
+import EmployeeLoginPage from '../../pages/employee/EmployeeLoginPage'
 
 function EmployeeProtected(){
     const token =localStorage.getItem('token');
@@ -23,7 +23,7 @@ function EmployeeProtected(){
             }
         }
     }else{
-        return <Login />
+        return <EmployeeLoginPage />
     }
 
 }

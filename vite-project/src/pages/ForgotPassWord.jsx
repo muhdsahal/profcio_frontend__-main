@@ -5,7 +5,7 @@ import { forgotPasswordUrl } from "../constants/constants";
 
 
 
-const ForgotPassword = () => {
+function ForgotPassword  ()  {
     const [email,setEmail] = useState('');
     const [message,setMessage] = useState('');
 

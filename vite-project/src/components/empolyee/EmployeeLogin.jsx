@@ -82,7 +82,7 @@ export function EmployeeLoginForm(){
                       password : value.id,
                   }
                     const response = await axios.post('http://127.0.0.1:8000/auth/emp/',value)
-                    console.log(response);
+                    console.log(response,'googledataaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
                     const token = JSON.stringify(response.data);
 
                     localStorage.setItem("token",token);
@@ -136,6 +136,7 @@ const handleLogin = async (e) => {
       const response = await axios.post(UserLoginURL, user);
       const token = JSON.stringify(response.data);
       const decoded = jwtDecode(token);
+      console.log(response,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
 
       if (decoded.user_type !== 'employee') {
         toast.error(`${decoded.user_type} not valid in this Login`);
@@ -213,7 +214,7 @@ const handleLogin = async (e) => {
             <Typography variant="small" className="mt-6 flex justify-center">
               Don&apos;t have an account?
               <Link to="/employee/signup">
-                 Login
+                 Signup
               </Link>
               <div className="text-center" style={{ margin: '2.5rem' }}>
                 {customGoogleLoginButton}

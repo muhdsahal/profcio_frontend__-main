@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from "react";
 import { ToastContainer,toast } from "react-toastify";
 import { Link,useNavigate } from "react-router-dom";
+import logo from "../image/profcio_logo.png"
 
 function ConfirmMail(){
     const navigate = useNavigate()
@@ -25,7 +26,7 @@ function ConfirmMail(){
             
             <div className="container mx-auto grid grid-rows-[13rem,5rem,3rem,5rem,4rem] -mt-32">
               <div className="flex justify-center">
-                {/* <img src={EmailOpen} className="w-56" alt="" /> */}
+                <img src={logo} className="w-56" alt="" />
               </div>
               <div className="mt-5 flex justify-center">
                 <p className="font-semibold sm:text-2xl text-xl">
@@ -38,12 +39,9 @@ function ConfirmMail(){
                   your <br /> address.
                 </p>
               </div>
-              <div
-                // onClick={() => navigate("/forgotpassword")}
-                className="text-sm sm:mt-0 mt-4 text-purple-400 font-bold flex justify-center"
-              >
-                <p className="cursor-pointer"> Change email</p>
-              </div>
+              {/* <Link to='/forgot_password' className="text-sm sm:mt-0 mt-4 text-black font-bold flex justify-center"> Forgot password </Link> */}
+              
+              
               <div className="flex justify-center ">
                 <div className="flex justify-between sm:text-lg text-sm">
                   {/* <button
@@ -54,8 +52,8 @@ function ConfirmMail(){
                   </button> */}
                   <button
                     onClick={Gmail}
-                    color="pink"
-                    className="text-white bg-purple-400 rounded-full sm:px-6 px-4 ms-5 my-2 xs:me-0 me-3 font-bold"
+                    color="black"
+                    className="text-white bg-black rounded-full sm:px-6 px-4 ms-5 my-2 xs:me-0 me-3 font-bold"
                   >
                     Go to Gmail inbox
                   </button>

@@ -5,6 +5,8 @@ import EmployeeRoutes from '../EmployeeRoutes'
 import AdminRoutes from '../AdminRoutes'
 import Login from '../../pages/login/login';
 import UserRoutes from '../UserRoutes';
+// import AdminLoginPage from '../../pages/admin/adminLoginPage';
+// import EmployeeLoginPage from '../../pages/employee/EmployeeLoginPage';
 
 function ProtectedRoutes(){
     const token = localStorage.removeItem('token');
@@ -24,8 +26,11 @@ function ProtectedRoutes(){
                 return <UserRoutes />
             }
         }
+    
     }else{
+       
         return <Login />
+        
     }
 }
 export default ProtectedRoutes

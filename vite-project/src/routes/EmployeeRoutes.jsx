@@ -5,7 +5,7 @@ import EmployeeProtected from "./ProtectedRoutes/EmployeeProtected";
 import EmployeeSignupPage from "../pages/employee/EmployeeSignupPage";
 // import ProtectedRoutes from "./ProtectedRoutes/ProtectedRoutes";
 import EmployeeLoginPage from "../pages/employee/EmployeeLoginPage";
-import EmployeeProfilePage from "../pages/employee/EmployeeProfilePage";
+// import EmployeeProfilePage from "../pages/employee/EmployeeProfilePage";
 
 
 
@@ -20,7 +20,7 @@ function EmployeeRoutes(){
 
             <Route element={<EmployeeProtected />}>
                 <Route path="/" element={<EmployeeHome />} />
-                    <Route path="/profile" element={<EmployeeProfilePage />} />
+                    {/* <Route path="/profile" element={<EmployeeProfilePage />} /> */}
 
                 
             </Route>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar&Footer/Navbar'
 import FooterPage from '../Navbar&Footer/FooterPage'
 import ServiceListPage from './ServiceListPage';
+import emp from '../../image/constrution_image1.png'
 // import carMecanic from '../../image/image_car.png';
 // import Plumber from '../../image/Plumber.png';
 // import Civil from '../../image/civilone.png'
@@ -24,30 +25,39 @@ function Home() {
   
   
   return (
-    <div>
-    <Navbar></Navbar>
-    <Typography variant="h3" color="black" style={customStyle} className='flex items-center justify-center' >
-      Welcome To Profcio
+    <div style={{ textAlign: 'center' }}>
+    <Navbar />
+      <Typography variant="h3" color="black" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', width: '100%' }}>
+        Welcome To Profcio
       </Typography>
-      <Typography variant="h3" color="black" style={customStyle} >
-      professional services <br />
-      homes and commercial properties
+      <br />
+      <br />
+      
+    
+    <div style={{ position: 'relative', width: '100%', maxWidth: '800px', margin: '0 auto' }}>
+      <img src={emp} alt="" style={{ width: '100%', height: 'auto' }} />
+      <Typography variant="h3" color="black" style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', width: '100%' }}>
+        Professional services <br />
+        Homes and commercial properties
       </Typography>
-      <u variant="h3" color="black" style={customStyle} >_________________________________________________________________</u>
-    <Typography variant='h2' color="black" style={customStyle} >
+    </div>
+
+    <u style={{ width: '100%', textAlign: 'center', marginBottom: '20px' }}>_________________________________________________________________</u>
+
+    <Typography variant='h2' color="black" style={{ textAlign: 'center' }}>
       Hire The Best Employees
       <br />
-      <Button variant="outlined" color='black'
-       className='flex items-start justify-start'
-       onClick={toEmployeeList}>Click here</Button>
+      <Button variant="outlined" color='black' onClick={toEmployeeList}>
+        Click here
+      </Button>
     </Typography>
-    <br />
 
-    
+    <br />
 
     <ServiceListPage />
     <FooterPage />
-    </div>
+  </div>
+
   )
 }
 

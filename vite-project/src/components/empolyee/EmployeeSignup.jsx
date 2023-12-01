@@ -26,7 +26,14 @@ export function EmployeeRegistrationForm(){
         username:"",
         email:"",
         password:"",
-        user_type : "employee"
+        user_type : "employee",
+        is_active : false,
+        phone_number:"",
+        work : "",
+        place : "",
+        description : "",
+        experience : "",
+        charge:""
     });
 
     const [user,setUser] = useState([]);
@@ -73,10 +80,41 @@ export function EmployeeRegistrationForm(){
         }
         else if(formData.password != other.conf_Password){
             toast.error("password mismatch !")
- 
 
             return false
         } 
+        else if(formData.phone_number.trim() === ""){
+          toast.error("phone number should not be empty")
+          return false
+        }
+        else if(formData.phone_number < 10 && phone_number > 10){
+          toast.error("phone number should be 10 digit")
+          return false
+        }
+        else if(formData.work.trim()=== ""){
+          toast.error("work should not be empty!")
+          return false
+        }
+        else if(formData.place.trim()=== ""){
+          toast.error("place should not be empty!")
+          return false
+        }
+        else if(formData.description.trim()=== ""){
+          toast.error("description should not be empty!")
+          return false
+        }
+        else if(formData.description.trim()=== ""){
+          toast.error("description should not be empty!")
+          return false
+        }
+        else if(formData.experience < 1 & formData.experience > 50 ){
+          toast.error(" experience should minimum 1 year !")
+          return false
+        }
+        else if(formData.charge  < 300 & formData.charge> 1500){
+          toast.error("description should not be empty!")
+          return false
+        }
         return true;
         
     }
@@ -95,12 +133,17 @@ export function EmployeeRegistrationForm(){
             
 
         setFormData({
-            // first_name:"",
-            // last_name:"",
-            username:"",
-            email:"",
-            password:"",
-            user_type:"employee"
+          username:"",
+          email:"",
+          password:"",
+          user_type : "employee",
+          is_active : false,
+          phone_number:"",
+          work : "",
+          place : "",
+          description : "",
+          experience : "",
+          charge:""
         })
         setOther({conf_Password:"",check:false})
         handleLoading();
@@ -126,33 +169,23 @@ export function EmployeeRegistrationForm(){
         }
       }
       return (
-        <div className="flex items-center justify-center h-screen" >
-           {loading && <Loader />}
-        <Card className="text-center" color="transparent" shadow={false}>
-         <Typography variant="h4" color="blue-gray">
-           Sign Up
-         </Typography>
-         <Typography color="gray" className="mt-1 font-normal">
-           Welcome To Profcio ! Enter Employee details.
-         </Typography>
-         <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-           <div className="mb-1 flex flex-col gap-6">
-             {/* <Typography variant="h6" color="blue-gray" className="-mb-3">
-               Your Name
-             </Typography> */}
-             {/* <Input
+        <div className="flex items-center justify-center h-screen">
+  {loading && <Loader />}
+  <Card className="text-center" color="transparent" shadow={false}>
+    <Typography variant="h4" color="blue-gray">
+      Sign Up
+    </Typography>
+    <Typography color="gray" className="mt-1 font-normal">
+      Welcome To Profcio! Enter Employee details.
+    </Typography>
+    <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+      <div className="mb-1 flex flex-col gap-6">
+        <div className="flex gap-6">
+          {/* First Line */}
+          <div className="flex-1">
+          <Input
                size="lg"
-               placeholder="Enter your first name"
-               value={formData.first_name} name="first_name"
-               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
-               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-               labelProps={{
-                 className: "before:content-none after:content-none",
-               }}
-             /> */}
-             <Input
-               size="lg"
-               placeholder="Enter your last username"
+               placeholder="Enter your username"
                value={formData.username} name="username"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -160,10 +193,12 @@ export function EmployeeRegistrationForm(){
                  className: "before:content-none after:content-none",
                }}
              />
-           <Input
+          </div>
+          <div className="flex-1">
+          <Input
                size="lg"
                placeholder="Enter your  email"
-              
+          
                value={formData.email} name="email"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -171,7 +206,13 @@ export function EmployeeRegistrationForm(){
                  className: "before:content-none after:content-none",
                }}
              />
-             <Input
+          </div>
+
+        </div>
+        <div className="flex gap-6">
+          {/* First Line */}
+          <div className="flex-1">
+          <Input
                size="lg"
                placeholder="Enter your password"
               
@@ -182,7 +223,9 @@ export function EmployeeRegistrationForm(){
                  className: "before:content-none after:content-none",
                }}
              />
-             <Input
+          </div>
+          <div className="flex-1">
+          <Input
                size="lg"
                placeholder="Enter your confirm password"
               
@@ -193,22 +236,105 @@ export function EmployeeRegistrationForm(){
                  className: "before:content-none after:content-none",
                }}
              />
-           </div>
-           <Button className="mt-6" fullWidth
-           onClick={(e)=>{handleSubmit()}}>
-             signup
-           </Button>
-           <Typography color="gray" className="mt-4 text-center font-normal">
-             Already have an account?{" "}
-             <Link to="/employee/employee_login">
-                 Login
-              </Link>
-             
-           </Typography>
-         </form>
-       </Card>
-       <Toaster/>
-       </div>
+          </div>
+        </div>
+        <div className="flex gap-6">
+        <div className="flex-1">
+        <Input
+               size="lg"
+               placeholder="Enter your Phone number"
+          
+               value={formData.phone_number} name="phone_number"
+               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
+               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+               labelProps={{
+                 className: "before:content-none after:content-none",
+               }}
+             />
+          </div>
+          <div className="flex-1">
+          <Input
+               size="lg"
+               placeholder="Enter your  work"
+          
+               value={formData.work} name="work"
+               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
+               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+               labelProps={{
+                 className: "before:content-none after:content-none",
+               }}
+             />
+          </div>
+          </div>
+          <div className="flex gap-6">
+          <div className="flex-1">
+          <Input
+               size="lg"
+               placeholder="Enter your  place"
+          
+               value={formData.place} name="place"
+               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
+               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+               labelProps={{
+                 className: "before:content-none after:content-none",
+               }}
+             />
+          </div>
+          <div className="flex-1">
+          <Input
+               size="lg"
+               placeholder="Enter your  description"
+          
+               value={formData.description} name="description"
+               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
+               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+               labelProps={{
+                 className: "before:content-none after:content-none",
+               }}
+             />
+          </div>
+          </div>
+          <div className="flex gap-6">
+          <div className="flex-1">
+          <Input
+               size="lg"
+               placeholder="Enter your  experience"
+          
+               value={formData.experience} name="experience"
+               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
+               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+               labelProps={{
+                 className: "before:content-none after:content-none",
+               }}
+             />
+          </div>
+          <div className="flex-1">
+          <Input
+               size="lg"
+               placeholder="Enter your  Charge"
+          
+               value={formData.charge} name="charge"
+               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
+               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+               labelProps={{
+                 className: "before:content-none after:content-none",
+               }}
+             />
+          </div>
+          </div>
+        <Button className="mt-6" fullWidth onClick={(e) => handleSubmit()}>
+          Sign Up
+        </Button>
+        <Typography color="gray" className="mt-4 text-center font-normal">
+          Already have an account?{" "}
+          <Link to="/employee/employee_login">Login</Link>
+        </Typography>
+      </div>
+    </form>
+  </Card>
+  <Toaster />
+</div>
+
      );
 
 

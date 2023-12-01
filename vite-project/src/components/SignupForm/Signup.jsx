@@ -40,7 +40,7 @@ export function SimpleRegistrationForm() {
     return regex.test(email);
   };
 
- 
+  
 
   // form data validation error
   const validForm = (e) => {

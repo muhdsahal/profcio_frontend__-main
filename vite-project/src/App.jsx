@@ -24,7 +24,7 @@ function App() {
           <Route element={<ProtectedRoutes />} >
           <Route element={<Login />} path="/login" />
           <Route element={<ForgotPassword />}  path="/forgot_password/" />
-          <Route exact element={<ResetPassword />} path="/reset_password/:ResetToken/" />
+          <Route  element={<ResetPassword />} path="/reset_password/:ResetToken/" />
           </Route> 
           <Route element={<UserRoutes />} path="/*" />
           <Route element={<EmployeeRoutes />} path="/employee/*" />
