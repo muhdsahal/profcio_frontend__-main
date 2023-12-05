@@ -3,7 +3,7 @@ import axios from "axios"
 import {
   Typography, Button, Card, CardContent
 } from "@material-tailwind/react";
-import car_mec from "../../image/car_mechanic.jpeg";
+// import car_mec from "../../image/car_mechanic.jpeg";
 // import plumber from "../../image/plumber.jpg"
 
 
@@ -12,18 +12,19 @@ import car_mec from "../../image/car_mechanic.jpeg";
 
 function EmployeeList  () {
   const [employees, setEmployees] = useState([]);
-
+  console.log(employees,'employeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
   useEffect(() => {
     // Make API request to fetch employee data
     axios.get('http://127.0.0.1:8000/auth/employeelisting/')
       .then(response => {
         setEmployees(response.data); // Assuming the API response contains an array of employee objects
-        console.log(setEmployees,'#######################################');
       })
       .catch(error => {
         console.error('Error fetching employee data:', error);
       });
   }, []);
+  
+
   return(
     <div>
         <h2 className="text-2xl font-semibold mb-4">Employees</h2>
@@ -31,7 +32,7 @@ function EmployeeList  () {
             {employees.map((employee) => (
               <div key={employee.username} className="max-w-xs bg-white border rounded-lg overflow-hidden shadow-lg">
                 <img
-                  src={car_mec} // Assuming `employee.username` contains the image URL
+                  src={employee.profile_photo} // Assuming `employee.username` contains the image URL
                   alt="card-image"
                   className="w-full h-48 object-cover"
                 />

@@ -27,13 +27,14 @@ export function EmployeeRegistrationForm(){
         email:"",
         password:"",
         user_type : "employee",
-        is_active : false,
-        phone_number:"",
+        phone_number:'+91'+'',
         work : "",
         place : "",
         description : "",
-        experience : "",
-        charge:""
+        experience : 0,
+        charge:0,
+        profile_photo : null
+        
     });
 
     const [user,setUser] = useState([]);
@@ -49,7 +50,7 @@ export function EmployeeRegistrationForm(){
     }
 
     //form data validation error
-    const  validForm = (e) => {
+    const  validForm = () => {
   
 
          if (formData.username.trim()===""){
@@ -87,10 +88,10 @@ export function EmployeeRegistrationForm(){
           toast.error("phone number should not be empty")
           return false
         }
-        else if(formData.phone_number < 10 && phone_number > 10){
-          toast.error("phone number should be 10 digit")
-          return false
-        }
+        // else if(formData.phone_number.length !== 10){
+        //   toast.error("phone number should be 10 digit")
+        //   return false
+        // }
         else if(formData.work.trim()=== ""){
           toast.error("work should not be empty!")
           return false
@@ -107,29 +108,53 @@ export function EmployeeRegistrationForm(){
           toast.error("description should not be empty!")
           return false
         }
-        else if(formData.experience < 1 & formData.experience > 50 ){
+        else if(formData.experience < 1 && formData.experience > 50 ){
           toast.error(" experience should minimum 1 year !")
           return false
         }
-        else if(formData.charge  < 300 & formData.charge> 1500){
+        else if(formData.charge  < 300 && formData.charge> 1500){
           toast.error("description should not be empty!")
           return false
         }
         return true;
         
     }
+        // upload image 
+        const handleInputChange = () =>{
+          const {name,value} = e.target
+          setFormData((preFormData) =>({
+            ...preFormData,
+            [name]:value,
+          }))
+        }
+
+        const handleImageChange = (e) => {
+          const selectedPhoto = e.target.files[0];
+          console.log('Selected Photo:', selectedPhoto);
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            profile_photo: selectedPhoto,
+          }));
+        };
+
+
         // form submit handler
-        const handleSubmit = async(e) => {
+        const handleSubmit = async() => {
           
           console.log(formData);
             if (validForm()){
             handleLoading();
         try{
-            const response = await axios.post(empRegisterURL,formData);
+          const formDataWithPhoto = new formData();
+          object.entries(formData).forEach(([key,value]) =>{
+            formDataWithPhoto.append(key,value)
+          })
+            formDataWithPhoto.append('profile_photo',formData.profile_photo)
+            console.log(formDataWithPhoto,'oooooooooooooooooooooooooooooooooooooooo');
 
-            const user_type = response.data.user_type
+            const response = await axios.post(empRegisterURL,formData);
+            // console.log(response.data,"dataaaaaaaaaaaaaaaaaaa");
             toast.success("Registraion success..!")
-            
             
 
         setFormData({
@@ -137,39 +162,42 @@ export function EmployeeRegistrationForm(){
           email:"",
           password:"",
           user_type : "employee",
-          is_active : false,
-          phone_number:"",
+          phone_number:'+91'+'',
           work : "",
           place : "",
           description : "",
-          experience : "",
-          charge:""
+          experience : 0,
+          charge:0,
+          profile_photo: null
         })
         setOther({conf_Password:"",check:false})
         handleLoading();
-        console.log(formData,'dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        console.log('registration successfull ',response.data);
         navigate("/confirm")
         }catch(error){
+          console.log('ooooooooooooooooo',error,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+        handleLoading();
+            if (error.response && error.response.data) {
+              const { email, username } = error.response.data;
+              if (email) {
+                toast.error(email[0]);
+              }
+              if (username) {
+                toast.error(username[0]);
+              }
+            } else {
+              toast.error("An error occurred during registration.");
             
-            handleLoading();
-              if (error.response.data){
-                console.log(error.response.data.email);
-                if (error.response.data.email){
-                    toast.error(error.response.data.email[0])
-                }
-                if (error.response.data.username){
-                    toast.error(error.response.data.username[0])
-                }
-              }else{
-                toast.error("An error occurred during registration..")
-           
+
             }
-          }
+        }
+      
 
         }
+
       }
-      return (
-        <div className="flex items-center justify-center h-screen">
+    return (
+  <div className="flex items-center justify-center h-screen">
   {loading && <Loader />}
   <Card className="text-center" color="transparent" shadow={false}>
     <Typography variant="h4" color="blue-gray">
@@ -197,7 +225,7 @@ export function EmployeeRegistrationForm(){
           <div className="flex-1">
           <Input
                size="lg"
-               placeholder="Enter your  email"
+               placeholder="Enter your email"
           
                value={formData.email} name="email"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
@@ -225,18 +253,20 @@ export function EmployeeRegistrationForm(){
              />
           </div>
           <div className="flex-1">
-          <Input
-               size="lg"
-               placeholder="Enter your confirm password"
-              
-               value={other.conf_Passwordpassword} name="conf_Password" type="password"
-               onChange={(e)=>{setOther({...other,[e.target.name]:e.target.value})}}
-               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-               labelProps={{
-                 className: "before:content-none after:content-none",
-               }}
-             />
+            <Input
+              size="lg"
+              placeholder="Enter your confirm password"
+              value={other.conf_Password}  
+              name="conf_Password"
+              type="password"
+              onChange={(e) => { setOther({ ...other, [e.target.name]: e.target.value }) }}
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+            />
           </div>
+
         </div>
         <div className="flex gap-6">
         <div className="flex-1">
@@ -321,8 +351,29 @@ export function EmployeeRegistrationForm(){
                }}
              />
           </div>
+          <br />
+
+          <div className="flex gap-6">
+            <div className="flex-1">
+              
+              <input
+                type="file"
+                id="profile_photo"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+              {formData.profile_photo && (
+                <img
+                  src={`${empRegisterURL}${formData.profile_photo}`}
+                  alt="Profile Preview"
+                  style={{ maxWidth: '100%', marginTop: '10px' }}
+                />
+              )}
+            </div>
+            </div>
           </div>
-        <Button className="mt-6" fullWidth onClick={(e) => handleSubmit()}>
+          
+        <Button className="mt-6" fullWidth onClick={handleSubmit}>
           Sign Up
         </Button>
         <Typography color="gray" className="mt-4 text-center font-normal">
