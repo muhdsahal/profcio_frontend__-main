@@ -5,6 +5,7 @@ import UserProtected from "./ProtectedRoutes/UserProtected";
 import ForgotPassword from "../pages/ForgotPassWord";
 import ResetPassword from "../pages/ResetPassword";
 import EmployeeListUser from "../pages/Home/EmployeeListPage";
+import UserProfilePage from "../pages/Home/UserProfilePage";
 
 function UserRoutes(){
     return(
@@ -16,6 +17,7 @@ function UserRoutes(){
                 <Route element={<Home />} path='/' />
             </Route>
                     <Route element={<EmployeeListUser />} path="/employeelist" />
+                    <Route element={<UserProfilePage />} path="/userprofile" />
         </Routes>
     )
 }

@@ -117,12 +117,12 @@ export function SimpleRegistrationForm() {
     
           <Card className="text-center bg-transparent shadow-none">
           
-            <Typography variant="h4" color="white">
+            <Typography variant="h4" color="black">
               Sign Up
             </Typography>
     
-            <Typography color="white" className="mt-1 font-normal">
-              Welcome To Profcio ! Enter your details to register.
+            <Typography color="black" className="mt-1 font-normal">
+              Welcome To Profcio ! Enter your details to register
               <div className="flex justify-center items-center screen" >
               <img  src={logo} alt="logo" width="130" height="150" className="w-35 h-20" />
             </div>

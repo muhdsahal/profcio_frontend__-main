@@ -23,7 +23,6 @@ import {
     Checkbox,
     Button,
   } from "@material-tailwind/react";
-import { useGoogleLogin } from "@react-oauth/google";
 
 export function EmployeeLoginForm(){
     localStorage.removeItem('token')
@@ -50,62 +49,7 @@ export function EmployeeLoginForm(){
     const handleLoading = () =>setLoading((cur)=>!cur);
 
 
-    const [guser,setgUser] = useState();
-
-    const handleGoogleLogin = useGoogleLogin({
-    onSuccess: (codeResponse) => setgUser(codeResponse),
-    onError: (error) => console.log("Login Failed:", error),
-});
-    
-
-        useEffect(()=>{
-            const handleGoogleAuth = async () =>{
-                try{
-                    if(guser){
-                    handleLoading();
-                    const res = await axios.get(
-                    `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${guser.access_token}`,
-                    {
-                        headers : {
-                            Authorization: `Bearer ${guser.access_token}`,
-                            Accept : "application/json",
-                        },
-                    }
-                    )
-                    console.log(res.data,"goooogledataaa");
-                    const value = res.data
-                    const values ={
-                      email : value.email,
-                      username : value.email,
-                      first_name : value.given_name,
-                      last_name : value.family_name,
-                      password : value.id,
-                  }
-                    const response = await axios.post('http://127.0.0.1:8000/auth/emp/',value)
-                    console.log(response,'googledataaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                    const token = JSON.stringify(response.data);
-
-                    localStorage.setItem("token",token);
-
-                    handleLoading();
-                    toast.success("Signed with Google..!")
-                    navigate("/");
-                }
-            }catch(err){
-                handleLoading();
-                console.log(err);
-                if (err.response.data){
-                    toast.error(err.response.data.email[0])
-                }else{
-                    toast.error("Google verification failed")
-                }
-            }
-        };
-        if (guser){
-          handleGoogleAuth();
-        } 
-      },[guser]);
-
+   
     //email validation
     const validEmail = (email) => {
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -141,8 +85,8 @@ const handleLogin = async (e) => {
       if (decoded.user_type !== 'employee') {
         toast.error(`${decoded.user_type} not valid in this Login`);
       } else {
-        toast.success(`Welcome ${decoded.username}....!!`);
         localStorage.setItem("token", token);
+        toast.success(`Welcome ${decoded.username}....!!`);
         navigate("/employee");
       }
 
@@ -158,22 +102,7 @@ const handleLogin = async (e) => {
   }
 };
 
-    const customGoogleLoginButton = (
-      <button
-        type="button"
-        className="flex items-center bg-light px-4 py-2 rounded"
-        onClick={()=>handleGoogleLogin()}
-      >
-        {/* <img
-          src={userImage}
-          alt="Google logo"
-          className="google-logo img-fluid"
-          width="22"
-          height="22"
-        /> */}
-        <span className="button-text ms-2">Continue with Google</span>
-      </button>
-    );
+    
 
     return (
       <div className="flex items-center justify-center h-screen" >
@@ -216,9 +145,7 @@ const handleLogin = async (e) => {
               <Link to="/employee/signup">
                  Signup
               </Link>
-              <div className="text-center" style={{ margin: '2.5rem' }}>
-                {customGoogleLoginButton}
-              </div>
+              
             </Typography>
           </CardFooter>
         </Card>

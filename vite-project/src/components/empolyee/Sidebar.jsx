@@ -111,7 +111,7 @@ export function SidebarWithSearch() {
         </ListItem>
 
         <ListItem >
-        {/* as={Link} to="/employee/profile/" onClick={toProfile} */}
+        as={Link} to="/employee/profile/" onClick={toProfile}
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>

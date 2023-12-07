@@ -5,7 +5,6 @@ import { useNavigate ,Link} from "react-router-dom";
 import axios from 'axios'
 import {Card,
     Input,
-    Checkbox,
     Button,
     Typography } from "@material-tailwind/react";
 
@@ -19,7 +18,7 @@ export function EmployeeRegistrationForm(){
       navigate("/employee/employee_login")
     }
 
-    const [other,setOther] = useState({conf_Password:"",check:false});
+    const [other,setOther] = useState({conf_Password:""});
 
     // form 
     const [formData,setFormData] =useState({
@@ -33,11 +32,13 @@ export function EmployeeRegistrationForm(){
         description : "",
         experience : 0,
         charge:0,
-        profile_photo : null
+        
         
     });
 
-    const [user,setUser] = useState([]);
+    // const [user,setUser] = useState([]);
+    // const [imagefile,setimagefile]=useState(null)
+
 
     // for loading
     const [loading,setLoading] = useState(false);
@@ -120,40 +121,33 @@ export function EmployeeRegistrationForm(){
         
     }
         // upload image 
-        const handleInputChange = () =>{
-          const {name,value} = e.target
-          setFormData((preFormData) =>({
-            ...preFormData,
-            [name]:value,
-          }))
-        }
+        // const handleInputChange = () =>{
+        //   const {name,value} = e.target
+        //   setFormData((preFormData) =>({
+        //     ...preFormData,
+        //     [name]:value,
+        //   }))
+        // }
 
-        const handleImageChange = (e) => {
-          const selectedPhoto = e.target.files[0];
-          console.log('Selected Photo:', selectedPhoto);
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            profile_photo: selectedPhoto,
-          }));
-        };
+        // const handleImageChange = (e) => {
+        //   setimagefile(e.target.files[0])
+
+        // };
 
 
         // form submit handler
         const handleSubmit = async() => {
           
-          console.log(formData);
+          // console.log(formData,'formdata....................................);
+    
             if (validForm()){
             handleLoading();
         try{
-          const formDataWithPhoto = new formData();
-          object.entries(formData).forEach(([key,value]) =>{
-            formDataWithPhoto.append(key,value)
-          })
-            formDataWithPhoto.append('profile_photo',formData.profile_photo)
-            console.log(formDataWithPhoto,'oooooooooooooooooooooooooooooooooooooooo');
-
+          
+          
+            
             const response = await axios.post(empRegisterURL,formData);
-            // console.log(response.data,"dataaaaaaaaaaaaaaaaaaa");
+            console.log(response.data,"dataaaaaaaaaaaaaaaaaaa");
             toast.success("Registraion success..!")
             
 
@@ -168,14 +162,14 @@ export function EmployeeRegistrationForm(){
           description : "",
           experience : 0,
           charge:0,
-          profile_photo: null
+          
         })
-        setOther({conf_Password:"",check:false})
+        setOther({conf_Password:""})
         handleLoading();
         console.log('registration successfull ',response.data);
         navigate("/confirm")
         }catch(error){
-          console.log('ooooooooooooooooo',error,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+          console.log(error,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
         handleLoading();
             if (error.response && error.response.data) {
               const { email, username } = error.response.data;
@@ -206,14 +200,19 @@ export function EmployeeRegistrationForm(){
     <Typography color="gray" className="mt-1 font-normal">
       Welcome To Profcio! Enter Employee details.
     </Typography>
-    <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+    <div className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"  >
       <div className="mb-1 flex flex-col gap-6">
         <div className="flex gap-6">
           {/* First Line */}
+          
           <div className="flex-1">
+          <Typography  color="blue-gray-200" className="-mb-3">
+               Enter Your Username
+          </Typography>
+          <br />
           <Input
                size="lg"
-               placeholder="Enter your username"
+               placeholder="username"
                value={formData.username} name="username"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -223,9 +222,13 @@ export function EmployeeRegistrationForm(){
              />
           </div>
           <div className="flex-1">
+          <Typography  color="blue-gray-200" className="-mb-3">
+               Enter Your Email
+          </Typography>
+          <br />
           <Input
                size="lg"
-               placeholder="Enter your email"
+               placeholder="email"
           
                value={formData.email} name="email"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
@@ -238,11 +241,15 @@ export function EmployeeRegistrationForm(){
 
         </div>
         <div className="flex gap-6">
-          {/* First Line */}
+          
           <div className="flex-1">
+          <Typography  color="blue-gray-200" className="-mb-3">
+               Enter Your Password
+          </Typography>
+          <br />
           <Input
                size="lg"
-               placeholder="Enter your password"
+               placeholder="**********"
               
                value={formData.password} name="password" type="password"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
@@ -253,9 +260,13 @@ export function EmployeeRegistrationForm(){
              />
           </div>
           <div className="flex-1">
+          <Typography  color="blue-gray-200" className="-mb-3">
+               Enter  Confirm password
+          </Typography>
+          <br />
             <Input
               size="lg"
-              placeholder="Enter your confirm password"
+              placeholder="*********"
               value={other.conf_Password}  
               name="conf_Password"
               type="password"
@@ -270,10 +281,13 @@ export function EmployeeRegistrationForm(){
         </div>
         <div className="flex gap-6">
         <div className="flex-1">
+        <Typography  color="blue-gray-200" className="-mb-3">
+               Enter Your Phone Number
+          </Typography>
+          <br />
         <Input
                size="lg"
-               placeholder="Enter your Phone number"
-          
+               
                value={formData.phone_number} name="phone_number"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -282,10 +296,15 @@ export function EmployeeRegistrationForm(){
                }}
              />
           </div>
+          
           <div className="flex-1">
+          <Typography  color="blue-gray-200" className="-mb-3">
+              Enter Your Work 
+          </Typography>
+          <br />
           <Input
                size="lg"
-               placeholder="Enter your  work"
+               placeholder=" work"
           
                value={formData.work} name="work"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
@@ -298,9 +317,13 @@ export function EmployeeRegistrationForm(){
           </div>
           <div className="flex gap-6">
           <div className="flex-1">
+          <Typography  color="blue-gray-200" className="-mb-3">
+               Enter Your Place 
+          </Typography>
+          <br />
           <Input
                size="lg"
-               placeholder="Enter your  place"
+               placeholder="place"
           
                value={formData.place} name="place"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
@@ -311,9 +334,13 @@ export function EmployeeRegistrationForm(){
              />
           </div>
           <div className="flex-1">
+          <Typography  color="blue-gray-200" className="-mb-3">
+               Enter Your description 
+          </Typography>
+          <br />
           <Input
                size="lg"
-               placeholder="Enter your  description"
+               placeholder="description"
           
                value={formData.description} name="description"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
@@ -326,9 +353,13 @@ export function EmployeeRegistrationForm(){
           </div>
           <div className="flex gap-6">
           <div className="flex-1">
+          <Typography  color="blue-gray-200" className="-mb-3">
+               Enter Your  Experience 
+          </Typography>
+          <br />
           <Input
                size="lg"
-               placeholder="Enter your  experience"
+               placeholder="experience"
           
                value={formData.experience} name="experience"
                onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
@@ -339,7 +370,13 @@ export function EmployeeRegistrationForm(){
              />
           </div>
           <div className="flex-1">
-          <Input
+
+          <Typography  color="blue-gray-200" className="-mb-3">
+               Enter Your Charge
+          </Typography>
+          <br />
+          <Input 
+               
                size="lg"
                placeholder="Enter your  Charge"
           
@@ -353,27 +390,10 @@ export function EmployeeRegistrationForm(){
           </div>
           <br />
 
-          <div className="flex gap-6">
-            <div className="flex-1">
-              
-              <input
-                type="file"
-                id="profile_photo"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-              {formData.profile_photo && (
-                <img
-                  src={`${empRegisterURL}${formData.profile_photo}`}
-                  alt="Profile Preview"
-                  style={{ maxWidth: '100%', marginTop: '10px' }}
-                />
-              )}
-            </div>
-            </div>
+          
           </div>
           
-        <Button className="mt-6" fullWidth onClick={handleSubmit}>
+        <Button  className="bg-rose-500 text-gray-700" fullWidth onClick={handleSubmit}>
           Sign Up
         </Button>
         <Typography color="gray" className="mt-4 text-center font-normal">
@@ -381,7 +401,7 @@ export function EmployeeRegistrationForm(){
           <Link to="/employee/employee_login">Login</Link>
         </Typography>
       </div>
-    </form>
+    </div>
   </Card>
   <Toaster />
 </div>

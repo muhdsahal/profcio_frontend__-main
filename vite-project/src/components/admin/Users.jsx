@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import React from "react";
 // import { UserBaseUrl,UserDetailsURL } from "../../constants/constants";
 import axios from "axios";
+import toast, { Toaster } from 'react-hot-toast'
+
 import {
     Card,
     Typography,
@@ -17,6 +19,7 @@ import {
 function UserList() {
     const [userList, setUserList] = useState([])
     const [loading, setLaoding] = useState(true)
+    const [users,setUsers ] = useState([])
 
     useEffect(() => {
         const apiUrl = "http://127.0.0.1:8000/auth/userdetails/";
@@ -55,13 +58,24 @@ function UserList() {
         })
     }
 
+    const SearchUser = async (keyword) => {
+        if(keyword){
+            try{
+                const SearchRequest = await axios.get(`http://127.0.0.1:8000/auth/userdetails/?search=${keyword}`)
+                setUsers(SearchRequest.data)
+            }catch(error){
+                console.log(error, 'an error showing ');
+                toast.error(error)
+            }
+        }
+    };
 
-   
 
-    console.log(userList, '<><><><><><><><><><><><><><><><><><><><><><><>');
     return (
         <div className="flex flex-col min-h-screen">
             <Card className="flex-1 w-full xl:w-[1005px] ">
+            <input onChange={(e) => SearchUser(e.target.value)} className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black' type="text" placeholder='  Search' />
+
                 <table className="  text-left">
                     <thead>
                         <tr>
@@ -116,7 +130,7 @@ function UserList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {userList.map((user) => {
+                        {users.map((user) => {
 
                             const classes =  "p-4 border-b border-blue-gray-50";
 
