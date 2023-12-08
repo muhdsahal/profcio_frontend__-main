@@ -23,13 +23,16 @@ function ServiceList() {
       });
   }, []);
 
+  console.log(services,'serrrrvidddd');
+
   return (
 
-    <div className="flex flex-row gap-4">
+    <div className="flex flex-row flex-wrap gap-4">
       {services.map((service) => (
-        <Card key={service.id} className="w-96">
+        <Card key={service.id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/5">
           <CardHeader floated={false} className="h-80">
-            <img src={service.Service_image} alt="profile-picture" />
+            <img src={service.service_image} alt="profile-picture" />
+            {/* <p>{service.service_image.name} </p> */}
             <CardBody className="text-center">
             <Typography variant="h4" color="blue-gray" className="mb-2">
               {service.name}

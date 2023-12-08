@@ -87,7 +87,7 @@ const handleLogin = async (e) => {
       } else {
         localStorage.setItem("token", token);
         toast.success(`Welcome ${decoded.username}....!!`);
-        navigate("/employee");
+        navigate("/employee/");
       }
 
     } catch (error) {
@@ -142,7 +142,7 @@ const handleLogin = async (e) => {
           </Button>
             <Typography variant="small" className="mt-6 flex justify-center">
               Don&apos;t have an account?
-              <Link to="/employee/signup">
+              <Link to="/employee/signup/">
                  Signup
               </Link>
               

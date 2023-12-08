@@ -30,8 +30,12 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import logo from '../../image/profcio__All.png'
+import { jwtDecode } from "jwt-decode";
  
 export function SidebarWithSearch() {
+  const token = localStorage.getItem('token')
+  const decode = jwtDecode(token)
+  const userId = decode.user_id;
   const [open, setOpen] = useState(0);
   const navigate = useNavigate()
  
@@ -40,15 +44,16 @@ export function SidebarWithSearch() {
   };
    const handleLogout = () =>{
     localStorage.removeItem('token')
-    navigate('/employee/employee_login')
+    navigate('/employee/employee_login/')
     
    }
    function toProfile() {
-    navigate("/employee/profile/");
+    navigate(`/employee/profile/${userId}`);
   }
     
  
   return (
+    <>
     <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="mb-2 flex items-center gap-4 p-4">
         <img src={logo} alt="logo" color='green' width="150" height="100" />
@@ -110,8 +115,7 @@ export function SidebarWithSearch() {
           My Service
         </ListItem>
 
-        <ListItem >
-        as={Link} to="/employee/profile/" onClick={toProfile}
+        <ListItem  onClick={toProfile}>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
@@ -155,5 +159,6 @@ export function SidebarWithSearch() {
         </ListItem>
       </List>
     </Card>
+    </>
   );
 }

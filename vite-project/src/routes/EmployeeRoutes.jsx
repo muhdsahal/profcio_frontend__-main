@@ -20,7 +20,7 @@ function EmployeeRoutes(){
 
             <Route element={<EmployeeProtected />}>
                 <Route path="/" element={<EmployeeHome />} />
-                    <Route path="/profile" element={<EmployeeProfilePage />} />
+                    <Route path="/profile/:userId" element={<EmployeeProfilePage />} />
 
                 
             </Route>
