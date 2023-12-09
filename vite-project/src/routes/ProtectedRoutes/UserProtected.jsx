@@ -1,13 +1,11 @@
 import { jwtDecode } from 'jwt-decode';
 import { Outlet } from 'react-router-dom'
-import Home from '../../pages/Home/Home'
-import EmployeeRoutes from '../EmployeeRoutes'
-import AdminRoutes from '../AdminRoutes'
+import EmployeeHome from '../../pages/employee/EmployeeHome';
+import AdminHome from '../../pages/admin/AdminHome';
 
 
 function UserProtected(){
     const token =localStorage.getItem('token');
-    // localStorage.clear
     // console.log(token,'hhhhhhhhhhhhhhhhhhhhhhhhhh');
 
     if(token){
@@ -16,14 +14,15 @@ function UserProtected(){
         if(decoded.user_type === 'user'){
             return <Outlet/>
         }else if(decoded.user_type === 'employee'){
-            return <EmployeeRoutes/>
+            return <EmployeeHome/>
         }else if (decoded.user_type === 'admin' && decoded.is_admin){
-            return <AdminRoutes />
+            return <AdminHome />
         }else{
-            return <Home/>
+            // return <Home/>
+            console.log(decoded,"else case employee protected");
         }
     }else{
-        return <Home/>
+        console.log("token not found");
     }
        
 }

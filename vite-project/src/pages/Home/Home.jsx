@@ -8,9 +8,9 @@ import emp from '../../image/constrution_image1.png'
 // import Plumber from '../../image/Plumber.png';
 // import Civil from '../../image/civilone.png'
 import { Typography,
-        Button,
+        Button } from "@material-tailwind/react";
         
-       } from "@material-tailwind/react";
+       
 
 function Home() {
 
@@ -30,8 +30,7 @@ function Home() {
       <Typography variant="h3" color="black" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', width: '100%' }}>
         Welcome To Profcio
       </Typography>
-      <br />
-      <br />
+
       
     
     <div style={{ position: 'relative', width: '100%', maxWidth: '800px', margin: '0 auto' }}>

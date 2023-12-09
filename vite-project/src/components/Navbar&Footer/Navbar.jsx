@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useState} from 'react';
 import { useNavigate,Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,24 +13,35 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from "../../image/profcio__All.png"
-import login from '../../pages/login/login';
-import Switcher from '../switcher/switcher';
+import { jwtDecode } from 'jwt-decode';
+import { LockClosedIcon } from '@heroicons/react/24/solid';
 
 const pages = ['Home', 'Services', 'Employees'];
 const settings = [];
 
 
 export default function ResponsiveNavBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const token = localStorage.getItem('token')
+  const decode = jwtDecode(token)
+  const userId = decode.user_id
+  console.log(userId,'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
   const navigate = useNavigate()
+  const isLoggedIn = !!localStorage.getItem('token');
 
-  const Logout = () => {
+  const handleLogout = () => {
     localStorage.removeItem('token');
     navigate("/login")
   
   }
+  const handleLogin = () => {
+    navigate("/login/")
+  }
 
+  const toProfile = () => {
+    navigate(`/userprofile/${userId}/`)
+  }
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -112,7 +123,7 @@ export default function ResponsiveNavBar() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page} 
               </Button>
             ))}
           </Box>
@@ -145,10 +156,19 @@ export default function ResponsiveNavBar() {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
+              
               <Button
-                onClick={Logout}
+                onClick={isLoggedIn ? handleLogout : handleLogin}
                 className="bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
-              >logout</Button>
+              >{isLoggedIn ? 'Logout' : 'Login'}
+              </Button>
+
+              <Button
+                onClick={toProfile}
+                className="bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
+              >Userprofile
+              </Button>
+                          
             </Menu>
           </Box>
         </Toolbar>

@@ -5,31 +5,33 @@ import Signup from "./pages/signup/Signup";
 import Login from "./pages/login/login"; // Correct import
 import ConfirmMail from "./pages/ConfirmMail";
 import Home from "./pages/Home/Home";
-import ProtectedRoutes from "./routes/ProtectedRoutes/ProtectedRoutes";
+import ProtectedRoutes from "./routes/ProtectedRoutes/PrivateRoute";
 import UserRoutes from "./routes/UserRoutes";
 import EmployeeRoutes from "./routes/EmployeeRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 import ForgotPassword from "./pages/ForgotPassWord";
 import ResetPassword from "./pages/ResetPassword";
+import UserType from "./components/Home/UserType";
+import PrivateRoute from "./routes/ProtectedRoutes/PrivateRoute";
 
 function App() {
   return (
     <div>
-      
       <Router>
         <Routes>
-          <Route element={<Home />} path="/" />
-          <Route element={<Signup />} path="/signup" />
-          <Route element={<ConfirmMail />} path="/confirm" />
-          <Route element={<ProtectedRoutes />} >
-          <Route element={<Login />} path="/login" />
-          <Route element={<ForgotPassword />}  path="/forgot_password/" />
-          <Route  element={<ResetPassword />} path="/reset_password/:ResetToken/" />
-          </Route> 
-          <Route element={<UserRoutes />} path="/*" />
-          <Route element={<EmployeeRoutes />} path="/employee/*" />
-          <Route element={<AdminRoutes />} path="/admin/*" />
-
+          <Route  element={<PrivateRoute />}>
+            <Route index element={<Home />} />
+            <Route path="/signup" exact element={<Signup />}/>
+            <Route path="/confirm" exact element={<ConfirmMail />}/>
+            <Route path="/login/" exact element={<Login />}/>
+            <Route path="/usertype/" exact element={<UserType />}/>
+            <Route path="/forgot_password/" element={<ForgotPassword />} />
+            <Route path="/reset_password/:ResetToken/" element={<ResetPassword />}  />
+          </Route>
+          
+            <Route path="/*" element={<UserRoutes />} />
+            <Route path="/employee/*" element={<EmployeeRoutes />} />
+            <Route path="/admin/*" element={<AdminRoutes />} />
         </Routes>
       </Router>
     </div>
