@@ -7,8 +7,7 @@ import EmployeeLoginPage from '../../pages/employee/EmployeeLoginPage'
 
 function EmployeeProtected(){
     const token =localStorage.getItem('token');
-    localStorage.clear
-    console.log(token,'hhhhhhhhhhhhhhhhhhhhhhhhhh');
+    
 
     if(token){
         const decoded = jwtDecode(token);

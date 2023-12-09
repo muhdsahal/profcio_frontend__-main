@@ -7,8 +7,8 @@ import AdminRoutes from '../AdminRoutes'
 
 function UserProtected(){
     const token =localStorage.getItem('token');
-    localStorage.clear
-    console.log(token,'hhhhhhhhhhhhhhhhhhhhhhhhhh');
+    // localStorage.clear
+    // console.log(token,'hhhhhhhhhhhhhhhhhhhhhhhhhh');
 
     if(token){
         const decoded = jwtDecode(token);

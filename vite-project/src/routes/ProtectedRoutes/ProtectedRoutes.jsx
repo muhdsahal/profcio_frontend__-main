@@ -5,12 +5,13 @@ import EmployeeRoutes from '../EmployeeRoutes'
 import AdminRoutes from '../AdminRoutes'
 import Login from '../../pages/login/login';
 import UserRoutes from '../UserRoutes';
+// import { Outlet } from "react-router-dom";
 // import AdminLoginPage from '../../pages/admin/adminLoginPage';
 // import EmployeeLoginPage from '../../pages/employee/EmployeeLoginPage';
 
 function ProtectedRoutes(){
-    const token = localStorage.removeItem('token');
-    localStorage.clear
+    const token = localStorage.getItem('token');
+    // localStorage.clear
     
     
 
@@ -18,13 +19,10 @@ function ProtectedRoutes(){
         const decoded = jwtDecode(token);
         if(decoded.user_type === 'admin' && decoded.is_admin){
             return <AdminRoutes />
-        }
-        else{
-            if(decoded.user_type === 'employee'){
-                return <EmployeeRoutes />
-            }else{
-                return <UserRoutes />
-            }
+        }else if(decoded.user_type === 'employee'){
+            return <EmployeeRoutes />
+        }else if(decoded.user_type === 'user') {
+            return <UserRoutes />
         }
     
     }else{
@@ -32,5 +30,8 @@ function ProtectedRoutes(){
         return <Login />
         
     }
+            
+        
+    
 }
 export default ProtectedRoutes
