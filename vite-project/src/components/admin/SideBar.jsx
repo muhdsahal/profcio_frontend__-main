@@ -30,8 +30,12 @@ export function Sidebar() {
 
   const handleLogout = () =>{
     localStorage.removeItem('token')
-    navigate('/admin/admin_login')
+    navigate('/admin/admin_login/')
   }
+  const handleService = () =>{
+    navigate('/admin/services/')
+  }
+  console.log(handleService,'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
   return (
     <Card className="h-[calc(100vh-2rem)] max-w-[64] p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="mb-2 p-4">
@@ -46,7 +50,7 @@ export function Sidebar() {
           </ListItemPrefix>
           Dashboard
         </ListItem>
-          <ListItem>
+          <ListItem onClick={handleService}>
             <ListItemPrefix>
               <WorkIcon className="h-5 w-5" />
             </ListItemPrefix>

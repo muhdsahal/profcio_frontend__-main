@@ -17,8 +17,8 @@ function AdminRoutes() {
 
             <Route element={<AdminProtected />}>
                 <Route path="/adminhome/" element={<AdminHome />} />
-                    <Route path="/users" element={<UserLists />} />
-                    <Route path="/services" element={<ServiceList />} />
+                    <Route path="/users/" element={<UserLists />} />
+                    <Route path="/services/" element={<ServiceList />} />
             </Route>
         </Routes >
     )

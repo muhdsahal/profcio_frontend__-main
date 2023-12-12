@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Typography, Card, Button, Input } from "@material-tailwind/react";
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 
 import toast from "react-hot-toast";
 
@@ -11,6 +11,8 @@ function EmployeeProfile() {
   const [employee, setEmployee] = useState(null);
   const [editing, setEditing] = useState(false);
   const [updatedEmployee, setUpdatedEmployee] = useState({});
+  const [imageFile, setImageFile] = useState(null);
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,18 +37,47 @@ function EmployeeProfile() {
   const handleCancelEdit = () => {
     setEditing(false);
     setUpdatedEmployee(employee);
+    setImageFile(null); // Clear the imageFile state
+    setPassword("");
   };
 
   const handleUpdateProfile = async () => {
     try {
-      const response = await axios.put(
-        `http://127.0.0.1:8000/auth/user_profile/${userId}/`,
-        updatedEmployee
-      );
+      const formData = new FormData();
 
+      // Append profile_photo if an imageFile is selected
+      if (imageFile) {
+        formData.append("profile_photo", imageFile, imageFile.name);
+      }
+      
+      // Append other fields
+      formData.append("username", updatedEmployee.username);
+      formData.append("email", updatedEmployee.email);
+      formData.append("phone_number", updatedEmployee.phone_number);
+      formData.append("work", updatedEmployee.work);
+      formData.append("experience", updatedEmployee.experience);
+      formData.append("charge", updatedEmployee.charge);
+      formData.append("password", password);
+  
+      const authToken = localStorage.getItem("token");
+      const tok = JSON.parse(authToken);
+  
+      const response = await axios.put(
+        `http://127.0.0.1:8000/auth/user_profile/${userId}/`,  // Use PATCH instead of PUT
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${tok.access}`,
+          },
+        }
+      );
+  
       setEmployee(response.data);
       setEditing(false);
-
+      setImageFile(null);
+      setPassword("");
+  
       console.log(response.data, "Profile updated successfully");
       toast.success("Profile updated successfully");
     } catch (error) {
@@ -54,6 +85,7 @@ function EmployeeProfile() {
       toast.error("An error occurred while updating profile");
     }
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -62,6 +94,8 @@ function EmployeeProfile() {
       [name]: value,
     }));
   };
+
+  console.log(imageFile, "imageFile");
 
   return (
     <div>
@@ -73,7 +107,11 @@ function EmployeeProfile() {
                 <div className="card-body">
                   <div className="flex flex-col items-center">
                     <img
-                      src="https://bootdey.com/img/Content/avatar/avatar6.png"
+                      src={
+                        employee.image
+                          ? employee.image
+                          : "https://bootdey.com/img/Content/avatar/avatar6.png"
+                      }
                       alt="Employee"
                       className="rounded-circle p-1 bg-primary"
                       width="110"
@@ -82,6 +120,14 @@ function EmployeeProfile() {
                       {editing ? (
                         // Edit mode
                         <div className="space-y-4">
+                          <Input
+                            type="file"
+                            name="image"
+                            onChange={(e) =>
+                              setImageFile(e.target.files[0])
+                            }
+                            placeholder="Profile Image"
+                          />
                           <Input
                             type="text"
                             name="username"
@@ -93,7 +139,7 @@ function EmployeeProfile() {
                             type="text"
                             name="email"
                             value={updatedEmployee.email}
-                            // onChange={handleInputChange}
+                            onChange={handleInputChange}
                             placeholder="Email"
                           />
                           <Input
@@ -124,6 +170,13 @@ function EmployeeProfile() {
                             onChange={handleInputChange}
                             placeholder="Charge"
                           />
+                          <Input
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Password"
+                          />
                           <div className="flex justify-between">
                             <Button
                               color="red"
@@ -142,15 +195,21 @@ function EmployeeProfile() {
                       ) : (
                         // Viewing mode
                         <div className="space-y-4">
-                           <div>
+                          <div>
                             <Grid container spacing={2} justify="center">
                               <Grid item xs={6}>
-                                <Typography variant="h4" className="text-center text-blueGray-700">
+                                <Typography
+                                  variant="h4"
+                                  className="text-center text-blueGray-700"
+                                >
                                   Username: {employee.username}
                                 </Typography>
                               </Grid>
                               <Grid item xs={6}>
-                                <Typography variant="h4" className="text-center text-blueGray-700">
+                                <Typography
+                                  variant="h4"
+                                  className="text-center text-blueGray-700"
+                                >
                                   Email: {employee.email}
                                 </Typography>
                               </Grid>
@@ -158,12 +217,19 @@ function EmployeeProfile() {
 
                             <Grid container spacing={2} justify="center">
                               <Grid item xs={6}>
-                                <Typography variant="h4" className="text-center text-blueGray-700">
-                                  Phone Number: {employee.phone_number}
+                                <Typography
+                                  variant="h4"
+                                  className="text-center text-blueGray-700"
+                                >
+                                  Phone Number:{" "}
+                                  {employee.phone_number}
                                 </Typography>
                               </Grid>
                               <Grid item xs={6}>
-                                <Typography variant="h4" className="text-center text-blueGray-700">
+                                <Typography
+                                  variant="h4"
+                                  className="text-center text-blueGray-700"
+                                >
                                   Work: {employee.work}
                                 </Typography>
                               </Grid>
@@ -171,12 +237,19 @@ function EmployeeProfile() {
 
                             <Grid container spacing={2} justify="center">
                               <Grid item xs={6}>
-                                <Typography variant="h4" className="text-center text-blueGray-700">
-                                  Experience: {employee.experience}
+                                <Typography
+                                  variant="h4"
+                                  className="text-center text-blueGray-700"
+                                >
+                                  Experience:{" "}
+                                  {employee.experience}
                                 </Typography>
                               </Grid>
                               <Grid item xs={6}>
-                                <Typography variant="h4" className="text-center text-blueGray-700">
+                                <Typography
+                                  variant="h4"
+                                  className="text-center text-blueGray-700"
+                                >
                                   Charge: {employee.charge}
                                 </Typography>
                               </Grid>

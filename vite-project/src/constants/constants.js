@@ -11,5 +11,6 @@ export const UserLoginURL = import.meta.env.VITE_USER_LOGIN_URL
 export const empRegisterURL = import.meta.env.VITE_EMPLOYEE_REGISTER_URL
 export const UserDetailsURL = import.meta.env.VITE_USER_DETAILS
 export const EmployeeListingURL = import.meta.env.VITE_EMPLOYEE_LISING
+export const ServiceListURL = import.meta.env.VITE_SERVICE_LIST 
 export const forgotPasswordUrl = import.meta.env.VITE_FORGOT_PASSWORD
 export const ResetPasswordUrl = import.meta.env.VITE_RESET_PASSWORD

@@ -1,7 +1,6 @@
 import React from "react";
 import { jwtDecode } from "jwt-decode";
 import { Navigate,Outlet } from "react-router-dom";
-
 import AdminHome from "../../pages/admin/AdminHome";
 import EmployeeHome from "../../pages/employee/EmployeeHome";
 import Home from "../../pages/Home/Home";

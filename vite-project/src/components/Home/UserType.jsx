@@ -12,7 +12,7 @@ function UserType() {
     if (userType === "employee") {
       navigate("/employee/signup");
     } else if (userType === "user") {
-      navigate("/signup");
+      navigate("/signup/");
     }
     // Add logic for admin signup if needed
   };

@@ -1,146 +1,104 @@
-import React, { useState } from "react";
-import {
-    Button,
-    Dialog,
-    Card,
-    CardBody,
-    CardFooter,
-    Typography,
-    Input,
-} from "@material-tailwind/react";
+// ServiceListCreatePage.js
 
-export function ServiceModal() {
-    const [open, setOpen] = useState(false);
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [category, setCategory] = useState("");
-    const [image, setImage] = useState(null);
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-    const handleOpen = () => setOpen((cur) => !cur);
+const ServiceListCreatePage = () => {
+  const [services, setServices] = useState([]);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    category: 'home',
+    service_image: null,
+  });
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        if (name === "name") setName(value);
-        else if (name === "description") setDescription(value);
-        else if (name === "category") setCategory(value);
-        else if (name === "image"){
+  useEffect(() => {
+    // Fetch services on component mount
+    axios.get('/api/services/')
+      .then(response => setServices(response.data))
+      .catch(error => console.error('Error fetching services:', error));
+  }, []);
 
-            setImage(e.target.files[0]);
-            console.log(e.target.files[0],"imaaaaageweee");
-        } 
-    };
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    const handleSubmit = async () => {
-        try {
-            const formData = new FormData();
-            formData.append("name", name);
-            formData.append("description", description);
-            formData.append("category", category);
-            formData.append("Service_image", image); // Assuming "Service_image" is the field name for the image in your backend model
+  const handleImageChange = (e) => {
+    setFormData({
+      ...formData,
+      service_image: e.target.files[0],
+    });
+  };
 
-            // Loop through all entries in FormData
-            // for (const entry of formData.entries()) {
-            //     const [key, value] = entry;
-            //     console.log(`Key: ${key}, Value: ${value}`);
-            // }
-                // Make an API call to create the servic
-                // const csrfToken = getCSRFToken();  // Implement a function to get the CSRF token
-                const response = await fetch("http://127.0.0.1:8000/auth/services/", {
-                    method: "POST",
-                    body: formData,
-                    // headers: {
-                    //     'Content-Type': 'multipart/form-data',
-                    //     // 'X-CSRFToken': csrfToken,
-                    //     // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN' if needed
-                    // },
-                });
-                console.log(response.formData, 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-                if (response.ok) {
-                    // Handle successful service creation, e.g., show a success message
-                    console.log("Service created successfully");
-                } else {
-                    // Handle error, e.g., show an error message
-                    console.error("Failed to create service");
-                }
-            } catch (error) {
-                console.error("Error creating service", error);
-            } finally {
-                // Close the modal after submission, whether successful or not
-                handleOpen();
-            }
-        };
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        return (
-            <>
-                <Button onClick={handleOpen}>Create Service</Button>
-                <Dialog
-                    size="xs"
-                    open={open}
-                    handler={handleOpen}
-                    className="bg-transparent shadow-none"
-                >
-                    <Card className="mx-auto w-full max-w-[54rem]">
-                        <CardBody className="flex flex-col gap-4">
-                            <Typography variant="h4" color="blue-gray">
-                                Service
-                            </Typography>
-                            <Typography
-                                className="mb-3 font-normal"
-                                variant="paragraph"
-                                color="gray"
-                            >
-                                Enter Service Details.
-                            </Typography>
-                            <Typography className="-mb-2" variant="h6">
-                                Name
-                            </Typography>
-                            <Input
-                                name="name"
-                                label="Name"
-                                size="lg"
-                                value={name}
-                                onChange={handleInputChange}
-                            />
+    // Create a FormData object to handle file uploads
+    const formDataObj = new FormData();
+    formDataObj.append('name', formData.name);
+    formDataObj.append('description', formData.description);
+    formDataObj.append('category', formData.category);
+    formDataObj.append('service_image', formData.service_image);
 
-                            <Typography className="-mb-2" variant="h6">
-                                Description
-                            </Typography>
-                            <Input
-                                name="description"
-                                label="Description"
-                                size="lg"
-                                value={description}
-                                onChange={handleInputChange}
-                            />
+    // Post new service to the backend
+    axios.post('/api/services/', formDataObj)
+      .then(response => {
+        setServices([...services, response.data]);
+        setFormData({
+          name: '',
+          description: '',
+          category: 'home',
+          service_image: null,
+        });
+      })
+      .catch(error => console.error('Error creating service:', error));
+  };
 
-                            <Typography className="-mb-2" variant="h6">
-                                Category
-                            </Typography>
-                            <Input
-                                name="category"
-                                label="Category"
-                                size="lg"
-                                value={category}
-                                onChange={handleInputChange}
-                            />
+  return (
+    <div>
+      <h2>Service List</h2>
+      <ul>
+        {services.map(service => (
+          <li key={service.id}>
+            {service.name} - {service.description} - {service.category}
+            <img src={service.service_image} alt={service.name} style={{ maxWidth: '100px' }} />
+          </li>
+        ))}
+      </ul>
 
-                            <Typography className="-mb-2" variant="h6">
-                                Image
-                            </Typography>
-                            <Input
-                                name="image"
-                                type="file"
-                                onChange={handleInputChange}
-                            />
-                            {/* <img src={image && URL.createObjectURL(image)} alt="profile-picture" /> */}
-                        </CardBody>
-                        <CardFooter className="pt-0">
-                            <Button variant="gradient" onClick={handleSubmit} fullWidth>
-                                Create Service
-                            </Button>
-                        </CardFooter>
-                    </Card>
-                </Dialog>
-            </>
-        );
-    }
+      <h2>Create Service</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input type="text" name="name" value={formData.name} onChange={handleChange} />
+        </label>
+        <br />
+        <label>
+          Description:
+          <textarea name="description" value={formData.description} onChange={handleChange} />
+        </label>
+        <br />
+        <label>
+          Category:
+          <select name="category" value={formData.category} onChange={handleChange}>
+            <option value="all_rounder">All Rounder</option>
+            <option value="commercial">Commercial</option>
+            <option value="home">Home</option>
+          </select>
+        </label>
+        <br />
+        <label>
+          Image:
+          <input type="file" name="service_image" onChange={handleImageChange} />
+        </label>
+        <br />
+        <button type="submit">Create Service</button>
+      </form>
+    </div>
+  );
+};
+
+export default ServiceListCreatePage;

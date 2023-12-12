@@ -32,7 +32,7 @@ export default function ResponsiveNavBar() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate("/login")
+    navigate("/login/")
   
   }
   const handleLogin = () => {
