@@ -4,10 +4,9 @@ import toast,{ Toaster } from "react-hot-toast";
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate,Link } from "react-router-dom";
 import axios from 'axios'
-
+import { userAxiosInstance } from "../../utils/axiosUtils";
 import {Card,
     Input,
-    Checkbox,
     Button,
     Typography } from "@material-tailwind/react";
 
@@ -18,7 +17,7 @@ import logo from '../../image/profcio__All.png'
 export function SimpleRegistrationForm() {
   const navigate = useNavigate();
 
-  const [other, setOther] = useState({ conf_Password: "", check: false });
+  const [other, setOther] = useState({ conf_Password: "" });
 
   // form
   const [formData, setFormData] = useState({
@@ -68,45 +67,53 @@ export function SimpleRegistrationForm() {
     return true;
   };
 
-  // form submit handler
-  const handleSubmit = async (e) => {
-    console.log(formData);
-    if (validForm()) {
+ 
+
+const handleSubmit = async (e) => {
+  console.log(formData);
+  if (validForm()) {
+    handleLoading();
+    try {
+      const response = await userAxiosInstance.post(userRegisterURL, formData);
+
+      // Update your token handling logic here
+      const access_token = response.data.access;
+      const refresh_token = response.data.refresh;
+
+      // Store tokens in a secure way ( in localStorage )
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('refresh_token', refresh_token);
+
+      // Other actions after successful registration...
+      toast.success("Registration success..!");
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        user_type: "user",
+      });
+      setOther({ conf_Password: "", check: false });
       handleLoading();
-      try {
-        const response = await axios.post(userRegisterURL, formData);
-
-        const user_type = response.data.user_type;
-        toast.success("Registration success..!");
-
-        setFormData({
-          // first_name:"",
-          // last_name:"",
-          username: "",
-          email: "",
-          password: "",
-          user_type: "user",
-        });
-        setOther({ conf_Password: "", check: false });
-        handleLoading();
-        console.log(formData, 'dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        navigate("/confirm");
-      } catch (error) {
-        handleLoading();
-        if (error.response.data) {
-          console.log(error.response.data.email);
-          if (error.response.data.email) {
-            toast.error(error.response.data.email[0]);
-          }
-          if (error.response.data.username) {
-            toast.error(error.response.data.username[0]);
-          }
-        } else {
-          toast.error("An error occurred during registration..");
+      navigate("/confirm");
+    } catch (error) {
+      handleLoading();
+      if (error.response && error.response.data) {
+        if (error.response.data.email) {
+          toast.error(error.response.data.email[0]);
         }
+        if (error.response.data.username) {
+          toast.error(error.response.data.username[0]);
+        }
+      } else {
+        console.log(response.data,'dataaaaaaaaaaaaaa');
+        toast.error("An error occurred during registration..");
       }
     }
-  };
+  }
+};
+
+// rest of the component...
+
   return(
       
         
