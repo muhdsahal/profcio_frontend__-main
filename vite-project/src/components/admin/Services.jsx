@@ -1,98 +1,142 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Dialog, Card, CardHeader, CardBody, CardFooter, Typography, Input, Checkbox, } from "@material-tailwind/react";
 import axios from 'axios';
-import {
-  Card,
-  Typography,
-  Button,
-} from "@material-tailwind/react";
 import Modal from 'react-modal';
-import { ServiceListURL } from '../../constants/constants';
-import { ServiceDialog } from './ServiceDialog';
+import { ServiceCatergoryURL, ServiceListURL } from '../../constants/constants';
+
 Modal.setAppElement('#root');
 
 const ServiceListPage = () => {
-  const [services, setServices] = useState([]);
-  const [selectedService, setSelectedService] = useState(null);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    category: '',
-    service_image: null,
-  });
 
-  useEffect(() => {
-    axios.get(ServiceListURL)
+  const [open, setOpen] = React.useState(false);
+  const [editOpen, seteditOpen] = React.useState(false);
+  const handleOpenModal = () => setOpen((cur) => !cur);
+  const editOpenModal = () => seteditOpen((cur) => !cur);
+  const [categoryOptions, setCategoryOptions] = useState([]);
+  const [serviceName, setserviceName] = useState('');
+  const [serviceDiscription, setserviceDiscription] = useState('');
+  const [serviceCategory, setserviceCategory] = useState('');
+  const [serviceImage, setserviceImage] = useState(null);
+  const [editServiceData, seteditServiceData] = useState([])
+  const [editService_id, seteditService_id] = useState('')
+
+  const handleFileInputChange = (e) => {
+
+    console.log(e.target.files[0], 'jjjjjjjjjjjjjjjj');
+    // setShowprofileImage(URL.createObjectURL(event.target.files[0]));
+    const file = e.target.files[0];
+    setserviceImage(file);
+  };
+
+
+
+
+  const [services, setServices] = useState([]);
+
+
+   const service_list = axios.get(ServiceListURL)
       .then(response => setServices(response.data))
       .catch(error => console.error('Error fetching services:', error));
+
+
+
+  
+
+
+  useEffect(() => {
+    // Fetch category options when the component mounts
+    axios.get(ServiceCatergoryURL)
+      .then(response => {
+        setCategoryOptions(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching category options:', error);
+      });
   }, []);
 
-  const handleEditService = (service) => {
-    setSelectedService(service);
-    setFormData({
-      name: service.name,
-      description: service.description,
-      category: service.category,
-      service_image: null,
-    });
-    setModalOpen(true);
-  };
 
-  const handleModalClose = () => {
-    setSelectedService(null);
-    setFormData({
-      name: '',
-      description: '',
-      category: '',
-      service_image: null,
-    });
-    setModalOpen(false);
-  };
+  const serviceCreate = () => {
+    const formData = new FormData();
+    formData.append('name', serviceName);
+    formData.append('description', serviceDiscription);
+    formData.append('category', serviceCategory);
+    formData.append('service_image', serviceImage);
 
-  const handleSaveService = () => {
-    if (selectedService) {
-      axios.put(`${ServiceListURL}/${selectedService.id}/`, formData)
-        .then(response => {
-          const updatedServices = services.map(service =>
-            service.id === selectedService.id ? response.data : service
-          );
-          setServices(updatedServices);
-        })
-        .catch(error => {
-          console.error('Error updating service:', error);
-          // Handle error display or other actions as needed
-        });
-    } else {
-      axios.post(ServiceListURL, formData)
-        .then(response => setServices([...services, response.data]))
-        .catch(error => {
-          console.error('Error creating service:', error);
-          // Handle error display or other actions as needed
-        });
-    }
-    handleModalClose();
-  };
-  console.log(formData,'formdataaaaaaaaaaaaaaaaaaaaa');
+    axios.post(ServiceListURL, formData)
+      .then(response => setServices([...services, response.data]),
+        setserviceName(''),
+        setserviceDiscription(''),
+        setserviceCategory(''),
+        setserviceImage(null),
+        console.log('shafi successfull'))
+      .catch(error => {
+        console.error('Error creating service:', error);
+        // Handle error display or other actions as needed
+      });
+    handleOpenModal()
+  }
+
+  const editHandleService = (e) => {
+    seteditService_id(e)
+    axios.get(`${ServiceListURL}${e}/`)
+    .then(response => {
+      setserviceName(response.data.name);
+      setserviceDiscription(response.data.description);
+      setserviceCategory(response.data.category);
+      setserviceImage(response.data.service_image);
+      console.log(editServiceData, 'llllllllllll');
+      return response.data; 
+    })
+    .catch(error => {
+      console.error('Error creating service:', error);
+      // Handle error display or other actions as needed
+    });
+  
+    editOpenModal()
+  }
+
+
+  const serviceEdit =()=>{
+    const formData = new FormData();
+    formData.append('name', serviceName);
+    formData.append('description', serviceDiscription);
+    formData.append('category', serviceCategory);
+    // formData.append('service_image', serviceImage);
+
+    axios.patch(`${ServiceListURL}${editService_id}/`, formData)
+      .then(response => service_list(),
+        setserviceName(''),
+        setserviceDiscription(''),
+        setserviceCategory(''),
+        setserviceImage(null),
+        console.log(' edit successfull'))
+      .catch(error => {
+        console.error('Error creating service:', error);
+        // Handle error display or other actions as needed
+      });
+      editOpenModal()
+
+  }
+
+
+  console.log(serviceCategory, 'formdataaaaaaaaaaaaaaaaaaaaa');
 
   const classes = "p-4 border-b border-blue-gray-50";
 
   return (
     <div className="flex flex-col min-h-screen">
       <Card className="flex-1 w-full xl:w-[1005px]">
-        <input
-          onChange={(e) => SearchService(e.target.value)}
+        {/* <input
+          // onChange={(e) => SearchService(e.target.value)}
           className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black'
           type="text"
           placeholder='  Search'
-        />
+        /> */}
 
         <div className="my-4 ml-16">
           <Button
             className="bg-green-500 text-white px-4 py-2 rounded"
-            onClick={() => {
-              setSelectedService(null);
-              setModalOpen(true);
-            }}
+            onClick={handleOpenModal}
           >
             Create Service
           </Button>
@@ -186,42 +230,171 @@ const ServiceListPage = () => {
                     className="font-normal"
                   >
                     {service.category}
+
                   </Typography>
                 </td>
                 <td className={classes}>
                   <Button
                     className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                    onClick={() => handleEditService(service)}
+                    onClick={(e) => editHandleService(service.id)}
                   >
                     Edit
                   </Button>
                 </td>
               </tr>
+
             ))}
           </tbody>
         </table>
 
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={handleModalClose}
-          contentLabel="Edit/Create Service Modal"
-        >
-          <ServiceDialog
-            isOpen={isModalOpen}
-            onClose={handleModalClose}
-            onSave={handleSaveService}
-            title={selectedService ? 'Edit Service' : 'Create Service'}
-            initialFormData={{
-              name: formData.name,
-              description: formData.description,
-              category: formData.category,
-              service_image: null,
-            }}
-          />
-        </Modal>
+
       </Card>
+
+
+      <>
+
+        <Dialog
+          size="xs"
+          open={open}
+          handler={handleOpenModal}
+          className="bg-transparent shadow-none"
+        >
+          <Card className="mx-auto w-full max-w-[24rem]">
+            <CardBody className="flex flex-col gap-4">
+              <Typography variant="h4" color="blue-gray">
+                create Service
+              </Typography>
+              <label>
+                Name:
+                <Input
+                  type="text"
+                  name="name"
+                  value={serviceName}
+                  onChange={(e) => setserviceName(e.target.value)}
+
+                />
+              </label>
+              <label>
+                Description:
+                <Input
+                  type="text"
+                  name="description"
+                  value={serviceDiscription}
+                  onChange={(e) => setserviceDiscription(e.target.value)}
+
+                />
+              </label>
+              <label>
+                Category:
+                <select
+                  name="category"
+                  value={serviceCategory}
+                  onChange={(e) => setserviceCategory(e.target.value)}
+                >
+                  {categoryOptions.map((category) => (
+                    <option key={category[0]} value={category[0]}>
+                      {category[1]}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Image:
+                <Input
+                  type="file"
+                  name="service_image"
+                  // value={serviceImage}
+                  onChange={handleFileInputChange} />
+              </label>
+            </CardBody>
+            <CardFooter className="pt-0">
+              <Button variant="gradient" onClick={serviceCreate} fullWidth>
+                Create Service
+              </Button>
+            </CardFooter>
+          </Card>
+        </Dialog>
+      </>
+
+      <>
+
+        <Dialog
+          size="xs"
+          open={editOpen}
+          handler={editOpenModal}
+          className="bg-transparent shadow-none"
+        >
+          <Card className="mx-auto w-full max-w-[24rem]">
+            <CardBody className="flex flex-col gap-4">
+              <Typography variant="h4" color="blue-gray">
+                Edit Service
+              </Typography>
+              <label>
+                Name:
+                <Input
+                  type="text"
+                  name="name"
+                  value={serviceName}
+                  onChange={(e) => setserviceName(e.target.value)}
+
+                />
+              </label>
+              <label>
+                Description:
+                <Input
+                  type="text"
+                  name="description"
+                  value={serviceDiscription}
+                  onChange={(e) => setserviceDiscription(e.target.value)}
+
+                />
+              </label>
+              <label>
+                Category:
+                <select
+                  name="category"
+                  value={serviceCategory}
+                  onChange={(e) => setserviceCategory(e.target.value)}
+                >
+                  {categoryOptions.map((category) => (
+                    <option key={category[0]} value={category[0]}>
+                      {category[1]}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Image:
+                <Input
+                  type="file"
+                  name="service_image"
+                  // value={editServiceData.service_image}
+                  onChange={handleFileInputChange} />
+              </label>
+            </CardBody>
+            <CardFooter className="pt-0">
+              <Button variant="gradient" onClick={serviceEdit} fullWidth>
+                Edit Service
+              </Button>
+            </CardFooter>
+          </Card>
+        </Dialog>
+      </>
     </div>
   );
 };
 
 export default ServiceListPage;
+
+
+
+
+
+
+
+
+
+
+
+
+

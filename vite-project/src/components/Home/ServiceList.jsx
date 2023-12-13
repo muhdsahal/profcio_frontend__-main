@@ -102,7 +102,7 @@ function ServiceList() {
         ) : (
           currentServices.map((service) => (
             <Card key={service.id} className="w-1/4 md:w-1/4 sm:w-1/2 lg:w-1/4 xl:w-1/4 mb-4">
-              <CardHeader floated={false} className="h-80">
+              <CardHeader floated={false} className="h-82">
                 <img
                   src={service.service_image}
                   alt="profile-picture"
@@ -111,9 +111,10 @@ function ServiceList() {
                 <CardBody className="text-center">
                   <Typography variant="h4" color="blue-gray" className="mb-2">
                     {service.name}
+                    
                   </Typography>
                   <Typography color="blue-gray" className="font-medium">
-                    {service.category}
+                  {service.description}
                   </Typography>
                 </CardBody>
               </CardHeader>
