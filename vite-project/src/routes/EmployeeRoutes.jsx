@@ -6,6 +6,7 @@ import EmployeeSignupPage from "../pages/employee/EmployeeSignupPage";
 import EmployeeLoginPage from "../pages/employee/EmployeeLoginPage";
 import EmployeeProfilePage from "../pages/employee/EmployeeProfilePage";
 import PrivateRoute from "./ProtectedRoutes/PrivateRoute";
+import EProfilePage from "../components/empolyee/Eprofile";
 
 
 
@@ -22,7 +23,9 @@ function EmployeeRoutes(){
 
             <Route exact element={<EmployeeProtected />}>
                 <Route path="/" element={<EmployeeHome />} />
-                    <Route path="/profile/:userId" element={<EmployeeProfilePage />} />
+                <Route path="/profile/:userId" element={<EmployeeProfilePage />} />
+                <Route path="/eprofile/:userId" element={<EProfilePage />} />
+
 
                 
             </Route>

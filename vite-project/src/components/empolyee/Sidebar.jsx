@@ -49,6 +49,7 @@ export function SidebarWithSearch() {
    }
    function toProfile() {
     navigate(`/employee/profile/${userId}`);
+    // console.log(userId,'userID>>>>>>>>>>>>>>>>>');
   }
     
  
