@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React,{ useState ,useEffect} from "react";
 import toast,{ Toaster } from "react-hot-toast";
 
 import { useNavigate ,Link} from "react-router-dom";
@@ -13,12 +13,14 @@ import Loader from '../Loading/Loading'
 
 export function EmployeeRegistrationForm(){
     const navigate = useNavigate()
+    const serviceListURL  =  'http://127.0.0.1:8000/auth/services/'
 
     const toLogin = () =>{
       navigate("/employee/employee_login/")
     }
 
     const [other,setOther] = useState({conf_Password:""});
+    const [serviceList, setServiceList] = useState([]);
 
     // form 
     const [formData,setFormData] =useState({
@@ -43,6 +45,8 @@ export function EmployeeRegistrationForm(){
     // for loading
     const [loading,setLoading] = useState(false);
     const handleLoading = () => setLoading((cur)=> !cur);
+    // const [dataLoaded, setDataLoaded] = useState(false); // Track whether data has been loaded
+
 
     //email validation Handler
     const validEmail = (email) => {
@@ -93,10 +97,10 @@ export function EmployeeRegistrationForm(){
         //   toast.error("phone number should be 10 digit")
         //   return false
         // }
-        else if(formData.work.trim()=== ""){
-          toast.error("work should not be empty!")
-          return false
-        }
+        // else if(formData.work.trim()=== ""){
+        //   toast.error("work should not be empty!")
+        //   return false
+        // }
         else if(formData.place.trim()=== ""){
           toast.error("place should not be empty!")
           return false
@@ -135,6 +139,23 @@ export function EmployeeRegistrationForm(){
         // };
 
 
+          useEffect(() => {
+            // Fetch the list of services from the API
+            axios.get(serviceListURL)
+              .then(response => {
+                setServiceList(response.data);
+                // setDataLoaded(true)
+                // Assuming the API returns an array of service names
+              })
+              .catch(error => {
+                console.error('Error fetching service list:', error);
+              });
+          }, []); // Empty dependency array to run the effect only once when the component mounts
+          console.log(serviceList,'serviceListURL');
+
+
+          
+        
         // form submit handler
         const handleSubmit = async() => {
           
@@ -302,17 +323,21 @@ export function EmployeeRegistrationForm(){
               Enter Your Work 
           </Typography>
           <br />
-          <Input
-               size="lg"
-               placeholder=" work"
-          
-               value={formData.work} name="work"
-               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
-               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-               labelProps={{
-                 className: "before:content-none after:content-none",
-               }}
-             />
+          <select
+            value={formData.work}
+            name="work"
+            onChange={(e) => {
+              setFormData({ ...formData, [e.target.name]: e.target.value });
+            }}
+            className="!border-t-blue-gray-200" // Apply the same class here
+          >
+            <option value="" disabled>Select a service</option>
+            {Object.values(serviceList).map(service => (
+              <option key={service.id} value={service.name}>
+                {service.name}
+              </option>
+            ))}
+          </select>
           </div>
           </div>
           <div className="flex gap-6">
