@@ -27,6 +27,7 @@ function EmployeeList() {
         console.error("Error fetching employee data:", error);
       });
   }, []);
+  
 
   useEffect(() => {
     // Filter employees based on search term

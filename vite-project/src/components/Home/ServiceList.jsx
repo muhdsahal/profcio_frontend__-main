@@ -66,27 +66,27 @@ function ServiceList() {
     <div className="min-h-screen flex flex-col justify-center items-center p-4">
       <div className="w-full mb-4 flex justify-between items-center">
         <div className="flex items-center">
-          <select value={selectedCategory} onChange={handleCategoryChange} className="p-2 rounded border mr-2">
+          {/* <select value={selectedCategory} onChange={handleCategoryChange} className="p-2 rounded border mr-2">
             <option value="">All Categories</option>
             {categories.map((category, index) => (
               <option key={index} value={category}>
-                {category}
+                {category.name}
               </option>
             ))}
-          </select>
-          <Input
+          </select> */}
+          {/* <Input
             type="text"
             placeholder="Search services"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="p-2 rounded border"
-          />
-          <button
+          /> */}
+          {/* <button
             className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
             onClick={handleSearch}
           >
             Search
-          </button>
+          </button> */}
         </div>
       </div>
 

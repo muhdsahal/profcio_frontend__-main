@@ -6,6 +6,7 @@ import AdminProtected from './ProtectedRoutes/AdminProtected'
 import AdminLoginPage from "../pages/admin/adminLoginPage";
 import UserLists from "../pages/admin/UserList";
 import ServiceList from "../pages/admin/ServiceList";
+import ServiceCategoryPage from "../pages/admin/ServiceCategoryPage";
 
 function AdminRoutes() {
     return (
@@ -18,7 +19,9 @@ function AdminRoutes() {
             <Route element={<AdminProtected />}>
                 <Route path="/adminhome/" element={<AdminHome />} />
                     <Route path="/users/" element={<UserLists />} />
+                    <Route path="/category/" element={<ServiceCategoryPage />} />
                     <Route path="/services/" element={<ServiceList />} />
+
             </Route>
         </Routes >
     )

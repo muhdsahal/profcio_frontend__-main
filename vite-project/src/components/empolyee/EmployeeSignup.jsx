@@ -1,6 +1,6 @@
 import { useState } from "react";
 import toast,{ Toaster } from "react-hot-toast";
-import 'react-toastify/dist/ReactToastify.css';
+
 import { useNavigate ,Link} from "react-router-dom";
 import axios from 'axios'
 import {Card,
@@ -15,7 +15,7 @@ export function EmployeeRegistrationForm(){
     const navigate = useNavigate()
 
     const toLogin = () =>{
-      navigate("/employee/employee_login")
+      navigate("/employee/employee_login/")
     }
 
     const [other,setOther] = useState({conf_Password:""});

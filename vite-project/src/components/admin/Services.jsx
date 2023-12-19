@@ -1,8 +1,12 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { Button, Dialog, Card, CardHeader, CardBody, CardFooter, Typography, Input, Checkbox, } from "@material-tailwind/react";
 import axios from 'axios';
 import Modal from 'react-modal';
-import { ServiceCatergoryURL, ServiceListURL } from '../../constants/constants';
+import {  ServiceListURL ,ServiceCatergoryURL } from '../../constants/constants';
+import Select from 'react-select';
+// import 'react-select/dist/react-select.css';
 
 Modal.setAppElement('#root');
 
@@ -33,10 +37,24 @@ const ServiceListPage = () => {
 
   const [services, setServices] = useState([]);
 
+      useEffect(() => {
+        
 
-   const service_list = axios.get(ServiceListURL)
-      .then(response => setServices(response.data))
-      .catch(error => console.error('Error fetching services:', error));
+        axios
+            .get(ServiceListURL)
+            .then((response) => {
+                const responseData = response.data;
+                console.log(responseData,'dataaaaaaaaa');
+
+                
+            })
+            .catch((error) => {
+                console.error("Error Fetching Data:", error);
+                // setLaoding(false)
+            })
+
+    }, [])
+  
 
 
 
@@ -53,6 +71,7 @@ const ServiceListPage = () => {
         console.error('Error fetching category options:', error);
       });
   }, []);
+  console.log(categoryOptions,'optionsssssssssss');
 
 
   const serviceCreate = () => {
@@ -119,7 +138,7 @@ const ServiceListPage = () => {
   }
 
 
-  console.log(serviceCategory, 'formdataaaaaaaaaaaaaaaaaaaaa');
+  // console.log(serviceCategory, 'formdataaaaaaaaaaaaaaaaaaaaa');
 
   const classes = "p-4 border-b border-blue-gray-50";
 
@@ -224,13 +243,8 @@ const ServiceListPage = () => {
                   </Typography>
                 </td>
                 <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {service.category}
-
+                  <Typography variant="small" color="blue-gray" className="font-normal">
+                    {categoryOptions.find(category => category.id === service.category)?.name || 'N/A'}
                   </Typography>
                 </td>
                 <td className={classes}>
@@ -291,13 +305,15 @@ const ServiceListPage = () => {
                   value={serviceCategory}
                   onChange={(e) => setserviceCategory(e.target.value)}
                 >
+                  <option value="" disabled>Select a service category</option>
                   {categoryOptions.map((category) => (
-                    <option key={category[0]} value={category[0]}>
-                      {category[1]}
+                    <option key={category.id} value={category.id}>
+                      {category.name}
                     </option>
                   ))}
                 </select>
               </label>
+
               <label>
                 Image:
                 <Input
@@ -356,9 +372,10 @@ const ServiceListPage = () => {
                   value={serviceCategory}
                   onChange={(e) => setserviceCategory(e.target.value)}
                 >
+                  <option value="" disabled>Select a service category</option>
                   {categoryOptions.map((category) => (
-                    <option key={category[0]} value={category[0]}>
-                      {category[1]}
+                    <option key={category.id} value={category.id}>
+                      {category.name}
                     </option>
                   ))}
                 </select>
@@ -385,6 +402,7 @@ const ServiceListPage = () => {
 };
 
 export default ServiceListPage;
+
 
 
 
