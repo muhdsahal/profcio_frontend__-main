@@ -136,6 +136,7 @@ export function LoginForm(){
           }
 
         } catch (error) {
+          console.log(error,"fsfasdf");
           if (error.response && error.response.data.detail) {
             toast.error(error.response.data.detail);
           } else {

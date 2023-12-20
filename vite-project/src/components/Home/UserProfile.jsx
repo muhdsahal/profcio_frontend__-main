@@ -11,7 +11,6 @@ function UserProfile() {
   const [editing, setEditing] = useState(false);
   const [updatedUser, setupdatedUser] = useState({});
   const [imageFile, setImageFile] = useState(null);
-  const [password, setPassword] = useState("");
   const { userId } = useParams();
 
   useEffect(() => {
@@ -39,7 +38,6 @@ function UserProfile() {
     setEditing(false);
     setupdatedUser(user);
     setImageFile(null); // Clear the imageFile state
-    setPassword("");
   };
 
   const handleUpdateProfile = async () => {
@@ -55,8 +53,7 @@ function UserProfile() {
       formData.append("username", updatedUser.username);
       formData.append("email", updatedUser.email);
       formData.append("phone_number", updatedUser.phone_number);
-      formData.append("place", updatedUser.work);
-      formData.append("password", password);
+      formData.append("place", updatedUser.place);
   
       const authToken = localStorage.getItem("token");
       const tok = JSON.parse(authToken);
@@ -75,7 +72,6 @@ function UserProfile() {
       setUser(response.data);
       setEditing(false);
       setImageFile(null);
-      setPassword("");
   
       console.log(response.data, "Profile updated successfully");
       toast.success("Profile updated successfully");
@@ -155,26 +151,16 @@ function UserProfile() {
                             name="phone_number"
                             value={updatedUser.phone_number}
                             onChange={handleInputChange}
-                            placeholder="Phone Number"
+                            // placeholder="Phone Number"
                           />
                           <Input
-                            label="work"
+                            label="place"
                             type="text"
                             name="work"
                             value={updatedUser.place}
                             onChange={handleInputChange}
-                            placeholder="Work"
                           />
-                         
-                          
-                          <Input
-                            label="password"
-                            type="password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            // placeholder="Password"
-                          />
+
                           <div className="flex justify-between">
                             <Button
                               color="red"

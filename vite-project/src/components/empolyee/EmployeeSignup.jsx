@@ -10,11 +10,16 @@ import {Card,
 
 import {empRegisterURL} from '../../constants/constants'
 import Loader from '../Loading/Loading'
+import citiesData from "./locations.json";
 
 export function EmployeeRegistrationForm(){
     const navigate = useNavigate()
     const serviceListURL  =  'http://127.0.0.1:8000/auth/services/'
 
+    const cityOptions = citiesData.cities.map((city) => ({
+      value: city.City,
+      label: city.City,
+    }));
     const toLogin = () =>{
       navigate("/employee/employee_login/")
     }
@@ -46,7 +51,9 @@ export function EmployeeRegistrationForm(){
     const [loading,setLoading] = useState(false);
     const handleLoading = () => setLoading((cur)=> !cur);
     // const [dataLoaded, setDataLoaded] = useState(false); // Track whether data has been loaded
-
+    const handleInputChange = (e) => {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
     //email validation Handler
     const validEmail = (email) => {
@@ -101,10 +108,10 @@ export function EmployeeRegistrationForm(){
         //   toast.error("work should not be empty!")
         //   return false
         // }
-        else if(formData.place.trim()=== ""){
-          toast.error("place should not be empty!")
-          return false
-        }
+        // else if(formData.place.trim()=== ""){
+        //   toast.error("place should not be empty!")
+        //   return false
+        // }
         else if(formData.description.trim()=== ""){
           toast.error("description should not be empty!")
           return false
@@ -341,22 +348,29 @@ export function EmployeeRegistrationForm(){
           </div>
           </div>
           <div className="flex gap-6">
+
           <div className="flex-1">
           <Typography  color="blue-gray-200" className="-mb-3">
                Enter Your Place 
           </Typography>
           <br />
-          <Input
-               size="lg"
-               placeholder="place"
-          
-               value={formData.place} name="place"
-               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
-               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-               labelProps={{
-                 className: "before:content-none after:content-none",
-               }}
-             />
+
+              <select
+              value={formData.place}
+              name="place"
+              onChange={(e) => {
+                setFormData({ ...formData, [e.target.name]: e.target.value });
+              }}
+              className="!border-t-blue-gray-200"
+                
+              >
+                <option value="">Select a city</option>
+                {cityOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
           </div>
           <div className="flex-1">
           <Typography  color="blue-gray-200" className="-mb-3">

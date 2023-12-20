@@ -14,7 +14,6 @@ function EmployeeProfile() {
   const [editing, setEditing] = useState(false);
   const [updatedEmployee, setUpdatedEmployee] = useState({});
   const [imageFile, setImageFile] = useState(null);
-  const [password, setPassword] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +40,6 @@ function EmployeeProfile() {
     setEditing(false);
     setUpdatedEmployee(employee);
     setImageFile(null); // Clear the imageFile state
-    setPassword("");
   };
 
   const handleUpdateProfile = async () => {
@@ -60,7 +58,6 @@ function EmployeeProfile() {
       formData.append("work", updatedEmployee.work);
       formData.append("experience", updatedEmployee.experience);
       formData.append("charge", updatedEmployee.charge);
-      formData.append("password", password);
   
       const authToken = localStorage.getItem("token");
       const tok = JSON.parse(authToken);
@@ -79,7 +76,6 @@ function EmployeeProfile() {
       setEmployee(response.data);
       setEditing(false);
       setImageFile(null);
-      setPassword("");
   
       console.log(response.data, "Profile updated successfully");
       toast.success("Profile updated successfully");
@@ -188,14 +184,7 @@ function EmployeeProfile() {
                             onChange={handleInputChange}
                             placeholder="Charge"
                           />
-                          <Input
-                            label="password"
-                            type="password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            // placeholder="Password"
-                          />
+
                           <div className="flex justify-between">
                             <Button
                               color="red"
