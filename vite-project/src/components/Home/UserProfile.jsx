@@ -90,7 +90,7 @@ function UserProfile() {
   };
 
   return (
-    <div className="w-screen flex justify-center pt-10 bg-gray-50" >
+    <div className="w-screen flex justify-center pt-10 bg-gray-50 overflow-hidden" >
       {user && (
         <div className="w-screen min-h-screen flex justify-center px-2  bg-gray-50" >
           <div className="md:w-2/4 py-5 px-10 bg-white rounded-md border shadow  h-fit">
@@ -142,7 +142,7 @@ function UserProfile() {
                             type="text"
                             name="email"
                             value={updatedUser.email}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
                             placeholder="Email"
                           />
                           <Input

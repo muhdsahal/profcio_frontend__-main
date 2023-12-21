@@ -6,28 +6,29 @@ import { Button, Dialog, Card, CardHeader, CardBody, CardFooter, Typography, Inp
 import axios  from "axios";
 import Modal from 'react-modal';
 import { ServiceCatergoryURL } from "../../constants/constants";
+import toast, { Toaster } from 'react-hot-toast';
+
 Modal.setAppElement('#root')
 function CategoryService(){
     const [open,setOpen] = useState(false)
     const [editOpen,setEditOpen] = useState(false)
     const handleOpenModal = () => setOpen((cur) => !cur);
-    // const editOpenModal = () => setEditOpen((cur) => !cur);
+    const editOpenModal = () => setEditOpen((cur) => !cur);
     const [categoryName,setCategoryName] = useState('')
     const [category,setCategory] =useState([])
-    const [categoryList, setCategoryList] = useState([]);
     const [editCategoryId,setEditCategoryId] = useState('')
-    const [errorOccurred, setErrorOccurred] = useState(false);
+    const [manageState, setManageState] = useState(false)
 
 
     useEffect(() => {
-        
+        setManageState(false)
 
         axios
             .get(ServiceCatergoryURL)
             .then((response) => {
                 const responseData = response.data;
                 setCategory(responseData)
-
+                
                 
             })
             .catch((error) => {
@@ -35,10 +36,30 @@ function CategoryService(){
                 // setLaoding(false)
             })
 
-    }, [])
+    }, [manageState])
 
 
     const CreateCategory = () => {
+
+
+        if (categoryName.trim().length < 3) {
+          toast.error("Category name must be at least 3 characters long");
+          return;
+        }
+
+        if (!/^[a-zA-Z]+$/.test(categoryName.trim()) || !isNaN(categoryName.trim())) {
+          toast.error("Category name can only contain letters. Numbers and minus numbers are not allowed.");
+          return;
+      }
+        if (!categoryName.trim()) {
+            toast.error("Category name cannot be empty");
+            return;
+        }
+        if (category.some(item => item.name === categoryName)) {
+          toast.error("Category name already exists");
+          return;
+        }
+        
         const formData = new FormData();
         formData.append('name',categoryName)
 
@@ -51,99 +72,82 @@ function CategoryService(){
         })
         handleOpenModal()
     }
+
     
     const editHandleCategory = (e) => {
-
-      
-        setEditCategoryId(e)
-        console.log(editCategoryId,'idddddddddddddddddddddd');
-        axios.get(`${ServiceCatergoryURL}${e}/`)
+      const value= category.find((obj)=>obj.id===e)
+      // console.log(value,'kkkkkkkkkkkkkkkkkkkkkkvale');
+      setCategoryName(value.name)
+      console.log("Edit Handle Category: ", e);
+    
+      setEditCategoryId(e);
+      axios.get(`${ServiceCatergoryURL}${e}/`)
         .then(response => {
-            setCategoryName(response.data.name)
-            return response.data;
+          console.log("Category data:", response.data);
+          setCategoryName(response.data.name);
+          
+          return response.data;
+
         })
         .catch(error => {
-            console.error("error creating category",error);
-        })
-        editOpenModal()
-    }
-
-
-  const editOpenModal = () => {
-    setEditOpen(!editOpen);
-  };
-
-  const fetchAndUpdateCategoryList = () => {
-    axios.get(`${ServiceCatergoryURL}`)
-      .then(response => {
-        setCategoryList(response.data);
-      })
-      .catch(error => {
-        console.error("Error fetching category list", error);
-      });
-  };
-
-  const CategoryEdit = () => {
-    const formData = new FormData();
-    formData.append('name', categoryName);
-
-    axios.patch(`${ServiceCatergoryURL}${editCategoryId}/`, formData)
-      .then(response => {
-        fetchAndUpdateCategoryList();
-        setCategoryName('');
-        console.log("Edit successful");
-        editOpenModal();
-      })
-      .catch(error => {
-        if (error.response && error.response.status === 404) {
-          console.error("Resource not found. Check the ID and URL.", error);
-          setErrorOccurred(true);  // Set error state to true
-        } else {
           console.error("Error editing category", error);
-          setErrorOccurred(true);  // Set error state to true for other errors
-        }
-      });
-  };
-         
-    // const classes = "p-4 b order-b border-blue-gray-50";
+        });
+      editOpenModal();
+    }
+    
+    const CategoryEdit = () => {
+      if (categoryName.trim().length < 3) {
+        toast.error("Category name must be at least 3 characters long");
+        return;
+      }
 
-    // const CategoryEdit = () => {
-    //     // Assuming ServiceCatergoryURL is the base URL for your category service
-    //     // You may need to adjust the URL based on your API structure
-    //     axios.put(`${ServiceCatergoryURL}${editCategoryId}/`, {
-    //       name: categoryName,
-    //       // Add other properties you want to update
-    //     })
-    //       .then(response => {
-    //         // Handle successful category update
-    //         console.log("Category updated successfully", response.data);
-    //         // Close the edit modal or perform any other actions
-    //       })
-    //       .catch(error => {
-    //         console.error("Error updating category", error);
-    //         // Handle error, display an error message, or perform other actions
-    //       });
-    //   };
+      if (!/^[a-zA-Z]+$/.test(categoryName.trim()) || !isNaN(categoryName.trim())) {
+        toast.error("Category name can only contain letters. Numbers and minus numbers are not allowed.");
+        return;
+    }
+      if (!categoryName.trim()) {
+          toast.error("Category name cannot be empty");
+          return;
+      }
+      if (category.some(item => item.name === categoryName)) {
+        toast.error("Category name already exists");
+        return;
+      }
+    
+    
+      const formData = new FormData();
+      formData.append('name', categoryName);
+    
+      axios.put(`${ServiceCatergoryURL}${editCategoryId}`, formData)
+        .then(response => {
+          setCategoryName('');
+          console.log("Edit successful");
+          toast.success("category edited successfully..!");
+          setManageState(true)
+        })
+        .catch(error => {
+          console.error("Error editing category", error);
+        });
+      editOpenModal();
+    };
     
       const classes = "p-4 border-b border-blue-gray-50";
 
-
+      const getSortedCategory = () => {
+        return category.slice().sort((a, b) => a.id - b.id);
+    };
     return(
         <div className="flex flex-col min-h-screen items-center justify-center">
-        <Card className="w-full max-w-screen-xl overflow-hidden">
-          <div className="my-4 mx-4 overflow-x-auto">
-            <Button
-              className="bg-green-500 text-white px-4 py-2 rounded"
-              onClick={handleOpenModal}
-            >
-              Create Category
-            </Button>
-          </div>
-      
-          <div className="my-4 mx-4 overflow-x-auto">
-            
-          </div>
-        </Card>
+        <Card className="my-4 mx-4 overflow-x-auto">
+        <div>
+          <Button
+            className="bg-green-500 text-white px-4 py-2 "
+            onClick={handleOpenModal}
+          >
+            Create Category
+          </Button>
+        </div>
+      </Card>
         <Card className="h-full w-full overflow-scroll">
       <table className="w-full min-w-max table-auto text-left">
         <thead>
@@ -155,7 +159,7 @@ function CategoryService(){
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="font-prompt-semibold"
                 >
                   Id
                 </Typography>
@@ -166,7 +170,7 @@ function CategoryService(){
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="font-prompt-semibold"
                 >
                   Name
                 </Typography>
@@ -177,7 +181,7 @@ function CategoryService(){
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="font-prompt-semibold"
                 >
                   Edit
                 </Typography>
@@ -186,13 +190,13 @@ function CategoryService(){
           </tr>
         </thead>
         <tbody>
-                  {category.map((category) => (
+                  {getSortedCategory().map((category) => (
                     <tr key={category.id}>
                       <td className={classes}>
                         <Typography
                           variant="small"
                           color="blue-gray"
-                          className="font-normal"
+                          className="font-prompt-semibold"
                         >
                           {category.id}
                         </Typography>
@@ -201,7 +205,7 @@ function CategoryService(){
                         <Typography
                           variant="small"
                           color="blue-gray"
-                          className="font-normal"
+                          className="font-prompt-semibold"
                         >
                           {category.name}
                         </Typography>
@@ -220,69 +224,70 @@ function CategoryService(){
       
                   ))}
                 </tbody>
-      </table>
-    </Card>
-      
-        <Dialog
-          size="xs"
-          open={open}
-          handler={handleOpenModal}
-          className="bg-transparent shadow-none"
-        >
-          <Card className="mx-auto w-full max-w-md">
-            <CardBody className="flex flex-col gap-4">
-              <Typography variant="h4" color="blue-gray">
-                Create Service
-              </Typography>
-              <label>
-                Name:
-                <Input
-                  type="text"
-                  name="name"
-                  value={categoryName}
-                  onChange={(e) => setCategoryName(e.target.value)}
-                  className="w-full"
-                />
-              </label>
-            </CardBody>
-            <CardFooter className="pt-0">
-              <Button variant="gradient" onClick={CreateCategory} fullWidth>
-                Create Service
-              </Button>
-            </CardFooter>
-          </Card>
-        </Dialog>
-      
-        <Dialog
-          size="xs"
-          open={editOpen}
-          handler={editOpenModal}
-          className="bg-transparent shadow-none"
-        >
-          <Card className="mx-auto w-full max-w-md">
-            <CardBody className="flex flex-col gap-4">
-              <Typography variant="h4" color="blue-gray">
-                Edit Service
-              </Typography>
-              <label>
-                Name:
-                <Input
-                  type="text"
-                  name="name"
-                  value={categoryName}
-                  onChange={(e) => setCategoryName(e.target.value)}
-                  className="w-full"
-                />
-              </label>
-            </CardBody>
-            <CardFooter className="pt-0">
-              <Button variant="gradient" onClick={CategoryEdit} fullWidth>
-                Edit Service
-              </Button>
-            </CardFooter>
-          </Card>
-        </Dialog>
-      </div>
+                </table>
+                  </Card>
+                    
+                      <Dialog
+                        size="xs"
+                        open={open}
+                        handler={handleOpenModal}
+                        className="bg-transparent shadow-none"
+                      >
+                        <Card className="mx-auto w-full max-w-md">
+                          <CardBody className="flex flex-col gap-4">
+                            <Typography variant="h4" color="blue-gray">
+                              Create Service
+                            </Typography>
+                            <label>
+                              Name:
+                              <Input
+                                type="text"
+                                name="name"
+                                value={categoryName}
+                                onChange={(e) => setCategoryName(e.target.value)}
+                                className="w-full"
+                              />
+                            </label>
+                          </CardBody>
+                          <CardFooter className="pt-0">
+                            <Button variant="gradient" onClick={CreateCategory} fullWidth>
+                              Create Service
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      </Dialog>
+                    
+                      <Dialog
+                        size="xs"
+                        open={editOpen}
+                        handler={editOpenModal}
+                        className="bg-transparent shadow-none"
+                      >
+                        <Card className="mx-auto w-full max-w-md">
+                          <CardBody className="flex flex-col gap-4">
+                            <Typography variant="h4" color="blue-gray">
+                              Edit Service
+                            </Typography>
+                            <label>
+                              Name:
+                              <Input
+                                type="text"
+                                name="name"
+                                value={categoryName}
+                                onChange={(e) => setCategoryName(e.target.value)}
+                                className="w-full"
+                              />
+                            </label>
+                          </CardBody>
+                          <CardFooter className="pt-0">
+                            <Button variant="gradient" onClick={CategoryEdit} fullWidth>
+                              Edit Service
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      </Dialog>
+                      <Toaster/>
+                    </div>
       
 
     )

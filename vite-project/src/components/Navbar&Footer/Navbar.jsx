@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import { useNavigate,Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -26,14 +26,14 @@ export default function ResponsiveNavBar() {
   const token = localStorage.getItem('token')
   const decode = jwtDecode(token)
   const userId = decode.user_id
-  console.log(userId,'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
+  console.log(userId, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
   const navigate = useNavigate()
   const isLoggedIn = !!localStorage.getItem('token');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate("/login/")
-  
+
   }
   const handleLogin = () => {
     navigate("/login/")
@@ -42,6 +42,7 @@ export default function ResponsiveNavBar() {
   const toProfile = () => {
     navigate(`/userprofile/${userId}/`)
   }
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -57,13 +58,14 @@ export default function ResponsiveNavBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#000000' }} >
+    <AppBar position="static" sx={{ backgroundColor: 'lightseagreen' }} >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to='/'>
-          <img src={logo} alt="logo" color='green' width="150" height="100" />
+            <img src={logo} alt="logo" color='green' width="150" height="100" />
           </Link>
           <Typography
             variant="h6"
@@ -117,22 +119,37 @@ export default function ResponsiveNavBar() {
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page} 
-              </Button>
-            ))}
+
+            <Button
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              <Link to={'/'}
+              className='font-Kantumruy'
+              style={{ fontSize: '16px', color: 'black' }}>
+                Home</Link>
+            </Button>
+
+          
+
+            <Button sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+                  <Link
+                    to={'/employeelist/'}
+                    className='font-Kantumruy'
+                    style={{ fontSize: '16px', color: 'black' }}
+                  >
+                    employees
+                  </Link>            
+            </Button>
+
           </Box>
-          
-          
+
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <img alt="img" src="https://bootdey.com/img/Content/avatar/avatar6.png" className='rounded-full w-12' />
+
               </IconButton>
             </Tooltip>
             <Menu
@@ -154,21 +171,23 @@ export default function ResponsiveNavBar() {
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
+
                 </MenuItem>
               ))}
-              
+
               <Button
                 onClick={isLoggedIn ? handleLogout : handleLogin}
-                className="bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
+                className="bg-blue-gray-100 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
               >{isLoggedIn ? 'Logout' : 'Login'}
               </Button>
+              <br />
 
               <Button
                 onClick={toProfile}
-                className="bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
+                className="bg-green-500 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
               >Userprofile
               </Button>
-                          
+
             </Menu>
           </Box>
         </Toolbar>

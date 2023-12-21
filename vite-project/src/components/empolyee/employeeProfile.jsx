@@ -8,7 +8,6 @@ import toast,{ Toaster } from "react-hot-toast";
 import { base_url } from "../../constants/constants";
 
 function EmployeeProfile() {
-  const cl = console.log.bind(console)
   const { userId } = useParams();
   const [employee, setEmployee] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -39,7 +38,7 @@ function EmployeeProfile() {
   const handleCancelEdit = () => {
     setEditing(false);
     setUpdatedEmployee(employee);
-    setImageFile(null); // Clear the imageFile state
+    setImageFile(null); 
   };
 
   const handleUpdateProfile = async () => {
@@ -97,10 +96,10 @@ function EmployeeProfile() {
   console.log(imageFile, "imageFile");
 
   return (
-    <div className="w-screen flex justify-center pt-10 bg-gray-50" >
+    <div className=" flex justify-center pt-10 bg-gray-50" >
       {employee && (
-        <div className="w-screen min-h-screen flex justify-center px-2  bg-gray-50" >
-          <div className="md:w-2/4 py-5 px-10 bg-white rounded-md border shadow  h-fit">
+        <div className=" min-h-screen flex justify-center px-2  bg-gray-50" >
+          <div className=" py-5 px-10 bg-white rounded-md border shadow  h-fit">
 
           
             <Typography variant="h3" color="blue" className="flex justify-center">
@@ -149,7 +148,7 @@ function EmployeeProfile() {
                             type="text"
                             name="email"
                             value={updatedEmployee.email}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
                             placeholder="Email"
                           />
                           <Input
@@ -165,7 +164,7 @@ function EmployeeProfile() {
                             type="text"
                             name="work"
                             value={updatedEmployee.work}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
                             placeholder="Work"
                           />
                           <Input

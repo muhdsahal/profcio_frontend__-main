@@ -72,18 +72,18 @@ function UserList() {
 
 
     return (
-        <div className="flex flex-col min-h-screen">
-            <Card className="flex-1 w-full xl:w-[1005px] ">
-            <input onChange={(e) => SearchUser(e.target.value)} className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black' type="text" placeholder='  Search' />
-
-                <table className="  text-left">
+        <div className="flex flex-col min-h-screen items-center ">
+            
+            {/* <input onChange={(e) => SearchUser(e.target.value)} className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black' type="text" placeholder='  Search' /> */}
+            <Card className="h-full w-full overflow-scroll">
+                <table className='w-full min-w-max table-auto text-left'>
                     <thead>
                         <tr>
                         <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
                                 <Typography
                                     variant="small"
                                     color="blue-gray"
-                                    className="font-normal leading-none opacity-70"
+                                    className="font-prompt-normal leading-none opacity-70"
                                 >
                                     Id
                                 </Typography>
@@ -92,7 +92,7 @@ function UserList() {
                                 <Typography
                                     variant="small"
                                     color="blue-gray"
-                                    className="font-normal leading-none opacity-70"
+                                    className="font-prompt-normal leading-none opacity-70"
                                 >
                                     Name
                                 </Typography>
@@ -101,7 +101,7 @@ function UserList() {
                                 <Typography
                                     variant="small"
                                     color="blue-gray"
-                                    className="font-normal leading-none opacity-70"
+                                    className="font-prompt-normal leading-none opacity-70"
                                 >
                                     Email
                                 </Typography>
@@ -111,7 +111,7 @@ function UserList() {
                                 <Typography
                                     variant="small"
                                     color="blue-gray"
-                                    className="font-normal leading-none opacity-70"
+                                    className="font-prompt-normal leading-none opacity-70"
                                 >
                                     User Type
                                 </Typography>
@@ -121,7 +121,7 @@ function UserList() {
                                 <Typography
                                     variant="small"
                                     color="blue-gray"
-                                    className="font-normal leading-none opacity-70"
+                                    className="font-prompt-normal leading-none opacity-70"
                                 >
                                     Action
                                 </Typography>
@@ -130,7 +130,7 @@ function UserList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user) => {
+                        {userList.map((user) => {
 
                             const classes =  "p-4 border-b border-blue-gray-50";
 
@@ -140,7 +140,7 @@ function UserList() {
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
-                                            className="font-normal"
+                                            className="font-prompt-normal"
                                         >
                                             {user.id}
                                         </Typography>
@@ -149,7 +149,7 @@ function UserList() {
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
-                                            className="font-normal"
+                                            className="font-prompt-normal"
                                         >
                                             {user.username}
                                         </Typography>
@@ -159,7 +159,7 @@ function UserList() {
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
-                                            className="font-normal"
+                                            className="font-prompt-normal"
                                         >
                                             {user.email}
                                         </Typography>
@@ -169,18 +169,18 @@ function UserList() {
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
-                                            className="font-normal"
+                                            className="font-prompt-normal"
                                         >
                                             {user.user_type}
                                         </Typography>
                                     </td>
                                         <td className={classes}>
                                         {user.is_active ? (
-                                            <Button className="bg-[#d11204] w-24" onClick={() => handleBlockUnblock(user.id, user.is_active)}>
+                                            <Button className="bg-[#d11204] w-18" onClick={() => handleBlockUnblock(user.id, user.is_active)}>
                                                 Block
                                             </Button>
                                             ) : (
-                                            <Button className="bg-[#20d104] w-24" onClick={() => handleBlockUnblock(user.id, user.is_active)}>
+                                            <Button className="bg-[#20d104] w-18" onClick={() => handleBlockUnblock(user.id, user.is_active)}>
                                                 <span className="-ml-2">Unblock</span>
                                             </Button>
                                         )}

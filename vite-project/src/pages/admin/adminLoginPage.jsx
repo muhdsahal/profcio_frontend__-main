@@ -4,7 +4,7 @@ import { AdminLoginForm } from "../../components/admin/AdminLogin";
 function AdminLoginPage(){
     return(
         <div>
-            <AdminLoginForm></AdminLoginForm>
+            <AdminLoginForm />
         </div>
     )
 }

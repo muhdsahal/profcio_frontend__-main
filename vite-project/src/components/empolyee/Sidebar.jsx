@@ -109,12 +109,12 @@ export function SidebarWithSearch() {
             </List>
           </AccordionBody>
         </Accordion>
-        <ListItem>
+        {/* <ListItem>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
           My Service
-        </ListItem>
+        </ListItem> */}
 
         <ListItem  onClick={toProfile}>
           <ListItemPrefix>

@@ -84,8 +84,6 @@ export function Sidebar() {
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
           Review
-          <ListItemSuffix>
-          </ListItemSuffix>
         </ListItem>
         <ListItem>
           <ListItemPrefix>

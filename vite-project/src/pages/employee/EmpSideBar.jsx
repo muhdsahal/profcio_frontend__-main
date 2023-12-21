@@ -3,7 +3,9 @@ import { SidebarWithSearch } from "../../components/empolyee/Sidebar";
 
 function EmpSideBar(){
     return (
-        <SidebarWithSearch></SidebarWithSearch>
+        <div>
+            <SidebarWithSearch />
+        </div>
     )
 }
 export default EmpSideBar

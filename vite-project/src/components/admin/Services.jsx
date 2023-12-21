@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Button, Dialog, Card, CardHeader, CardBody, CardFooter, Typography, Input, Checkbox, } from "@material-tailwind/react";
 import axios from 'axios';
 import Modal from 'react-modal';
-import {  ServiceListURL ,ServiceCatergoryURL } from '../../constants/constants';
+import { ServiceListURL, ServiceCatergoryURL } from '../../constants/constants';
 import Select from 'react-select';
+import toast, { Toaster } from 'react-hot-toast';
 // import 'react-select/dist/react-select.css';
 
 Modal.setAppElement('#root');
@@ -23,6 +24,8 @@ const ServiceListPage = () => {
   const [serviceImage, setserviceImage] = useState(null);
   const [editServiceData, seteditServiceData] = useState([])
   const [editService_id, seteditService_id] = useState('')
+  const [services, setServices] = useState([]);
+
 
   const handleFileInputChange = (e) => {
 
@@ -35,30 +38,24 @@ const ServiceListPage = () => {
 
 
 
-  const [services, setServices] = useState([]);
 
-      useEffect(() => {
-        
+  useEffect(() => {
+    axios
+      .get(ServiceListURL)
+      .then((response) => {
+        setServices(response.data)
+      })
+      .catch((error) => {
+        console.error("Error Fetching Data:", error);
+        // setLaoding(false)
+      })
 
-        axios
-            .get(ServiceListURL)
-            .then((response) => {
-                const responseData = response.data;
-                console.log(responseData,'dataaaaaaaaa');
-
-                
-            })
-            .catch((error) => {
-                console.error("Error Fetching Data:", error);
-                // setLaoding(false)
-            })
-
-    }, [])
-  
+  }, [])
 
 
 
-  
+
+
 
 
   useEffect(() => {
@@ -71,10 +68,42 @@ const ServiceListPage = () => {
         console.error('Error fetching category options:', error);
       });
   }, []);
-  console.log(categoryOptions,'optionsssssssssss');
+
 
 
   const serviceCreate = () => {
+   
+    if (!serviceName.trim()) {
+      toast.error("Service name cannot be empty");
+      return;
+  }
+
+  // Validation: Check if serviceName is at least 3 characters long
+  if (serviceName.trim().length < 3) {
+      toast.error("Service name must be at least 3 characters long");
+      return;
+  }
+
+  // Validation: Check if serviceName contains only letters and is not a number or minus number
+  if (!/^[a-zA-Z]+$/.test(serviceName.trim()) || !isNaN(serviceName.trim())) {
+      toast.error("Service name can only contain letters. Numbers and minus numbers are not allowed.");
+      return;
+  }
+
+  // Validation: Check if serviceName is not a repeating name
+  if (services.some(service => service.name === serviceName)) {
+      toast.error("Service name already exists. Please choose a different name.");
+      return;
+  }
+
+  // Validation: Check if serviceDiscription is empty
+  if (!serviceDiscription.trim()) {
+      toast.error("Service description cannot be empty");
+      return;
+  }
+
+  
+
     const formData = new FormData();
     formData.append('name', serviceName);
     formData.append('description', serviceDiscription);
@@ -87,72 +116,95 @@ const ServiceListPage = () => {
         setserviceDiscription(''),
         setserviceCategory(''),
         setserviceImage(null),
-        console.log('shafi successfull'))
-      .catch(error => {
-        console.error('Error creating service:', error);
-        // Handle error display or other actions as needed
-      });
+        console.log('daata successfull')),
+      toast.success("service createed Successfully")
+        .catch(error => {
+          console.error('Error creating service:', error);
+          // Handle error display or other actions as needed
+        });
     handleOpenModal()
   }
 
   const editHandleService = (e) => {
     seteditService_id(e)
     axios.get(`${ServiceListURL}${e}/`)
-    .then(response => {
-      setserviceName(response.data.name);
-      setserviceDiscription(response.data.description);
-      setserviceCategory(response.data.category);
-      setserviceImage(response.data.service_image);
-      console.log(editServiceData, 'llllllllllll');
-      return response.data; 
-    })
-    .catch(error => {
-      console.error('Error creating service:', error);
-      // Handle error display or other actions as needed
-    });
-  
+      .then(response => {
+        setserviceName(response.data.name);
+        setserviceDiscription(response.data.description);
+        setserviceCategory(response.data.category);
+        setserviceImage(response.data.service_image);
+        console.log(editServiceData, 'llllllllllll');
+        return response.data;
+      })
+      .catch(error => {
+        console.error('Error creating service:', error);
+        // Handle error display or other actions as needed
+      });
+
     editOpenModal()
   }
 
 
-  const serviceEdit =()=>{
+  const serviceEdit = () => {
+    if (!serviceName.trim()) {
+      toast.error("Service name cannot be empty");
+      return;
+  }
+
+  if (serviceName.trim().length < 3) {
+      toast.error("Service name must be at least 3 characters long");
+      return;
+  }
+
+  if (!/^[a-zA-Z]+$/.test(serviceName.trim()) || !isNaN(serviceName.trim())) {
+      toast.error("Service name can only contain letters. Numbers and minus numbers are not allowed.");
+      return;
+  }
+
+  if (services.some(service => service.name === serviceName)) {
+      toast.error("Service name already exists. Please choose a different name.");
+      return;
+  }
+
+  if (!serviceDiscription.trim()) {
+      toast.error("Service description cannot be empty");
+      return;
+  }
     const formData = new FormData();
     formData.append('name', serviceName);
     formData.append('description', serviceDiscription);
     formData.append('category', serviceCategory);
     // formData.append('service_image', serviceImage);
 
-    axios.patch(`${ServiceListURL}${editService_id}/`, formData)
-      .then(response => service_list(),
+    axios.put(`${ServiceListURL}${editService_id}/`, formData)
+      .then(response =>
         setserviceName(''),
         setserviceDiscription(''),
         setserviceCategory(''),
         setserviceImage(null),
+        toast.success("Service Edited  successfully!"),
         console.log(' edit successfull'))
       .catch(error => {
         console.error('Error creating service:', error);
         // Handle error display or other actions as needed
       });
-      editOpenModal()
+    editOpenModal()
 
   }
+  
+  const getSortedServices = () => {
+    return services.slice().sort((a, b) => a.id - b.id);
+};
 
 
-  // console.log(serviceCategory, 'formdataaaaaaaaaaaaaaaaaaaaa');
 
   const classes = "p-4 border-b border-blue-gray-50";
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Card className="flex-1 w-full xl:w-[1005px]">
-        {/* <input
-          // onChange={(e) => SearchService(e.target.value)}
-          className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black'
-          type="text"
-          placeholder='  Search'
-        /> */}
+    <div className="flex flex-col min-h-screen items-center ">
 
-        <div className="my-4 ml-16">
+      <Card className="my-4 mx-4 overflow-x-auto">
+        <div >
           <Button
             className="bg-green-500 text-white px-4 py-2 rounded"
             onClick={handleOpenModal}
@@ -160,15 +212,17 @@ const ServiceListPage = () => {
             Create Service
           </Button>
         </div>
+      </Card>
 
-        <table className="text-left">
+      <Card className="h-full w-full overflow-scroll">
+        <table className='w-full min-w-max table-auto text-left'>
           <thead>
             <tr>
               <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="font-prompt-semibold"
                 >
                   Id
                 </Typography>
@@ -177,7 +231,7 @@ const ServiceListPage = () => {
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="font-prompt-semibold"
                 >
                   Name
                 </Typography>
@@ -186,7 +240,7 @@ const ServiceListPage = () => {
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="font-prompt-semibold"
                 >
                   Description
                 </Typography>
@@ -195,7 +249,7 @@ const ServiceListPage = () => {
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="font-prompt-semibold"
                 >
                   Category
                 </Typography>
@@ -204,7 +258,7 @@ const ServiceListPage = () => {
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="font-prompt-semibold"
                 >
                   Action
                 </Typography>
@@ -213,13 +267,13 @@ const ServiceListPage = () => {
           </thead>
 
           <tbody>
-            {services.map((service) => (
+            {getSortedServices().map((service) => (
               <tr key={service.id}>
                 <td className={classes}>
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal"
+                    className="font-prompt-semibold"
                   >
                     {service.id}
                   </Typography>
@@ -228,7 +282,7 @@ const ServiceListPage = () => {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal"
+                    className="font-prompt-semibold"
                   >
                     {service.name}
                   </Typography>
@@ -237,13 +291,13 @@ const ServiceListPage = () => {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal"
+                    className="font-prompt-semibold"
                   >
                     {service.description}
                   </Typography>
                 </td>
                 <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal">
+                  <Typography variant="small" color="blue-gray" className="font-prompt-semibold">
                     {categoryOptions.find(category => category.id === service.category)?.name || 'N/A'}
                   </Typography>
                 </td>
@@ -260,9 +314,10 @@ const ServiceListPage = () => {
             ))}
           </tbody>
         </table>
-
-
       </Card>
+
+
+      {/* </Card> */}
 
 
       <>
@@ -271,7 +326,7 @@ const ServiceListPage = () => {
           size="xs"
           open={open}
           handler={handleOpenModal}
-          className="bg-transparent shadow-none"
+          className="bg-transparent"
         >
           <Card className="mx-auto w-full max-w-[24rem]">
             <CardBody className="flex flex-col gap-4">
@@ -397,6 +452,7 @@ const ServiceListPage = () => {
           </Card>
         </Dialog>
       </>
+      <Toaster />
     </div>
   );
 };

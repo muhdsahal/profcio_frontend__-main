@@ -3,7 +3,7 @@ import ResponseNavBar from '../../components/Navbar&Footer/Navbar'
 
 function Navbar() {
   return (
-    <ResponseNavBar></ResponseNavBar>
+    <ResponseNavBar />
   )
 }
 

@@ -27,7 +27,7 @@ export function ProfcioFooter() {
   //   navigate("/employee")
   // }
   return (
-    <footer className="relative w-full" style={{ backgroundColor: 'black', color: 'white' }}>
+    <footer className="relative w-full" style={{ backgroundColor: 'lightseagreen', color: 'black' }}>
       <div className="mx-auto w-full max-w-7xl px-8">
         <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
           <img src={logo} alt="logo" width="150" height="100" />
@@ -41,7 +41,7 @@ export function ProfcioFooter() {
               <ul key={title}>
                 <Typography
                   variant="small"
-                  color="blue-gray"
+                  color="black"
                   className="mb-3 font-medium opacity-40"
                 >
                   {title}
