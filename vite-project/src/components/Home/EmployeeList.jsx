@@ -8,6 +8,8 @@ import {
   Input,
   Select,
 } from "@material-tailwind/react";
+import { Link,useNavigate} from 'react-router-dom';
+import { EmployeeListingURL } from '../../constants/constants';
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
@@ -15,11 +17,11 @@ function EmployeeList() {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [employeesPerPage] = useState(8);
-
+  const navigate = useNavigate()
   useEffect(() => {
     // Make API request to fetch employee data
     axios
-      .get("http://127.0.0.1:8000/auth/employeelisting/")
+      .get(EmployeeListingURL)
       .then((response) => {
         setEmployees(response.data); // Assuming the API response contains an array of employee objects
       })
@@ -29,6 +31,8 @@ function EmployeeList() {
   }, []);
   
 
+
+ 
   useEffect(() => {
     // Filter employees based on search term
     const filtered = employees.filter((employee) =>
@@ -64,7 +68,7 @@ function EmployeeList() {
       <h2 className="text-2xl font-semibold mb-4">Employees</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {currentEmployees.map((employee) => (
-          <div key={employee.username} className="max-w-xs bg-white border rounded-lg overflow-hidden shadow-lg">
+          <div key={employee.id} className="max-w-xs bg-white border rounded-lg overflow-hidden shadow-lg">
             <img
               src={employee.profile_photo}
               alt="card-image"
@@ -76,9 +80,13 @@ function EmployeeList() {
               <p className="text-gray-700 mb-2">₹{employee.charge}</p>
               <p className="text-gray-600">{employee.description}</p>
               <div className="mt-4">
-                <Button color="blue" ripple="light" className="px-4 py-2 rounded">
-                  Book Now
-                </Button>
+              
+              <Button color="blue" ripple="light" className="px-4 py-2 rounded" 
+              onClick={()=>navigate(`/employeedetails/${employee.id}/`)}
+              >
+                Book Now
+              </Button>
+          
               </div>
             </div>
           </div>
