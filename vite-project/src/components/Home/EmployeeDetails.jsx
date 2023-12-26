@@ -7,9 +7,12 @@ import { Button } from '@mui/material';
 import { Box } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { AddShoppingCart, Favorite } from '@mui/icons-material';
-
+import "react-calendar/dist/Calendar.css";
+import UserBookingComponent from './UserBooking';
 const EmployeeDetails = () => {
   const [employeeData, setEmployeeData] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(null); // Add selectedDay state
+
   const { id } = useParams(); 
 
   useEffect(() => {
@@ -96,7 +99,13 @@ const EmployeeDetails = () => {
             </Button>
           </Box>
         </div>
+
+        <UserBookingComponent
+              selectedDay={selectedDay}
+              onSelectUserDay={(day) => setSelectedDay(day)}
+            />
       </section>
+      
        ) : (
         <p>Loading...</p>)}
    </>
