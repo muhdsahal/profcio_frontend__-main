@@ -8,6 +8,8 @@ import toast,{ Toaster } from "react-hot-toast";
 import { base_url } from "../../constants/constants";
 import EmployeeBookingComponent from "./EmployeeBooking";
 import UserBookingComponent from "../Home/UserBooking"
+import AvailabilitySettings from "./AvailabiltyOEmployee";
+import EmployeeAvailabilityCalendar from "./EmployeeCalender";
 
 function EmployeeProfile() {
   const { userId } = useParams();
@@ -15,6 +17,8 @@ function EmployeeProfile() {
   const [editing, setEditing] = useState(false);
   const [updatedEmployee, setUpdatedEmployee] = useState({});
   const [imageFile, setImageFile] = useState(null);
+  const [availability, setAvailability] = useState([]); // Store fetched availability
+
 
 
   useEffect(() => {
@@ -95,67 +99,12 @@ function EmployeeProfile() {
       [name]: value,
     }));
   };
-  const [selectedDays, setSelectedDays] = useState([]);
-  const [selectedUserDay, setSelectedUserDay] = useState('');
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Example initial state
-
-  const handleEmployeeDaysSelect = (days) => {
-    setSelectedDays(days);
-  };
-
-  const handleUserConfirmBooking = (day) => {
-    setSelectedUserDay(day);
-    // Perform actions to book the selected day by the user
-    // Send the 'day' to the server for booking
-  };
-
-  const handleDateSelect = (date) => {
-    setSelectedDate(date);
-    // Send the selected date to the backend for saving
-    saveSelectedDateToBackend(date); // Function to send data to backend
-  };
-
-  // const apiUrl = 'http://127.0.0.1:8000/auth/employeebooking/'
-  const [employeeId, setEmployeeId] = useState(null);
-
-  useEffect(() => {
-    // Fetch employee details, including employee ID, from the backend
-    fetch('http://127.0.0.1:8000/auth/user_profile/', {
-      // Add appropriate headers or authentication tokens if required
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Assuming the backend response contains employee details including employee ID
-        setEmployeeId(data.employeeId); // Set the employeeId state based on the response
-      })
-      .catch((error) => {
-        console.error('Error fetching employee details:', error);
-      });
-  }, []);
-console.log(employeeId,'rrrrrrrrrrrrrrrrrrrr');
-  const saveSelectedDateToBackend = (date) => {
-    fetch(`http://127.0.0.1:8000/employeebooking/${employeeId}/book/`, {
-      method: 'POST',
-      body: JSON.stringify({ selectedDate: date }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log('Date saved successfully!');
-          // Handle success
-        } else {
-          console.error(error,'Failed to save date');
-          // Handle failure
-        }
-      })
-      .catch((error) => {
-        console.error('Error occurred:', error);
-        // Handle errors
-      });
-  };
   
+
+  
+
+  
+
   return (
     <div className=" flex justify-center pt-10 bg-gray-50" >
       {employee && (
@@ -363,23 +312,24 @@ console.log(employeeId,'rrrrrrrrrrrrrrrrrrrr');
             </div>
             <div className="">
             <div className="container mx-auto p-6 bg-gray-100">
-              <div className="bg-white shadow-md rounded-md p-6 mb-6">
-                <h2 className="text-3xl font-bold mb-4">Employee Schedule</h2>
-                <div className="border border-gray-300 p-4">
-                  <EmployeeBookingComponent onDaysSelect={handleEmployeeDaysSelect} />
-                </div>
-              </div>
+            <div>
+              {/* Other profile content */}
+              <AvailabilitySettings
+                initialAvailability={availability} // Pass initial data if available
+                onSaveAvailability={(updatedAvailability) => {
+                  setAvailability(updatedAvailability); // Update state on save
+                  // Send updated availability to backend
+                }}
+              />
+            </div>
+            <div>
+              {/* Other profile details */}
+              <h2>Manage Availability</h2>
+              <EmployeeAvailabilityCalendar />
+            </div>
 
-              {/* Show User Booking Component if a day is selected */}
-                <div className="bg-white shadow-md rounded-md p-6">
-                {selectedUserDay ? (
-                  <UserBookingComponent selectedDay={selectedUserDay} onConfirmBooking={handleUserConfirmBooking} />
-                ) : (
-                  <p className="italic text-gray-500">Please wait for the user to select a day</p>
-                )}
 
-                <button onClick={() => handleDateSelect(new Date())}>Select Date</button>
-              </div>
+              
             </div>
             </div>
           </div>

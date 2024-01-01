@@ -13,10 +13,6 @@ import { EmployeeListingURL } from '../../constants/constants';
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredEmployees, setFilteredEmployees] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [employeesPerPage] = useState(8);
   const navigate = useNavigate()
   useEffect(() => {
     // Make API request to fetch employee data
@@ -32,42 +28,12 @@ function EmployeeList() {
   
 
 
- 
-  useEffect(() => {
-    // Filter employees based on search term
-    const filtered = employees.filter((employee) =>
-      employee.username.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredEmployees(filtered);
-  }, [searchTerm, employees]);
-
-  // Pagination logic
-  const indexOfLastEmployee = currentPage * employeesPerPage;
-  const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
-  const currentEmployees = filteredEmployees.slice(
-    indexOfFirstEmployee,
-    indexOfLastEmployee
-  );
-
-  // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   return (
     <div>
-      <div className="flex items-center mb-4">
-        <Input
-          type="text"
-          placeholder="Search by username..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="mr-2"
-        />
-        {/* Add other filters as needed */}
-        {/* Example: <Select options={...} onChange={...} /> */}
-      </div>
+      
       <h2 className="text-2xl font-semibold mb-4">Employees</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {currentEmployees.map((employee) => (
+        {employees.map((employee) => (
           <div key={employee.id} className="max-w-xs bg-white border rounded-lg overflow-hidden shadow-lg">
             <img
               src={employee.profile_photo}
@@ -92,8 +58,50 @@ function EmployeeList() {
           </div>
         ))}
       </div>
+      
+    </div>
+  );
+}
+
+export default EmployeeList;
+
+  // useEffect(() => {
+  //   // Filter employees based on search term
+  //   const filtered = employees.filter((employee) =>
+  //   employee.username.toLowerCase().includes(searchTerm.toLowerCase()),
+  
+
+  //   );
+  //   setFilteredEmployees(filtered);
+  // }, [searchTerm, employees]);
+
+  // // Pagination logic
+  // const indexOfLastEmployee = currentPage * employeesPerPage;
+  // const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
+  // const currentEmployees = filteredEmployees.slice(
+  //   indexOfFirstEmployee,
+  //   indexOfLastEmployee
+  // );
+
+  // // Change page
+  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
+  {/* <div className="flex items-center mb-4">
+        <Input
+          type="text"
+          placeholder="Search by username..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="mr-2"
+        />
+
+      </div> */}
+
+
+
       {/* Pagination */}
-      <ul className="flex justify-center mt-4">
+      {/* <ul className="flex justify-center mt-4">
         {Array.from({ length: Math.ceil(filteredEmployees.length / employeesPerPage) }).map((_, index) => (
           <li key={index}>
             <Button
@@ -106,9 +114,4 @@ function EmployeeList() {
             </Button>
           </li>
         ))}
-      </ul>
-    </div>
-  );
-}
-
-export default EmployeeList;
+      </ul> */}

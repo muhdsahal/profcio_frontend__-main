@@ -3,3 +3,6 @@
 @import 'tailwindcss/utilities';
 
 
+body{
+   overflow-x: hidden; 
+}

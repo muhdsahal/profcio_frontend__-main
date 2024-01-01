@@ -71,11 +71,12 @@ export function AdminLoginForm(){
 const handleLogin = async (e) => {
   if (validForm()) {
     handleLoading();
-
+console.log(user,'user............................');
     try {
       const response = await axios.post(UserLoginURL, user);
       const token = JSON.stringify(response.data);
       const decoded = jwtDecode(token);
+      console.log(response.data,'response=========>>>>>>>>>>');
 
       if (decoded.user_type !== 'admin') {
         toast.error(`${decoded.user_type} not valid in this Login`);
@@ -86,18 +87,20 @@ const handleLogin = async (e) => {
       }
 
     } catch (error) {
+      console.log(error,'errrrrrrrrrrrrrror');
       if (error.response && error.response.data.detail) {
         toast.error(error.response.data.detail);
       } else {
         toast.error("An Error occurred, please try again");
       }
-    } finally {
+    }
+     finally {
       handleLoading();
     }
   }
 };
     return (
-      <div className="flex items-center justify-center h-screen" >
+      <div className="flex items-center justify-center h-screen overflow-x" >
         {loading && <Loader />}
         <Card className="w-96"  >
           <div className="flex justify-center items-center screen" >

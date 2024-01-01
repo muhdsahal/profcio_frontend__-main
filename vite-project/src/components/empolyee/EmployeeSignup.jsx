@@ -1,6 +1,5 @@
 import React,{ useState ,useEffect} from "react";
 import toast,{ Toaster } from "react-hot-toast";
-
 import { useNavigate ,Link} from "react-router-dom";
 import axios from 'axios'
 import {Card,
@@ -39,21 +38,18 @@ export function EmployeeRegistrationForm(){
         description : "",
         experience : 0,
         charge:0,
+        profile_photo : null
         
         
     });
-
-    // const [user,setUser] = useState([]);
-    // const [imagefile,setimagefile]=useState(null)
-
 
     // for loading
     const [loading,setLoading] = useState(false);
     const handleLoading = () => setLoading((cur)=> !cur);
     // const [dataLoaded, setDataLoaded] = useState(false); // Track whether data has been loaded
-    const handleInputChange = (e) => {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    // const handleInputChange = (e) => {
+    //   setFormData({ ...formData, [e.target.name]: e.target.value });
+    // };
 
     //email validation Handler
     const validEmail = (email) => {
@@ -100,18 +96,7 @@ export function EmployeeRegistrationForm(){
           toast.error("phone number should not be empty")
           return false
         }
-        // else if(formData.phone_number.length !== 10){
-        //   toast.error("phone number should be 10 digit")
-        //   return false
-        // }
-        // else if(formData.work.trim()=== ""){
-        //   toast.error("work should not be empty!")
-        //   return false
-        // }
-        // else if(formData.place.trim()=== ""){
-        //   toast.error("place should not be empty!")
-        //   return false
-        // }
+       
         else if(formData.description.trim()=== ""){
           toast.error("description should not be empty!")
           return false
@@ -131,21 +116,7 @@ export function EmployeeRegistrationForm(){
         return true;
         
     }
-        // upload image 
-        // const handleInputChange = () =>{
-        //   const {name,value} = e.target
-        //   setFormData((preFormData) =>({
-        //     ...preFormData,
-        //     [name]:value,
-        //   }))
-        // }
-
-        // const handleImageChange = (e) => {
-        //   setimagefile(e.target.files[0])
-
-        // };
-
-
+        
           useEffect(() => {
             // Fetch the list of services from the API
             axios.get(serviceListURL)
@@ -158,9 +129,21 @@ export function EmployeeRegistrationForm(){
                 console.error('Error fetching service list:', error);
               });
           }, []); // Empty dependency array to run the effect only once when the component mounts
-          console.log(serviceList,'serviceListURL');
+          // console.log(serviceList,'serviceListURL');
 
-
+          const handleProfilePhotoChange = (e) => {
+            const file = e.target.files[0];
+          
+            if (file) {
+              // You can perform additional checks on the file if needed
+          
+              setFormData({
+                ...formData,
+                profile_photo: file,
+              });
+            }
+          };
+          
           
         
         // form submit handler
@@ -171,27 +154,43 @@ export function EmployeeRegistrationForm(){
             if (validForm()){
             handleLoading();
         try{
-          
-          
-            
-            const response = await axios.post(empRegisterURL,formData);
-            console.log(response.data,"dataaaaaaaaaaaaaaaaaaa");
-            toast.success("Registraion success..!")
-            
+          const formDataObj = new FormData();
 
-        setFormData({
-          username:"",
-          email:"",
-          password:"",
-          user_type : "employee",
-          phone_number:'+91'+'',
-          work : "",
-          place : "",
-          description : "",
-          experience : 0,
-          charge:0,
+          // Append all form data to FormData object
+          Object.entries(formData).forEach(([key, value]) => {
+          formDataObj.append(key, value);
+        });
+
+          if (formData.profile_photo) {
+            formDataObj.append("profile_photo", formData.profile_photo);
+          }
+            
+            // const response = await axios.post(empRegisterURL,formDataObj);
+            // console.log(response.data,"dataaaaaaaaaaaaaaaaaaa");
+            // toast.success("Registraion success..!")
+            const response = await axios.post(empRegisterURL, formDataObj, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+            toast.success("Registraion success..!")
+
+
+        // setFormData({
+        //   username:"",
+        //   email:"",
+        //   password:"",
+        //   user_type : "employee",
+        //   phone_number:'+91'+'',
+        //   work : "",
+        //   place : "",
+        //   description : "",
+        //   experience : 0,
+        //   charge:0,
+        //   profile_photo:null,
+         
           
-        })
+        // })
         setOther({conf_Password:""})
         handleLoading();
         console.log('registration successfull ',response.data);
@@ -324,34 +323,30 @@ export function EmployeeRegistrationForm(){
                }}
              />
           </div>
-          
           <div className="flex-1">
           <Typography  color="blue-gray-200" className="-mb-3">
-              Enter Your Work 
+               Enter Your description 
           </Typography>
           <br />
-          <select
-            value={formData.work}
-            name="work"
-            onChange={(e) => {
-              setFormData({ ...formData, [e.target.name]: e.target.value });
-            }}
-            className="!border-t-blue-gray-200" // Apply the same class here
-          >
-            <option value="" disabled>Select a service</option>
-            {Object.values(serviceList).map(service => (
-              <option key={service.id} value={service.name}>
-                {service.name}
-              </option>
-            ))}
-          </select>
+          <Input
+               size="lg"
+               placeholder="description"
+          
+               value={formData.description} name="description"
+               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
+               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+               labelProps={{
+                 className: "before:content-none after:content-none",
+               }}
+             />
           </div>
+          
           </div>
           <div className="flex gap-6">
 
           <div className="flex-1">
           <Typography  color="blue-gray-200" className="-mb-3">
-               Enter Your Place 
+               Select Your Place 
           </Typography>
           <br />
 
@@ -374,21 +369,26 @@ export function EmployeeRegistrationForm(){
           </div>
           <div className="flex-1">
           <Typography  color="blue-gray-200" className="-mb-3">
-               Enter Your description 
+              Enter Your Work 
           </Typography>
           <br />
-          <Input
-               size="lg"
-               placeholder="description"
-          
-               value={formData.description} name="description"
-               onChange={(e)=>{setFormData({...formData,[e.target.name]:e.target.value})}}
-               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-               labelProps={{
-                 className: "before:content-none after:content-none",
-               }}
-             />
+          <select
+            value={formData.work}
+            name="work"
+            onChange={(e) => {
+              setFormData({ ...formData, [e.target.name]: e.target.value });
+            }}
+            className="!border-t-blue-gray-200" // Apply the same class here
+          >
+            <option value="" disabled>Select a service</option>
+            {Object.values(serviceList).map(service => (
+              <option key={service.id} value={service.name}>
+                {service.name}
+              </option>
+            ))}
+          </select>
           </div>
+          
           </div>
           <div className="flex gap-6">
           <div className="flex-1">
@@ -429,10 +429,26 @@ export function EmployeeRegistrationForm(){
           </div>
           <br />
 
-          
           </div>
+          <div className="flex-1">
+            <Typography color="blue-gray-200" className="-mb-3">
+              Upload Profile Photo
+            </Typography>
+            <br />
+            <Input
+              size="lg"
+              type="file"
+              name="profile_photo"
+              onChange={(e) => handleProfilePhotoChange(e)}
+              className="!border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+            />
+          </div>
+
           
-        <Button  className="bg-rose-500 text-gray-700" fullWidth onClick={handleSubmit}>
+        <Button  className=" text-gray-700" fullWidth onClick={handleSubmit} style={{backgroundColor: 'lightseagreen'}}>
           Sign Up
         </Button>
         <Typography color="gray" className="mt-4 text-center font-normal">

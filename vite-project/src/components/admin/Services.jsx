@@ -297,9 +297,7 @@ const ServiceListPage = () => {
                   </Typography>
                 </td>
                 <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-prompt-semibold">
-                    {categoryOptions.find(category => category.id === service.category)?.name || 'N/A'}
-                  </Typography>
+                  
                 </td>
                 <td className={classes}>
                   <Button

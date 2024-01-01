@@ -7,11 +7,16 @@ import { Button } from '@mui/material';
 import { Box } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { AddShoppingCart, Favorite } from '@mui/icons-material';
-import "react-calendar/dist/Calendar.css";
-import UserBookingComponent from './UserBooking';
-const EmployeeDetails = () => {
+import AvailableDates from './AvailableDates';
+// import "react-calendar/dist/Calendar.css";
+// import { Calendar, momentLocalizer } from 'react-calendar';
+// import moment from 'moment'; // Import moment library
+
+// import UserBookingComponent from './UserBooking';
+
+function EmployeeDetails() {
   const [employeeData, setEmployeeData] = useState(null);
-  const [selectedDay, setSelectedDay] = useState(null); // Add selectedDay state
+  const [bookingData,setBookingData] = useState([])
 
   const { id } = useParams(); 
 
@@ -20,7 +25,7 @@ const EmployeeDetails = () => {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/auth/employeelisting/${id}/`);
         setEmployeeData(response.data);
-        console.log(response.data,'employeeeeeeeeeeeeeeeeeeeeeeee');
+        // console.log(response.data,'employeeeeeeeeeeeeeeeeeeeeeeee');
       } catch (error) {
         console.error('Error fetching employee data:', error);
       }
@@ -29,10 +34,27 @@ const EmployeeDetails = () => {
     fetchEmployeeData();
   }, [id]); // Fetch data whenever the ID changes
   // console.log(employeeData,'employeeData');
+  
+  useEffect(() => {
+    const fetchBookingData = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/auth/employee/${id}/book/`);
+        setBookingData(response.data);
+        console.log(response.data,'bookigdataaaaaaaaaaaaaaa');
+      } catch (error) {
+        console.error('Error fetching employee data:', error);
+      }
+    };
 
+    fetchBookingData();
+  }, [id]);
+ 
   if (!employeeData){
     return <Loader/>
   }
+
+ 
+  
   return (<>
   <div>
       <h1 className='flex text-center justify-center'>EmployeeDetails</h1>
@@ -77,16 +99,6 @@ const EmployeeDetails = () => {
             </div>
           </Box>
 
-          <Box mt={6}>
-            <p className="pb-2 text-xs text-gray-500">Quantity</p>
-            <div className="flex">
-              <Button>-</Button>
-              <div className="flex h-8 w-8 cursor-text items-center justify-center border-t border-b active:ring-gray-500">
-                1
-              </div>
-              <Button>+</Button>
-            </div>
-          </Box>
 
           <Box mt={7} display="flex" flexDirection="row" alignItems="center" gap={6}>
             <Button variant="contained" className="bg-violet-900 text-white hover:bg-blue-800">
@@ -100,10 +112,7 @@ const EmployeeDetails = () => {
           </Box>
         </div>
 
-        <UserBookingComponent
-              selectedDay={selectedDay}
-              onSelectUserDay={(day) => setSelectedDay(day)}
-            />
+        <AvailableDates  empId={employeeData.id}/>
       </section>
       
        ) : (

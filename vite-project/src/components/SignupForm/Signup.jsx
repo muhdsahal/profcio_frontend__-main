@@ -189,7 +189,7 @@ const handleSubmit = async (e) => {
                 />
               </div>
                   <br />
-              <Button variant="White" fullWidth className="bg-rose-500 text-gray-700" onClick={handleSubmit}>
+              <Button variant="White" fullWidth color="lightseagreen" className=" text-gray-700" onClick={handleSubmit}>
                 Signup
               </Button>
     
