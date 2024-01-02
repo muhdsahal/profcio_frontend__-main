@@ -6,10 +6,8 @@ import Grid from "@material-ui/core/Grid";
 
 import toast,{ Toaster } from "react-hot-toast";
 import { base_url } from "../../constants/constants";
-import EmployeeBookingComponent from "./EmployeeBooking";
-import UserBookingComponent from "../Home/UserBooking"
-import AvailabilitySettings from "./AvailabiltyOEmployee";
-import EmployeeAvailabilityCalendar from "./EmployeeCalender";
+import AvailableDates from "../Home/AvailableDates";
+
 
 function EmployeeProfile() {
   const { userId } = useParams();
@@ -17,7 +15,6 @@ function EmployeeProfile() {
   const [editing, setEditing] = useState(false);
   const [updatedEmployee, setUpdatedEmployee] = useState({});
   const [imageFile, setImageFile] = useState(null);
-  const [availability, setAvailability] = useState([]); // Store fetched availability
 
 
 
@@ -310,28 +307,8 @@ function EmployeeProfile() {
                 </div>
               </Card>
             </div>
-            <div className="">
-            <div className="container mx-auto p-6 bg-gray-100">
-            <div>
-              {/* Other profile content */}
-              <AvailabilitySettings
-                initialAvailability={availability} // Pass initial data if available
-                onSaveAvailability={(updatedAvailability) => {
-                  setAvailability(updatedAvailability); // Update state on save
-                  // Send updated availability to backend
-                }}
-              />
-            </div>
-            <div>
-              {/* Other profile details */}
-              <h2>Manage Availability</h2>
-              <EmployeeAvailabilityCalendar />
-            </div>
-
-
-              
-            </div>
-            </div>
+            <AvailableDates  empId={employee.id}/>
+          
           </div>
         </div>
       )}

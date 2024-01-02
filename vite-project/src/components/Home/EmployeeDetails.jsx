@@ -8,11 +8,7 @@ import { Box } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { AddShoppingCart, Favorite } from '@mui/icons-material';
 import AvailableDates from './AvailableDates';
-// import "react-calendar/dist/Calendar.css";
-// import { Calendar, momentLocalizer } from 'react-calendar';
-// import moment from 'moment'; // Import moment library
 
-// import UserBookingComponent from './UserBooking';
 
 function EmployeeDetails() {
   const [employeeData, setEmployeeData] = useState(null);
@@ -112,7 +108,7 @@ function EmployeeDetails() {
           </Box>
         </div>
 
-        <AvailableDates  empId={employeeData.id}/>
+        <AvailableDates   empId={employeeData.id}/>
       </section>
       
        ) : (

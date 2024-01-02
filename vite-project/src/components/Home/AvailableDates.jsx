@@ -4,12 +4,12 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { jwtDecode } from 'jwt-decode';
 import { Button } from '@material-tailwind/react';
+import toast, { Toaster } from "react-hot-toast";
 
 function AvailableDates(props) {
   const empId = props.empId;
   const [bookedDates, setBookedDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
-  
   const token = localStorage.getItem('token');
   const decode = jwtDecode(token);
   const userId = decode.user_id;
@@ -32,16 +32,10 @@ function AvailableDates(props) {
     setSelectedDate(date);
   };
 
-  const DateConverter = (date) => {
-    const modifiedDate = new Date(date);
-    modifiedDate.setDate(modifiedDate.getDate());
-    return modifiedDate.toISOString().split('T')[0];
-  };
-  
-
   const bookEmployee = async () => {
     try {
-      const formattedDate = DateConverter(selectedDate);
+      const formattedDate = selectedDate.toISOString().split('T')[0]; // Directly use selectedDate
+
       console.log('userId:', userId);
       console.log('empId:', empId);
       console.log('formattedDate:', formattedDate);
@@ -51,11 +45,12 @@ function AvailableDates(props) {
         empId,
         formattedDate // Date format as per your requirement
       });
-
+      toast.success("booking succcessfully completed !");
       console.log('Booking successful:', response.data.message);
       // You can perform any action after successful booking here
       return response.data; // Return the response if needed
     } catch (error) {
+      toast.error("an error during booking!");
       // Handle error
       console.error('Error booking:', error);
     }
@@ -68,17 +63,19 @@ function AvailableDates(props) {
         value={selectedDate}
         onChange={handleDateChange}
         tileDisabled={({ date }) =>
-          bookedDates.some((bookedDate) => bookedDate.toDateString() === date.toDateString())
+          bookedDates.some((bookedDate) => bookedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]) ||
+          date.getTime() <= new Date().setHours(0, 0, 0, 0) // Disable today and previous days
         }
       />
       <p>
-        Selected Date: {selectedDate && selectedDate.toISOString().split('T')[0]}
-        {selectedDate ? (
+        Selected Date: {selectedDate && selectedDate.toLocaleDateString()}
+        {selectedDate && selectedDate.getTime() > new Date().setHours(0, 0, 0, 0) && ( // Enable button only for future dates
           <Button color='blue' onClick={bookEmployee}>
             Book Now
           </Button>
-        ) : null}
-      </p>  
+        )}
+      </p>
+      <Toaster />
     </div>
   );
 }
