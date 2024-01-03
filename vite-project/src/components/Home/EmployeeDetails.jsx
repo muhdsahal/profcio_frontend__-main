@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Loader from '../Loading/Loading';
 import { Rating } from '@mui/material';
-import { Button } from '@mui/material';
-import { Box } from '@mui/material';
+import { Button } from '@material-tailwind/react';
+import { Box, } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { AddShoppingCart, Favorite } from '@mui/icons-material';
 import AvailableDates from './AvailableDates';
@@ -13,6 +13,7 @@ import AvailableDates from './AvailableDates';
 function EmployeeDetails() {
   const [employeeData, setEmployeeData] = useState(null);
   const [bookingData,setBookingData] = useState([])
+
 
   const { id } = useParams(); 
 
@@ -69,46 +70,51 @@ function EmployeeDetails() {
               alt="card-image"
               className="w-full h-100 object-cover"
             />
+            {/* <Button className='flex align-middle w-45 h-24' color="green">Chat</Button> */}
         </div>
+        
 
         {/* description */}
         <div className="mx-auto px-5 lg:px-5">
-          <h2 className="pt-3 text-2xl font-bold lg:pt-0">
-            {/* Product title */}
-            {employeeData.username}
+            <h2 className="pt-3 text-2xl font-bold lg:pt-0">
+            
+            Name : {employeeData.username}
           </h2>
-          {/* Other product details */}
+          <h2 className="pt-3 text-2xl font-bold lg:pt-0">
+        
+            Work : {employeeData.work}
+          </h2>
+
+          <h2 className="pt-3 text-2xl font-bold lg:pt-0">
+        
+        Charge : ₹  {employeeData.charge}
+        </h2>
+
+      <h2 className="pt-3 text-2xl font-bold lg:pt-0">
+        
+        Location : {employeeData.place}
+      </h2>
+      <h2 className="pt-3 text-2xl font-bold lg:pt-0">
+        
+      Experience : {employeeData.experience} year
+      </h2>
+      <p className="pt-3 text-xs font-bold lg:pt-0">
+        
+      Description : {employeeData.description} 
+      </p>
+      
+      
+
+       
          
           
-          <Box mt={6}>
-            <p className="pb-2 text-xs text-gray-500">Work</p>
-            <div className="flex gap-1">
-              {/* Mapping through sizes */}
-              {employeeData.work}
-            </div>
-          </Box>
-
-          <Box mt={6}>
-            <p className="pb-2 text-xs text-gray-500">Charge :</p>
-            <div className="flex gap-1">
-            {employeeData.charge}
-            </div>
-          </Box>
+         
 
 
-          <Box mt={7} display="flex" flexDirection="row" alignItems="center" gap={6}>
-            <Button variant="contained" className="bg-violet-900 text-white hover:bg-blue-800">
-              <AddShoppingCart />
-              Add to cart
-            </Button>
-            <Button variant="contained" className="bg-amber-400 hover:bg-yellow-300">
-              <Favorite />
-              Wishlist
-            </Button>
-          </Box>
+          <AvailableDates  empId={employeeData.id} empdetails={employeeData.charge}/>
         </div>
 
-        <AvailableDates   empId={employeeData.id}/>
+        
       </section>
       
        ) : (

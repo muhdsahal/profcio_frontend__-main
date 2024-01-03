@@ -4,21 +4,29 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { jwtDecode } from 'jwt-decode';
 import { Button } from '@material-tailwind/react';
-import toast, { Toaster } from "react-hot-toast";
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { base_url } from '../../constants/constants';
+import moment from 'moment-timezone';
 
 function AvailableDates(props) {
   const empId = props.empId;
+  const employeeCharge = props.empdetails;
+
   const [bookedDates, setBookedDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const token = localStorage.getItem('token');
   const decode = jwtDecode(token);
   const userId = decode.user_id;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/auth/employee/${empId}/book/`);
-        const bookedDatesArray = response.data.map((dateInfo) => new Date(dateInfo.booking_date));
+        const response = await axios.get(`${base_url}/auth/employee/${empId}/book/`);
+        const bookedDatesArray = response.data.map((dateInfo) =>
+          moment(dateInfo.booking_date).tz('Asia/Kolkata').toDate()
+        );
         setBookedDates(bookedDatesArray);
       } catch (error) {
         console.error('Error fetching booking data:', error);
@@ -28,32 +36,60 @@ function AvailableDates(props) {
     fetchBookingData();
   }, [userId]);
 
+  const isSunday = (date) => {
+    return date.getDay() === 0; // Sunday is represented by 0 in JavaScript's getDay()
+  };
+
   const handleDateChange = (date) => {
+    console.log(date, 'genuine date');
     setSelectedDate(date);
   };
 
   const bookEmployee = async () => {
     try {
-      const formattedDate = selectedDate.toISOString().split('T')[0]; // Directly use selectedDate
+      if (!selectedDate) {
+        toast.error('Please select a valid date!');
+        return;
+      }
 
-      console.log('userId:', userId);
-      console.log('empId:', empId);
-      console.log('formattedDate:', formattedDate);
+      const formattedDate = moment(selectedDate).tz('Asia/Kolkata').format('YYYY-MM-DD');
 
-      const response = await axios.post('http://127.0.0.1:8000/auth/employee/booking/register/', {
-        userId,
-        empId,
-        formattedDate // Date format as per your requirement
-      });
-      toast.success("booking succcessfully completed !");
-      console.log('Booking successful:', response.data.message);
-      // You can perform any action after successful booking here
-      return response.data; // Return the response if needed
+      // Check if the selected date is a Sunday and prevent booking if true
+      if (isSunday(selectedDate)) {
+        toast.error('Booking is not allowed on Sundays!');
+        return;
+      }
+
+      const data = {
+        userId: userId,
+        empId: empId,
+        currency: 'INR',
+        unit_amount: employeeCharge * 100,
+        quantity: 1,
+        mode: 'payment',
+        date: formattedDate,
+        
+      };
+
+      const response = await axios.post(`${base_url}/auth/booking/payment/`, data);
+      window.location.href = response.data.message.url;
+
+      return response.data;
     } catch (error) {
-      toast.error("an error during booking!");
-      // Handle error
+      toast.error('An error occurred during booking!');
       console.error('Error booking:', error);
     }
+  };
+
+  const tileContent = ({ date, view }) => {
+    if (view === 'month') {
+      return (
+        <div style={{ position: 'absolute', bottom: '5px', left: '5px' }}>
+          {isSunday(date) && <span style={{ color: 'red' }}>Holiday</span>}
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -63,14 +99,19 @@ function AvailableDates(props) {
         value={selectedDate}
         onChange={handleDateChange}
         tileDisabled={({ date }) =>
-          bookedDates.some((bookedDate) => bookedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]) ||
-          date.getTime() <= new Date().setHours(0, 0, 0, 0) // Disable today and previous days
+          bookedDates.some(
+            (bookedDate) => bookedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
+          ) ||
+          date.getTime() <= new Date().setHours(0, 0, 0, 0) || // Disable today and previous days
+          isSunday(date) // Disable Sundays
         }
-      />
+        />
+       <h4 className='font-bold text-red-600' >Sunday Holiday</h4>
+        
       <p>
         Selected Date: {selectedDate && selectedDate.toLocaleDateString()}
-        {selectedDate && selectedDate.getTime() > new Date().setHours(0, 0, 0, 0) && ( // Enable button only for future dates
-          <Button color='blue' onClick={bookEmployee}>
+        {selectedDate && selectedDate.getTime() > new Date().setHours(0, 0, 0, 0) && (
+          <Button color="blue" onClick={bookEmployee}>
             Book Now
           </Button>
         )}

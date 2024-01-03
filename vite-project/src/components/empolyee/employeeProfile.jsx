@@ -307,8 +307,8 @@ function EmployeeProfile() {
                 </div>
               </Card>
             </div>
-            <AvailableDates  empId={employee.id}/>
-          
+            <AvailableDates  empId={employee.id} role={employee.user_type}/>
+                        {/* <p>{employee.user_type}</p> */}
           </div>
         </div>
       )}
