@@ -218,16 +218,16 @@ export function EmployeeRegistrationForm(){
 
       }
     return (
-  <div className="flex items-center justify-center h-screen">
+  <div className="flex items-center justify-center ">
   {loading && <Loader />}
-  <Card className="text-center" color="transparent" shadow={false}>
+  <Card className="text-center pt-8 pb-2" color="transparent" shadow={false}>
     <Typography variant="h4" color="blue-gray">
       Sign Up
     </Typography>
     <Typography color="gray" className="mt-1 font-normal">
       Welcome To Profcio! Enter Employee details.
     </Typography>
-    <div className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"  >
+    <div className=" w-80 max-w-screen-lg sm:w-96"  >
       <div className="mb-1 flex flex-col gap-6">
         <div className="flex gap-6">
           {/* First Line */}
@@ -344,10 +344,10 @@ export function EmployeeRegistrationForm(){
           </div>
           <div className="flex gap-6">
 
-          <div className="flex-1">
-          <Typography  color="blue-gray-200" className="-mb-3">
+          <div className="flex gap md:w-86 h-10">
+          {/* <Typography  color="blue-gray-200" className="-mb-3">
                Select Your Place 
-          </Typography>
+          </Typography> */}
           <br />
 
               <select
@@ -356,10 +356,10 @@ export function EmployeeRegistrationForm(){
               onChange={(e) => {
                 setFormData({ ...formData, [e.target.name]: e.target.value });
               }}
-              className="!border-t-blue-gray-200"
+              className="border-[1px] border-[#747676]"
                 
               >
-                <option value="">Select a city</option>
+                <option value="">Select Your city</option>
                 {cityOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -367,20 +367,20 @@ export function EmployeeRegistrationForm(){
                 ))}
               </select>
           </div>
-          <div className="flex-1">
-          <Typography  color="blue-gray-200" className="-mb-3">
+          <div className="flex gap-4 md:w-86 h-10">
+          {/* <Typography  color="blue-gray-200" className="-mb-3">
               Enter Your Work 
-          </Typography>
+          </Typography> */}
           <br />
-          <select
+          <select className='border-[1px] border-[#747676]'
             value={formData.work}
             name="work"
             onChange={(e) => {
               setFormData({ ...formData, [e.target.name]: e.target.value });
             }}
-            className="!border-t-blue-gray-200" // Apply the same class here
+            // className="!border-t-blue-gray-200" // Apply the same class here
           >
-            <option value="" disabled>Select a service</option>
+            <option value="" disabled>Select Your service</option>
             {Object.values(serviceList).map(service => (
               <option key={service.id} value={service.name}>
                 {service.name}
@@ -453,7 +453,7 @@ export function EmployeeRegistrationForm(){
         </Button>
         <Typography color="gray" className="mt-4 text-center font-normal">
           Already have an account?{" "}
-          <Link to="/employee/employee_login">Login</Link>
+          <Link to="/employee/employee_login" color="blue">Login</Link>
         </Typography>
       </div>
     </div>

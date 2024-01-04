@@ -131,7 +131,7 @@ console.log(user,'user............................');
             variant="White"
             fullWidth
             onClick={(e) => handleLogin()}
-            className="bg-rose-500 text-gray-700"
+            style={{backgroundColor: 'lightseagreen'}}
           >
             Sign In
           </Button>

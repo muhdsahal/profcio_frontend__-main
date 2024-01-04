@@ -203,7 +203,7 @@ const ServiceListPage = () => {
   return (
     <div className="flex flex-col min-h-screen items-center ">
 
-      <Card className="my-4 mx-4 overflow-x-auto">
+      <Card className="my-4 mx-4">
         <div >
           <Button
             className="bg-green-500 text-white px-4 py-2 rounded"
@@ -236,15 +236,7 @@ const ServiceListPage = () => {
                   Name
                 </Typography>
               </th>
-              <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-prompt-semibold"
-                >
-                  Description
-                </Typography>
-              </th>
+              
               <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
                 <Typography
                   variant="small"
@@ -287,16 +279,16 @@ const ServiceListPage = () => {
                     {service.name}
                   </Typography>
                 </td>
+                
                 <td className={classes}>
-                  <Typography
+                <Typography
                     variant="small"
                     color="blue-gray"
                     className="font-prompt-semibold"
                   >
-                    {service.description}
+                  {categoryOptions.find(category => category.id === service.category)?.name || 'N/A'}
+
                   </Typography>
-                </td>
-                <td className={classes}>
                   
                 </td>
                 <td className={classes}>

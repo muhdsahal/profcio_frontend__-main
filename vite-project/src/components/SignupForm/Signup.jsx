@@ -117,12 +117,12 @@ const handleSubmit = async (e) => {
   return(
       
         
-        <div className="flex items-center justify-center h-screen text-black">
-          
+        <div className="flex items-center justify-center  text-black">
+  
     
           {loading && <Loader />}
     
-          <Card className="text-center bg-transparent shadow-none">
+          <Card className="text-center pt-8 pb-2 bg-transparent shadow-none">
           
             <Typography variant="h4" color="black">
               Sign Up
@@ -136,7 +136,7 @@ const handleSubmit = async (e) => {
             </Typography>
             
     
-            <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+            <form className=" w-80 max-w-screen-lg sm:w-96">
               <div className="mb-1 flex flex-col gap-6">
                 <Input
                   size="lg"
@@ -189,7 +189,7 @@ const handleSubmit = async (e) => {
                 />
               </div>
                   <br />
-              <Button variant="White" fullWidth color="lightseagreen" className=" text-gray-700" onClick={handleSubmit}>
+              <Button variant="White" fullWidth color="lightseagreen" style={{backgroundColor: 'lightseagreen'}} onClick={handleSubmit}>
                 Signup
               </Button>
     

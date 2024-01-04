@@ -207,7 +207,7 @@ export function LoginForm(){
                 variant="White"
                 fullWidth
                 onClick={handleLogin}
-                className="bg-rose-500 text-gray-700"
+                style={{backgroundColor: 'lightseagreen'}}
               >
                 Sign In
               </Button>
@@ -216,7 +216,7 @@ export function LoginForm(){
                 <div className="text-center" style={{ margin: '2.5rem' }}>
                   {customGoogleLoginButton}
                 </div>
-                <Link to="/forgot_password" className="text-sm sm:mt-0 mt-4 text-black font-bold flex justify-center">
+                <Link to="/password_reset/" className="text-sm sm:mt-0 mt-4 text-black font-bold flex justify-center">
                   Forgot password
                 </Link>
               </Typography>

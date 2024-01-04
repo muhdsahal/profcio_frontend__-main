@@ -7,7 +7,7 @@ import AdminLoginPage from "../pages/admin/adminLoginPage";
 import UserLists from "../pages/admin/UserList";
 import ServiceList from "../pages/admin/ServiceList";
 import ServiceCategoryPage from "../pages/admin/ServiceCategoryPage";
-
+import BookingPage from "../components/admin/Booking";
 function AdminRoutes() {
     return (
         <Routes>
@@ -21,6 +21,7 @@ function AdminRoutes() {
                     <Route path="/users/" element={<UserLists />} />
                     <Route path="/category/" element={<ServiceCategoryPage />} />
                     <Route path="/services/" element={<ServiceList />} />
+                    <Route path="/booking/" element={<BookingPage />} />
 
             </Route>
         </Routes >

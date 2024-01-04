@@ -137,15 +137,22 @@ const handleLogin = async (e) => {
             fullWidth
             onClick={(e) => handleLogin()}
             className="bg-rose-500 text-gray-700"
+            style={{backgroundColor: 'lightseagreen'}}
           >
             Sign In
           </Button>
-            <Typography variant="small" className="mt-6 flex justify-center">
+            <Typography variant="small" className="mt-6 flex justify-center" >
               Don&apos;t have an account?
               <Link to="/employee/signup/">
                  Signup
               </Link>
-              
+
+            </Typography>
+            <Typography variant="small" className="mt-6 flex justify-center">
+              forgot password
+            <Link to="/employee/password_reset/">
+                forgot_password
+              </Link>
             </Typography>
           </CardFooter>
         </Card>

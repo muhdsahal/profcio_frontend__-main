@@ -27,15 +27,15 @@ function Home() {
   return (
     <div style={{ textAlign: 'center' }}>
     <Navbar />
-      <Typography variant="h3" color="black" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', width: '100%' }}>
+      <Typography  variant="h3" color="black" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', width: '100%' }}>
         Welcome To Profcio
       </Typography>
 
-      
+    
     
     <div style={{ position: 'relative', width: '100%', maxWidth: '800px', margin: '0 auto' }}>
       <img src={emp} alt="" style={{ width: '100%', height: 'auto' }} />
-      <Typography variant="h3" color="black" style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', width: '100%' }}>
+      <Typography fontFamily="Pacifico" variant="h3" color="black" style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', width: '100%' }}>
         Professional services <br />
         Homes and commercial properties
       </Typography>
@@ -44,9 +44,9 @@ function Home() {
     <u style={{ width: '100%', textAlign: 'center', marginBottom: '20px' }}>_________________________________________________________________</u>
 
     <Typography variant='h2' color="black" style={{ textAlign: 'center' }}>
-      Hire The Best Employees
+      Book Now Best  Employees
       <br />
-      <Button variant="outlined" color='black' onClick={toEmployeeList}>
+      <Button variant="outlined" color='black' style={{backgroundColor: 'lightseagreen'}} onClick={toEmployeeList}>
         Click here
       </Button>
     </Typography>

@@ -39,7 +39,11 @@ export function Sidebar() {
   const handleCategory = () =>{
     navigate("/admin/category/")
   }
-  console.log(handleService,'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
+
+  const handleBooking = () =>{
+    navigate("/admin/booking/")
+  }
+
   return (
     <Card className="h-[calc(100vh-2rem)] max-w-[64] p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="mb-2 p-4">
@@ -85,7 +89,7 @@ export function Sidebar() {
           </ListItemPrefix>
           Review
         </ListItem>
-        <ListItem>
+        <ListItem onClick={handleBooking}>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
