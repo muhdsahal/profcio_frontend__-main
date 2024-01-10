@@ -16,13 +16,9 @@ import logo from '../../image/profcio__All.png'
 
 export function SimpleRegistrationForm() {
   const navigate = useNavigate();
-
   const [other, setOther] = useState({ conf_Password: "" });
-
   // form
   const [formData, setFormData] = useState({
-    // first_name:"",
-    // last_name:"",
     username: "",
     email: "",
     password: "",
@@ -76,23 +72,14 @@ const handleSubmit = async (e) => {
     try {
       const response = await userAxiosInstance.post(userRegisterURL, formData);
 
-      // Update your token handling logic here
-      const access_token = response.data.access;
-      const refresh_token = response.data.refresh;
-
-      // Store tokens in a secure way ( in localStorage )
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('refresh_token', refresh_token);
-
-      // Other actions after successful registration...
       toast.success("Registration success..!");
-      setFormData({
-        username: "",
-        email: "",
-        password: "",
-        user_type: "user",
-      });
-      setOther({ conf_Password: "", check: false });
+      // setFormData({
+      //   username: "",
+      //   email: "",
+      //   password: "",
+      //   user_type: "user",
+      // });
+      // setOther({ conf_Password: "", check: false });
       handleLoading();
       navigate("/confirm");
     } catch (error) {

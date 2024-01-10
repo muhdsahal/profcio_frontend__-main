@@ -35,7 +35,7 @@ function EmployeeDetails() {
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/auth/employee/${id}/book/`);
+        const response = await axios.get(`http://127.0.0.1:8000/employee/employee/${id}/book/`);
         setBookingData(response.data);
         console.log(response.data,'bookigdataaaaaaaaaaaaaaa');
       } catch (error) {
@@ -73,7 +73,6 @@ function EmployeeDetails() {
             {/* <Button className='flex align-middle w-45 h-24' color="green">Chat</Button> */}
         </div>
         
-
         {/* description */}
         <div className="mx-auto px-5 lg:px-5">
             <h2 className="pt-3 text-2xl font-bold lg:pt-0">
@@ -103,14 +102,6 @@ function EmployeeDetails() {
       Description : {employeeData.description} 
       </p>
       
-      
-
-       
-         
-          
-         
-
-
           <AvailableDates  empId={employeeData.id} empdetails={employeeData.charge}/>
         </div>
 
@@ -119,10 +110,7 @@ function EmployeeDetails() {
       
        ) : (
         <p>Loading...</p>)}
-   </>
-    
-
-    
+   </>  
   );
 };
 

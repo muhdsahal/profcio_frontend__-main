@@ -1,66 +1,86 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
-    Card,
-    CardBody,
-    CardFooter,
-    Typography,
-    Input,
-    Button,
-  } from "@material-tailwind/react";
+  Card,
+  CardBody,
+  CardFooter,
+  Typography,
+  Input,
+  Button,
+} from "@material-tailwind/react";
 import axios from 'axios';
-import { Password } from '@mui/icons-material';
+import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { base_url } from '../constants/constants';
 
 function ResetPassword() {
-    const [newPassword, setNewPassword] = useState("");
-    const [message, setMessage] = useState("");
-    const [uid, setUid] = useState('')
-    const navigate = useNavigate()
-    const apiUrl = "http://127.0.0.1:8000/auth/password_change/"
+  const [newPassword, setNewPassword] = useState("");
+  const [confPassword, setConfPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [uid, setUid] = useState('');
+  const navigate = useNavigate();
+  const apiUrl = `${base_url}/auth/password_change/`;
 
-    const handlePasswordResetConfirmation = async () => {
-        console.log(newPassword,'password');
-        try {
-          const response = await axios.post(apiUrl, {
-            
-            new_password: newPassword,
-            uid: uid,
-        });
-            console.log(response.data,'response.datresponse.datresponse.datresponse.dat');
-            setMessage(response.data.detail);
-            navigate("/employee/employee_login")
-        } catch (error) {
-          console.error(error, 'reset error');
-          setMessage(error.response.data.detail);
-        }
-      };
+  const handlePasswordResetConfirmation = async () => {
+    if (newPassword !== confPassword) {
+      toast.error("New password and confirmation password do not match");
+      return;
+    }
 
+    try {
+      const response = await axios.post(apiUrl, {
+        new_password: newPassword,
+        uid: uid,
+      });
+      setMessage(response.data.detail);
+      navigate("/employee/employee_login");
+    } catch (error) {
+      console.error(error, 'reset error');
+      setMessage(error.response.data.detail);
+    }
+  };
 
-      useEffect(() => {
-        // Get the current URL
-        const currentUrl = window.location.href;
-    
-        // Splitting the URL by '/'
-        const urlParts = currentUrl.split('/');
-    
-        // Extracting data from the last two positions
-        setUid(urlParts[urlParts.length - 2])
-        const data1 = urlParts[urlParts.length - 2];
-        const data2 = urlParts[urlParts.length - 1];
-    
-        console.log("Data from the second-to-last position:", data1);
-        console.log("Data from the last position:", data2);
-      }, []); // Run this effect only once when the component mounts
-    
+const validatePassword = (password) => {
+  // At least 8 characters
+  const lengthRegex = /.{8,}/;
+  // At least one uppercase letter
+  const uppercaseRegex = /[A-Z]/;
+  // At least one lowercase letter
+  const lowercaseRegex = /[a-z]/;
+  // At least one digit
+  const digitRegex = /\d/;
+  // At least one special character
+  const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+
+  return (
+    lengthRegex.test(password) &&
+    uppercaseRegex.test(password) &&
+    lowercaseRegex.test(password) &&
+    digitRegex.test(password) &&
+    specialCharRegex.test(password)
+  );
+};
+
+  useEffect(() => {
+    // Get the current URL
+    const currentUrl = window.location.href;
+
+    // Splitting the URL by '/'
+    const urlParts = currentUrl.split('/');
+
+    // Extracting data from the last two positions
+    setUid(urlParts[urlParts.length - 2]);
+    const data1 = urlParts[urlParts.length - 2];
+    const data2 = urlParts[urlParts.length - 1];
+
+    console.log("Data from the second-to-last position:", data1);
+    console.log("Data from the last position:", data2);
+  }, []); // Run this effect only once when the component mounts
+
   return (
     <>
-    
-    <div className="flex items-center justify-center h-screen">
-      <Card className="w-96">
-        <CardBody className="flex flex-col gap-4">
-         
-            
-         
+      <div className="flex items-center justify-center h-screen">
+        <Card className="w-96">
+          <CardBody className="flex flex-col gap-4">
             <>
               <Typography style={{ fontWeight: "500" }}>
                 Reset Password{" "}
@@ -74,76 +94,32 @@ function ResetPassword() {
                 name="newPassword"
                 onChange={(e) => setNewPassword(e.target.value)}
               />
-            </>
-        
-        </CardBody>
-        <CardFooter className="pt-0">
-        <Button
-          variant="White"
-          fullWidth
-          onClick={ handlePasswordResetConfirmation}
-          className="bg-rose-500 text-gray-700"
-        >
-          submit
-        </Button>
-
-          {/* {message && <p>{message}</p>} */}
-        </CardFooter>
-      </Card>
-      {/* <Toaster /> */}
-    </div>
-
-    
-    </>
-    
-  )
-}
-
-export default ResetPassword
-
-{/* <>
-              <Typography style={{ fontWeight: "500" }}>
-                Reset Password{" "}
-              </Typography>
 
               <Input
-                placeholder="Enter new password"
+                placeholder="Confirm new password"
                 type="password"
                 size="lg"
-                label="newPassword"
-                name="newPassword"
-                onChange={(e) => setNewPassword(e.target.value)}
+                label="confPassword"
+                name="confPassword"
+                onChange={(e) => setConfPassword(e.target.value)}
               />
-            </> */}
+            </>
+          </CardBody>
+          <CardFooter className="pt-0">
+            <Button
+              variant="White"
+              fullWidth
+              onClick={handlePasswordResetConfirmation}
+              className="bg-rose-500 text-gray-700"
+            >
+              Submit
+            </Button>
+          </CardFooter>
+        </Card>
+        <Toaster />
+      </div>
+    </>
+  );
+}
 
-
-
-// import React, { useState } from "react";
-// import axios from "axios";
-// import { useParams } from "react-router-dom";
-// import { ResetPasswordUrl } from "../constants/constants";
-// const ResetPassword =()=>{
-//     const {ResetToken} = useParams();
-//     const [newPassword,setNewPassword] = useState('');
-//     const [message,setMessage] = useState('');
-
-//     const handleResetPassword = async ()  => {
-//         try{
-//             const response = await axios.post(`${ResetPasswordUrl}/${ResetToken}`,{
-//             new_password:newPassword,
-//             })
-//             setMessage(response.data.detail);
-//         }catch(error){
-//             setMessage(error.response.data.detail)
-//         }
-//     };
-//     return(
-//         <div>
-//             <h2>reset Password</h2>
-//         <input type="password" placeholder="new passowrd" onChange={(e)=> setNewPassword(e.target.value)}/>
-//         <Button onclick={handleResetPassword}>Submit</Button>
-//         {message && <p>message</p>}
-//         </div>
-//     )
-// }   
-// export default ResetPassword
+export default ResetPassword;

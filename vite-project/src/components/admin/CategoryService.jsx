@@ -2,13 +2,21 @@
 
 import React from "react";
 import { useState,useEffect} from "react";
-import { Button, Dialog, Card, CardHeader, CardBody, CardFooter, Typography, Input, Checkbox, } from "@material-tailwind/react";
+import {
+  Dialog,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  TextField,
+  Typography
+} from '@material-ui/core';
 import axios  from "axios";
 import Modal from 'react-modal';
 import { ServiceCatergoryURL } from "../../constants/constants";
 import toast, { Toaster } from 'react-hot-toast';
 
-Modal.setAppElement('#root')
+//Modal.setAppElement('')
 function CategoryService(){
     const [open,setOpen] = useState(false)
     const [editOpen,setEditOpen] = useState(false)
@@ -136,19 +144,24 @@ function CategoryService(){
       const getSortedCategory = () => {
         return category.slice().sort((a, b) => a.id - b.id);
     };
+    const buttonStyle = {
+      backgroundColor: 'lightseagreen',
+      color: 'white', // Optionally, set text color
+    };
     return(
-        <div className="flex flex-col min-h-screen items-center justify-center">
+        <div className="flex flex-col  items-center justify-center">
         <Card className="my-4 mx-4 overflow-x-auto">
         <div>
           <Button
-            className="bg-green-500 text-white px-4 py-2 "
+           style = {buttonStyle}
             onClick={handleOpenModal}
+            
           >
             Create Category
           </Button>
         </div>
       </Card>
-        <Card className="h-full w-full overflow-scroll">
+        <Card className="h-full w-full ">
       <table className="w-full min-w-max table-auto text-left">
         <thead>
           <tr>
@@ -182,6 +195,7 @@ function CategoryService(){
                   variant="small"
                   color="blue-gray"
                   className="font-prompt-semibold"
+                  
                 >
                   Edit
                 </Typography>
@@ -214,8 +228,9 @@ function CategoryService(){
                       
                       <td className={classes}>
                         <Button
-                          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                          
                           onClick={(e) => editHandleCategory(category.id)}
+                          style={buttonStyle}
                         >
                           Edit
                         </Button>
@@ -227,50 +242,49 @@ function CategoryService(){
                 </table>
                   </Card>
                     
-                      <Dialog
-                        size="xs"
-                        open={open}
-                        handler={handleOpenModal}
-                        className="bg-transparent shadow-none"
-                      >
-                        <Card className="mx-auto w-full max-w-md">
-                          <CardBody className="flex flex-col gap-4">
-                            <Typography variant="h4" color="blue-gray">
-                              Create Service
-                            </Typography>
-                            <label>
-                              Name:
-                              <Input
-                                type="text"
-                                name="name"
-                                value={categoryName}
-                                onChange={(e) => setCategoryName(e.target.value)}
-                                className="w-full"
-                              />
-                            </label>
-                          </CardBody>
-                          <CardFooter className="pt-0">
-                            <Button variant="gradient" onClick={CreateCategory} fullWidth>
-                              Create Service
-                            </Button>
-                          </CardFooter>
-                        </Card>
-                      </Dialog>
+                  <Dialog
+                      open={open}
+                      handler={handleOpenModal}
+                      aria-labelledby="form-dialog-title"
+                      maxWidth="xs"
+                    >
+                      <Card>
+                        <CardContent>
+                          <Typography variant="h4" color="primary">
+                            Create Service
+                          </Typography>
+                          <TextField
+                            label="Name"
+                            type="text"
+                            name="name"
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
+                            fullWidth
+                          />
+                        </CardContent>
+                        <CardActions>
+                          <Button style={buttonStyle} onClick={CreateCategory} fullWidth>
+                            Create Service
+                          </Button>
+                        </CardActions>
+                      </Card>
+                    </Dialog>
                     
                       <Dialog
-                        size="xs"
+                        
                         open={editOpen}
                         handler={editOpenModal}
-                        className="bg-transparent shadow-none"
+                        className="bg-transparent shadow-none bg-coolGray-50"
+                        maxWidth="xl"
                       >
                         <Card className="mx-auto w-full max-w-md">
-                          <CardBody className="flex flex-col gap-4">
+                          <CardContent className="flex flex-col gap-4">
                             <Typography variant="h4" color="blue-gray">
                               Edit Service
                             </Typography>
                             <label>
                               Name:
-                              <Input
+                              <TextField
                                 type="text"
                                 name="name"
                                 value={categoryName}
@@ -278,12 +292,13 @@ function CategoryService(){
                                 className="w-full"
                               />
                             </label>
-                          </CardBody>
-                          <CardFooter className="pt-0">
-                            <Button variant="gradient" onClick={CategoryEdit} fullWidth>
+                          </CardContent>
+                          <CardActions className="pt-0">
+                            <Button  style={buttonStyle}
+                             onClick={CategoryEdit} fullWidth>
                               Edit Service
                             </Button>
-                          </CardFooter>
+                          </CardActions>
                         </Card>
                       </Dialog>
                       <Toaster/>

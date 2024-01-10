@@ -75,7 +75,7 @@ function UserList() {
         <div className="flex flex-col min-h-screen items-center ">
             
             {/* <input onChange={(e) => SearchUser(e.target.value)} className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black' type="text" placeholder='  Search' /> */}
-            <Card className="h-full w-full overflow-scroll">
+            <Card className="h-full w-full">
                 <table className='w-full min-w-max table-auto text-left'>
                     <thead>
                         <tr>

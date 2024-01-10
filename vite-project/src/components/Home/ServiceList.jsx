@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Carousel,Button,h2} from "@material-tailwind/react";
-import { ServiceCatergoryURL } from '../../constants/constants';
+import { ServiceCatergoryURL ,ServiceListURL } from '../../constants/constants';
 
 const ServiceList = () => {
   const [services, setServices] = useState([]);
@@ -21,7 +21,7 @@ const ServiceList = () => {
   
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/auth/services/')
+    axios.get(ServiceListURL)
       .then(response => {
         setServices(response.data);
       })

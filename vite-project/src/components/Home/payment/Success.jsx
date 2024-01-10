@@ -23,7 +23,7 @@ function SuccessFullPayment (){
         if(!isInitializedRef.current){
             const fetchData = async () => {
                 try{
-                    const response = await axios.post(`${base_url}/auth/employee/booking/register/`, {
+                    const response = await axios.post(`${base_url}/employee/employee/booking/register/`, {
                         userId,
                         empId,
                         date,

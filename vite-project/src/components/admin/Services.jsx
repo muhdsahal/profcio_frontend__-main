@@ -1,13 +1,21 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Button, Dialog, Card, CardHeader, CardBody, CardFooter, Typography, Input, Checkbox, } from "@material-tailwind/react";
+import {
+  Dialog,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  TextField,
+  Typography
+} from '@material-ui/core';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { ServiceListURL, ServiceCatergoryURL } from '../../constants/constants';
-// import Select from 'react-select';
 import toast, { Toaster } from 'react-hot-toast';
-// import 'react-select/dist/react-select.css';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 Modal.setAppElement('#root');
 
@@ -78,25 +86,38 @@ const ServiceListPage = () => {
       return;
   }
 
-  // Validation: Check if serviceName is at least 3 characters long
   if (serviceName.trim().length < 3) {
       toast.error("Service name must be at least 3 characters long");
       return;
   }
 
-  // Validation: Check if serviceName contains only letters and is not a number or minus number
+  if (!serviceName || !serviceCategory) {
+    toast.error('Service name and category are required.');
+    return;
+  }
+
+  const isDuplicate = services.some(
+    (service) =>
+      service.name=== serviceName.toLowerCase() &&
+      service.category === serviceCategory.toLowerCase()
+  );
+
+
+  if (isDuplicate) {
+    toast.error('Service with the same name and category already exists.');
+    return;
+  }
+
   if (!/^[a-zA-Z]+$/.test(serviceName.trim()) || !isNaN(serviceName.trim())) {
       toast.error("Service name can only contain letters. Numbers and minus numbers are not allowed.");
       return;
   }
 
-  // Validation: Check if serviceName is not a repeating name
-  if (services.some(service => service.name === serviceName)) {
-      toast.error("Service name already exists. Please choose a different name.");
-      return;
-  }
+  // if (services.some(service => service.name === serviceName)) {
+  //     toast.error("Service name already exists. Please choose a different name.");
+  //     return;
+  // }
 
-  // Validation: Check if serviceDiscription is empty
   if (!serviceDiscription.trim()) {
       toast.error("Service description cannot be empty");
       return;
@@ -111,13 +132,14 @@ const ServiceListPage = () => {
     formData.append('service_image', serviceImage);
 
     axios.post(ServiceListURL, formData)
-      .then(response => setServices([...services, response.data]),
+      .then(response => {setServices([...services, response.data]),
         setserviceName(''),
         setserviceDiscription(''),
         setserviceCategory(''),
         setserviceImage(null),
-        console.log('daata successfull')),
-      toast.success("service createed Successfully")
+        console.log('daata successfull')
+        toast.success("service createed Successfully")
+      })
         .catch(error => {
           console.error('Error creating service:', error);
           // Handle error display or other actions as needed
@@ -137,8 +159,7 @@ const ServiceListPage = () => {
         return response.data;
       })
       .catch(error => {
-        console.error('Error creating service:', error);
-        // Handle error display or other actions as needed
+        console.error('Error editing service:', error);
       });
 
     editOpenModal()
@@ -161,10 +182,10 @@ const ServiceListPage = () => {
       return;
   }
 
-  if (services.some(service => service.name === serviceName)) {
-      toast.error("Service name already exists. Please choose a different name.");
-      return;
-  }
+  // if (services.some(service => service.name === serviceName)) {
+  //     toast.error("Service name already exists. Please choose a different name.");
+  //     return;
+  // }
 
   if (!serviceDiscription.trim()) {
       toast.error("Service description cannot be empty");
@@ -177,15 +198,16 @@ const ServiceListPage = () => {
     // formData.append('service_image', serviceImage);
 
     axios.put(`${ServiceListURL}${editService_id}/`, formData)
-      .then(response =>
+      .then(response =>{
         setserviceName(''),
         setserviceDiscription(''),
         setserviceCategory(''),
         setserviceImage(null),
         toast.success("Service Edited  successfully!"),
-        console.log(' edit successfull'))
-      .catch(error => {
-        console.error('Error creating service:', error);
+        console.log(' edit successfull')
+        })
+        .catch(error => {
+        console.error('Error editing service:', error);
         // Handle error display or other actions as needed
       });
     editOpenModal()
@@ -194,7 +216,15 @@ const ServiceListPage = () => {
   
   const getSortedServices = () => {
     return services.slice().sort((a, b) => a.id - b.id);
-};
+  };
+  const buttonStyle = {
+    backgroundColor: 'lightseagreen',
+    color: 'white', // Optionally, set text color
+  };
+  const cancelColor = {
+    backgroundColor: 'red',
+    color: 'white', // Optionally, set text color
+  };
 
 
 
@@ -206,7 +236,7 @@ const ServiceListPage = () => {
       <Card className="my-4 mx-4">
         <div >
           <Button
-            className="bg-green-500 text-white px-4 py-2 rounded"
+            style={buttonStyle}
             onClick={handleOpenModal}
           >
             Create Service
@@ -214,7 +244,7 @@ const ServiceListPage = () => {
         </div>
       </Card>
 
-      <Card className="h-full w-full overflow-scroll">
+      <Card className="h-full w-full">
         <table className='w-full min-w-max table-auto text-left'>
           <thead>
             <tr>
@@ -293,7 +323,7 @@ const ServiceListPage = () => {
                 </td>
                 <td className={classes}>
                   <Button
-                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                    style={buttonStyle}
                     onClick={(e) => editHandleService(service.id)}
                   >
                     Edit
@@ -312,69 +342,82 @@ const ServiceListPage = () => {
 
       <>
 
-        <Dialog
-          size="xs"
-          open={open}
-          handler={handleOpenModal}
-          className="bg-transparent"
-        >
-          <Card className="mx-auto w-full max-w-[24rem]">
-            <CardBody className="flex flex-col gap-4">
-              <Typography variant="h4" color="blue-gray">
-                create Service
-              </Typography>
-              <label>
-                Name:
-                <Input
-                  type="text"
-                  name="name"
-                  value={serviceName}
-                  onChange={(e) => setserviceName(e.target.value)}
+          <Dialog
+            size="md"
+            open={open}
+            onClose={handleOpenModal}
+            aria-labelledby="form-dialog-title"
+            
+          >
+            <Card>
+              <CardContent className='flex flex-wrap gap-3'>
+                <Typography variant="h4" color="primary">
+                  create Service
+                </Typography>
+              
+                  <TextField
+                    type="text"
+                    name="name"
+                    label="name"
+                    value={serviceName}
+                    onChange={(e) => setserviceName(e.target.value)}
+                    fullWidth
 
-                />
-              </label>
-              <label>
-                Description:
-                <Input
-                  type="text"
-                  name="description"
-                  value={serviceDiscription}
-                  onChange={(e) => setserviceDiscription(e.target.value)}
+                  />
+                
+            
+                  <TextField
+                    type="text"
+                    name="description"
+                    label='description'
+                    value={serviceDiscription}
+                    onChange={(e) => setserviceDiscription(e.target.value)}
+                    fullWidth
+                    
+                  />
+                  <br />
+                
+                <div className="flex gap md:w-86 h-10">
+                  <select
+                    name="category"
+                    value={serviceCategory}
+                    onChange={(e) => setserviceCategory(e.target.value)}
+                    className="border-[1px] border-[#747676]"
+                  >
+                    <option value="" disabled>Select a service category</option>
+                    {categoryOptions.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                      
+                  </div>
+                
 
-                />
-              </label>
-              <label>
-                Category:
-                <select
-                  name="category"
-                  value={serviceCategory}
-                  onChange={(e) => setserviceCategory(e.target.value)}
-                >
-                  <option value="" disabled>Select a service category</option>
-                  {categoryOptions.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label>
-                Image:
-                <Input
+                <Typography variant="h6">
+                  image 
+                  <input
                   type="file"
                   name="service_image"
-                  // value={serviceImage}
-                  onChange={handleFileInputChange} />
-              </label>
-            </CardBody>
-            <CardFooter className="pt-0">
-              <Button variant="gradient" onClick={serviceCreate} fullWidth>
-                Create Service
-              </Button>
-            </CardFooter>
-          </Card>
-        </Dialog>
+                  onChange={handleFileInputChange}
+                />
+                </Typography>   
+                  
+                  
+                
+              </CardContent>
+              <CardActions className="pt-0">
+                <Button style={buttonStyle}
+                onClick={serviceCreate} fullWidth>
+                  Create Service
+                </Button>
+                <Button style={cancelColor} onClick={handleOpenModal} fullWidth>
+                      cancel
+                </Button>
+              </CardActions>
+            </Card>
+          </Dialog>
       </>
 
       <>
@@ -382,40 +425,44 @@ const ServiceListPage = () => {
         <Dialog
           size="xs"
           open={editOpen}
-          handler={editOpenModal}
-          className="bg-transparent shadow-none"
+          onclose={editOpenModal}
+          aria-labelledby="form-dialog-title"
+          
         >
-          <Card className="mx-auto w-full max-w-[24rem]">
-            <CardBody className="flex flex-col gap-4">
-              <Typography variant="h4" color="blue-gray">
+          <Card >
+            <CardContent className='flex flex-wrap gap-3'>
+              <Typography variant="h4" color="primary">
                 Edit Service
               </Typography>
-              <label>
-                Name:
-                <Input
+              {/* <CloseIcon onClick={editOpenModal} className='justify-items-end' style={{ cursor: 'pointer' }} /> */}
+
+              
+                <TextField
                   type="text"
+                  label="Name"
                   name="name"
                   value={serviceName}
                   onChange={(e) => setserviceName(e.target.value)}
+                  fullWidth
 
                 />
-              </label>
-              <label>
-                Description:
-                <Input
+              
+           
+                <TextField
+                label="description"
                   type="text"
                   name="description"
                   value={serviceDiscription}
                   onChange={(e) => setserviceDiscription(e.target.value)}
-
+                  fullWidth
                 />
-              </label>
-              <label>
-                Category:
+
+              <div className="flex gap md:w-86 h-10">
                 <select
                   name="category"
                   value={serviceCategory}
                   onChange={(e) => setserviceCategory(e.target.value)}
+                  className="border-[1px] border-[#747676]"
                 >
                   <option value="" disabled>Select a service category</option>
                   {categoryOptions.map((category) => (
@@ -424,21 +471,25 @@ const ServiceListPage = () => {
                     </option>
                   ))}
                 </select>
-              </label>
-              <label>
-                Image:
-                <Input
+              </div>
+
+              <Typography variant="h6">
+                image
+                <input
                   type="file"
                   name="service_image"
                   // value={editServiceData.service_image}
                   onChange={handleFileInputChange} />
-              </label>
-            </CardBody>
-            <CardFooter className="pt-0">
-              <Button variant="gradient" onClick={serviceEdit} fullWidth>
+              </Typography>
+            </CardContent>
+            <CardActions className="pt-0">
+              <Button style={buttonStyle} onClick={serviceEdit} fullWidth>
                 Edit Service
               </Button>
-            </CardFooter>
+              <Button style={cancelColor} onClick={editOpenModal} fullWidth>
+                cancel
+              </Button>
+            </CardActions>
           </Card>
         </Dialog>
       </>

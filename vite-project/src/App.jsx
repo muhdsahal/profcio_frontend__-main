@@ -10,7 +10,7 @@ import UserRoutes from "./routes/UserRoutes";
 import EmployeeRoutes from "./routes/EmployeeRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 import ForgotPassword from "./pages/ForgotPassWord";
-// import ResetPassword from "./pages/ResetPassword";
+import ResetPassword from "./pages/ResetPassword";
 import UserType from "./components/Home/UserType";
 import PrivateRoute from "./routes/ProtectedRoutes/PrivateRoute";
 
@@ -26,7 +26,7 @@ function App() {
             <Route path="/login/" exact element={<Login />}/>
             <Route path="/usertype/" exact element={<UserType />}/>
             <Route path="/password_reset/" element={<ForgotPassword />} />
-            {/* <Route path="/reset_password/:ResetToken/" element={<ResetPassword />}  /> */}
+            <Route path="/reset_password/:uid/:token" element={<ResetPassword />} />
           </Route>
           
             <Route path="/*" element={<UserRoutes />} />

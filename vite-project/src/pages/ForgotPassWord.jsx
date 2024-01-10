@@ -10,12 +10,13 @@ import {
 } from "@material-tailwind/react";
 import { Toaster } from "react-hot-toast";
 import {  ResetPasswordUrl } from "../constants/constants"; // Make sure to import your ResetPasswordUrl
+import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [step, setStep] = useState(1); // 1 for forgot password, 2 for password reset
-
+  const navigate = useNavigate()
   const handleForgotPassword = async () => {
     console.log(email,'email print');
     try {
@@ -25,7 +26,7 @@ function ForgotPassword() {
       });
       console.log(response,'email reaponse');
       setMessage(response.data.detail)
-     
+     navigate("/confirm")
     } catch (error) {
       console.error(error, 'forgot error');
       setMessage(error.response.data.detail);

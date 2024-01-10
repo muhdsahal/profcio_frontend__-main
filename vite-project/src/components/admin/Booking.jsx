@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import React from "react";
-// import { UserBaseUrl,UserDetailsURL } from "../../constants/constants";
+import { BookingListUrl } from "../../constants/constants";
 import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast'
 
@@ -22,10 +22,10 @@ function BookingList() {
     // const [users,setUsers ] = useState([])
 
     useEffect(() => {
-        const apiUrl = "http://127.0.0.1:8000/auth/employee_bookings_list/";
+        // const apiUrl = "http://127.0.0.1:8000/employee/employee_bookings_list/";
 
         axios
-            .get(apiUrl)
+            .get(BookingListUrl)
             .then((response) => {
                 const responseData = response.data;
                 setBookingList(responseData)
@@ -48,7 +48,7 @@ function BookingList() {
         <div className="flex flex-col min-h-screen items-center ">
             
             {/* <input onChange={(e) => SearchUser(e.target.value)} className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black' type="text" placeholder='  Search' /> */}
-            <Card className="h-full w-full overflow-scroll">
+            <Card className="h-full w-full">
                 <table className='w-full min-w-max table-auto text-left'>
                     <thead>
                         <tr>

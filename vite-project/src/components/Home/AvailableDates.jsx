@@ -23,7 +23,7 @@ function AvailableDates(props) {
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
-        const response = await axios.get(`${base_url}/auth/employee/${empId}/book/`);
+        const response = await axios.get(`${base_url}/employee/employee/${empId}/book/`);
         const bookedDatesArray = response.data.map((dateInfo) =>
           moment(dateInfo.booking_date).tz('Asia/Kolkata').toDate()
         );
@@ -71,7 +71,7 @@ function AvailableDates(props) {
         
       };
 
-      const response = await axios.post(`${base_url}/auth/booking/payment/`, data);
+      const response = await axios.post(`${base_url}/employee/booking/payment/`, data);
       window.location.href = response.data.message.url;
 
       return response.data;

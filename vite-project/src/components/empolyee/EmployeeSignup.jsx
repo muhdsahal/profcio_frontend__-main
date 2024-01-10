@@ -13,7 +13,7 @@ import citiesData from "./locations.json";
 
 export function EmployeeRegistrationForm(){
     const navigate = useNavigate()
-    const serviceListURL  =  'http://127.0.0.1:8000/auth/services/'
+    const serviceListURL  =  'http://127.0.0.1:8000/service/service_list/'
 
     const cityOptions = citiesData.cities.map((city) => ({
       value: city.City,
@@ -105,14 +105,23 @@ export function EmployeeRegistrationForm(){
           toast.error("description should not be empty!")
           return false
         }
+        else if(!formData.place){
+          toast.error("place should not be empty!")
+          return false
+        }
+        else if(!formData.work){
+          toast.error("work should not be empty!")
+          return false
+        }
         else if(formData.experience < 1 && formData.experience > 50 ){
           toast.error(" experience should minimum 1 year !")
           return false
         }
-        else if(formData.charge  < 300 && formData.charge> 1500){
-          toast.error("description should not be empty!")
+        else if(formData.charge  < 300 && formData.charge> 2999){
+          toast.error("minimum charge 300 and maximum charge 2999 ")
           return false
         }
+
         return true;
         
     }
@@ -446,7 +455,7 @@ export function EmployeeRegistrationForm(){
               }}
             />
           </div>
-
+              
           
         <Button  className=" text-gray-700" fullWidth onClick={handleSubmit} style={{backgroundColor: 'lightseagreen'}}>
           Sign Up
