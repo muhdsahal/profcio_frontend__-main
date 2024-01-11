@@ -12,6 +12,8 @@ import SuccessFullPayment from "../components/Home/payment/Success";
 import CanceledPayment from "../components/Home/payment/fail";
 import ForgotPassword from "../pages/ForgotPassWord";
 import ResetPassword from "../pages/ResetPassword";
+import BookingListUser from "../components/Home/BookingList";
+import BookingListPage from "../pages/Home/BookingListPage";
 function UserRoutes(){
     return(
         <Routes>
@@ -29,6 +31,7 @@ function UserRoutes(){
                     <Route element={<EmployeeListUser />} path="/employeelist" />
                     <Route element={<UserProfilePage />} path="/userprofile/:userId" />
                     <Route element={<EmployeeDetailsPage />} path="/employeedetails/:id/" />
+                    <Route element={<BookingListPage/>} path="/booking_list/:userId"/>
                     <Route element={<SuccessFullPayment />} path="/employeedetails/payment/success/" />
                     <Route element={<CanceledPayment />} path="/employeedetails/payment/canceled/" />
                     

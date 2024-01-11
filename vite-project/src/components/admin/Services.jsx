@@ -182,6 +182,14 @@ const ServiceListPage = () => {
       return;
   }
 
+  if(!serviceName){
+    toast.error("service name cannot be empty")
+    return
+  }
+  if(!serviceCategory){
+    toast.error("category  name cannot be empty")
+    return
+  }
   // if (services.some(service => service.name === serviceName)) {
   //     toast.error("Service name already exists. Please choose a different name.");
   //     return;

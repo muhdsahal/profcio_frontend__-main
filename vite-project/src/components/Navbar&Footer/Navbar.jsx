@@ -42,7 +42,9 @@ export default function ResponsiveNavBar() {
   const toProfile = () => {
     navigate(`/userprofile/${userId}/`)
   }
-
+  const toBookings = () =>{
+    navigate(`/booking_list/${userId}`)
+  }
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -186,6 +188,12 @@ export default function ResponsiveNavBar() {
                 onClick={toProfile}
                 className="bg-green-500 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
               >Userprofile
+              </Button>
+                <br />
+              <Button
+                onClick={toBookings}
+                className="bg-green-500 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
+              >My Bookings
               </Button>
 
             </Menu>

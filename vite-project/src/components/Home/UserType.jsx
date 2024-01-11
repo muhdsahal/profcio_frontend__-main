@@ -10,9 +10,9 @@ function UserType() {
   const handleSignup = (userType) => {
     // Redirect based on user type selected during signup
     if (userType === "employee") {
-      navigate("/employee/signup");
+      navigate("/employee/login");
     } else if (userType === "user") {
-      navigate("/signup/");
+      navigate("/login/");
     }
     // Add logic for admin signup if needed
   };

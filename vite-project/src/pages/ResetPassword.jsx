@@ -32,7 +32,7 @@ function ResetPassword() {
         uid: uid,
       });
       setMessage(response.data.detail);
-      navigate("/employee/employee_login");
+      navigate("/usertype");
     } catch (error) {
       console.error(error, 'reset error');
       setMessage(error.response.data.detail);

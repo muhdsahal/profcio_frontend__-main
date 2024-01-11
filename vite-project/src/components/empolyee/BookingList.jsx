@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
-import React from "react";
-import { BookingListUrl } from "../../constants/constants";
+import React,{useState,useEffect} from "react";
 import axios from "axios";
-import toast, { Toaster } from 'react-hot-toast'
-
+import { BookingEmployeeSide } from "../../constants/constants";
+import { jwtDecode } from "jwt-decode";
 import {
     Card,
     Typography,
@@ -15,28 +13,27 @@ import {
     Chip,
 } from "@material-tailwind/react";
 
-
-function BookingList() {
-    const [BookingList, setBookingList] = useState([])
-    const [loading, setLaoding] = useState(true)
-
-    useEffect(() => {
-        axios
-            .get(BookingListUrl)
-            .then((response) => {
-                const responseData = response.data;
-                setBookingList(responseData)
-            })
-            .catch((error) => {
-                console.error("Error Fetching Data:", error);
-                setLaoding(false)
-            })
-    }, [])
-
-    
-    return (
-        <div className="flex flex-col min-h-screen items-center ">
-            {/* <input onChange={(e) => SearchUser(e.target.value)} className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black' type="text" placeholder='  Search' /> */}
+function BookingListEmployee(){
+    const token = localStorage.getItem('token')
+    const decode = jwtDecode(token)
+    const userId = decode.user_id
+    console.log(userId,'userserserserserser');
+    const [bookingList,setBookingList] = useState([])
+    const [loading,setLoading] = useState(true)
+    useEffect(()=>{
+        axios.get(`${BookingEmployeeSide}${userId}`)
+        .then((response)=>{
+            const responseData = response.data
+            setBookingList(responseData)
+        })
+        .catch((error)=>{
+            console.error("an error occured data fectcing..",error);
+            setLoading(false)
+        })
+    },[])
+    return(<>
+    <div className="flex flex-col min-h-max items-center ">
+                <h1>My Bookings</h1>
             <Card className="h-full w-full">
                 <table className='w-full min-w-max table-auto text-left'>
                     <thead>
@@ -92,7 +89,7 @@ function BookingList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {BookingList.map((book) => {
+                        {bookingList.map((book) => {
 
                             const classes =  "p-4 border-b border-blue-gray-50";
 
@@ -154,7 +151,6 @@ function BookingList() {
                 </table>
             </Card>
         </div>
-    );
-
+    </>)
 }
-export default BookingList;
+export default BookingListEmployee

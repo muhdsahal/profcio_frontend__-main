@@ -51,6 +51,10 @@ export function SidebarWithSearch() {
     navigate(`/employee/profile/${userId}`);
     // console.log(userId,'userID>>>>>>>>>>>>>>>>>');
   }
+
+  const toBookings = () => {
+    navigate(`/employee/booking_list/${userId}`)
+  }
     
  
   return (
@@ -100,7 +104,7 @@ export function SidebarWithSearch() {
           Profile
         </ListItem>
               
-        <ListItem>
+        <ListItem onClick={toBookings}>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
