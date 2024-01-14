@@ -7,8 +7,7 @@ import emp from '../../image/constrution_image1.png'
 // import carMecanic from '../../image/image_car.png';
 // import Plumber from '../../image/Plumber.png';
 // import Civil from '../../image/civilone.png'
-import { Typography,
-        Button } from "@material-tailwind/react";
+import { Typography,Button } from "@material-tailwind/react";
         
        
 

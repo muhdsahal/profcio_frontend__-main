@@ -6,7 +6,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
+// import './interceptor/axiox.jsx'
 const theme = createTheme();
 
 ReactDOM.createRoot(document.getElementById('root')).render(

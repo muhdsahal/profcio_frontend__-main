@@ -71,13 +71,23 @@ export function AdminLoginForm(){
 const handleLogin = async (e) => {
   if (validForm()) {
     handleLoading();
-console.log(user,'user............................');
     try {
-      const response = await axios.post(UserLoginURL, user);
-      const token = JSON.stringify(response.data);
+      const  {data:response} = await axios.post(
+        UserLoginURL,
+        user,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      );
+      localStorage.clear()
+      localStorage.setItem('access_token',response.access)
+      localStorage.setItem('refresh_token',response.refresh)
+      axios.defaults.headers.common['Authorization'] = 
+                                     `Bearer ${response['access']}`
+      const token = JSON.stringify(response.access);
       const decoded = jwtDecode(token);
-      console.log(response.data,'response=========>>>>>>>>>>');
-
+      console.log({response}, 'data response,.............................')
       if (decoded.user_type !== 'admin') {
         toast.error(`${decoded.user_type} not valid in this Login`);
       } else {

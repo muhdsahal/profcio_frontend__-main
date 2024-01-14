@@ -77,10 +77,22 @@ const handleLogin = async (e) => {
     handleLoading();
 
     try {
-      const response = await axios.post(UserLoginURL, user);
-      const token = JSON.stringify(response.data);
+      const  {data:response} = await axios.post(
+        UserLoginURL,
+        user,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      );
+      localStorage.clear()
+      localStorage.setItem('access_token',response.access)
+      localStorage.setItem('refresh_token',response.refresh)
+      axios.defaults.headers.common['Authorization'] = 
+                                     `Bearer ${response['access']}`
+      const token = JSON.stringify(response.access);
       const decoded = jwtDecode(token);
-      console.log(response,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+      console.log({response}, 'data response,.............................')
 
       if (decoded.user_type !== 'employee') {
         toast.error(`${decoded.user_type} not valid in this Login`);

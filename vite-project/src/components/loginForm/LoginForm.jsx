@@ -27,7 +27,7 @@ import {
 import { useGoogleLogin } from "@react-oauth/google";
 
 export function LoginForm(){
-    localStorage.removeItem('token')
+    // localStorage.removeItem('token')
     const navigate = useNavigate();
     const [user,setUser] = useState({email:"",password:"",user_type:"user"});
 
@@ -123,28 +123,40 @@ export function LoginForm(){
         handleLoading();
 
         try {
-          const response = await axios.post(UserLoginURL, user);
-          const token = JSON.stringify(response.data);
+          const  {data:response} = await axios.post(
+            UserLoginURL,
+            user,
+            {
+              headers: { 'Content-Type': 'application/json' },
+              withCredentials: true
+            }
+          );
+          localStorage.clear()
+          localStorage.setItem('access_token',response.access)
+          localStorage.setItem('refresh_token',response.refresh)
+          axios.defaults.headers.common['Authorization'] = 
+                                         `Bearer ${response['access']}`
+          const token = JSON.stringify(response.access);
           const decoded = jwtDecode(token);
-          console.log(response,'data response,.............................');
+          console.log({response}, 'data response,.............................');
           if (decoded.user_type !== 'user') {
             toast.error(`${decoded.user_type} not valid in this Login`);
           } else {
             toast.success(`Welcome ${decoded.username}....!!`);
-            localStorage.setItem("token", token);
-            navigate("/");
+            localStorage.setItem('token', token);
+            navigate('/');
           }
-
         } catch (error) {
-          console.log(error,"fsfasdf");
+          console.log(error);
           if (error.response && error.response.data.detail) {
             toast.error(error.response.data.detail);
           } else {
-            toast.error("An Error occurred, please try again");
+            toast.error('An Error occurred, please try again');
           }
         } finally {
           handleLoading();
         }
+        
       }
     };
 

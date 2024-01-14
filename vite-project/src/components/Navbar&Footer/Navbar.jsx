@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -23,12 +23,19 @@ const settings = [];
 export default function ResponsiveNavBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [userId , setUserId] = useState('');
   const token = localStorage.getItem('token')
-  const decode = jwtDecode(token)
-  const userId = decode.user_id
-  console.log(userId, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
   const navigate = useNavigate()
-  const isLoggedIn = !!localStorage.getItem('token');
+  const [isLoggedIn, setisLoggedIn] = useState(false)
+  useEffect(() => {
+    if (token) {
+      const decode = jwtDecode(token);
+      setUserId(decode.user_id);
+      console.log(userId, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
+      setisLoggedIn(!!localStorage.getItem('token'));
+    }
+  }, [token]);
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -42,7 +49,7 @@ export default function ResponsiveNavBar() {
   const toProfile = () => {
     navigate(`/userprofile/${userId}/`)
   }
-  const toBookings = () =>{
+  const toBookings = () => {
     navigate(`/booking_list/${userId}`)
   }
   const handleOpenNavMenu = (event) => {
@@ -60,7 +67,7 @@ export default function ResponsiveNavBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  
+
 
   return (
     <AppBar position="static" sx={{ backgroundColor: 'lightseagreen' }} >
@@ -126,22 +133,22 @@ export default function ResponsiveNavBar() {
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               <Link to={'/'}
-              className='font-Kantumruy'
-              style={{ fontSize: '16px', color: 'black' }}>
+                className='font-Kantumruy'
+                style={{ fontSize: '16px', color: 'black' }}>
                 Home</Link>
             </Button>
 
-          
+
 
             <Button sx={{ my: 2, color: 'white', display: 'block' }}
             >
-                  <Link
-                    to={'/employeelist/'}
-                    className='font-Kantumruy'
-                    style={{ fontSize: '16px', color: 'black' }}
-                  >
-                    employees
-                  </Link>            
+              <Link
+                to={'/employeelist/'}
+                className='font-Kantumruy'
+                style={{ fontSize: '16px', color: 'black' }}
+              >
+                employees
+              </Link>
             </Button>
 
           </Box>
@@ -182,19 +189,19 @@ export default function ResponsiveNavBar() {
                 className="bg-blue-gray-100 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
               >{isLoggedIn ? 'Logout' : 'Login'}
               </Button>
-              <br />
+              {isLoggedIn && <span> <br />
 
-              <Button
-                onClick={toProfile}
-                className="bg-green-500 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
-              >Userprofile
-              </Button>
+                <Button
+                  onClick={toProfile}
+                  className="bg-green-500 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
+                >Userprofile
+                </Button>
                 <br />
-              <Button
-                onClick={toBookings}
-                className="bg-green-500 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
-              >My Bookings
-              </Button>
+                <Button
+                  onClick={toBookings}
+                  className="bg-green-500 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
+                >My Bookings
+                </Button> </span>}
 
             </Menu>
           </Box>

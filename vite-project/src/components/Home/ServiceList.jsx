@@ -36,7 +36,7 @@ const ServiceList = () => {
   <Carousel
     transition={{ duration: 2 }}
     className="rounded-xl"
-    renderArrowPrev={(onClickHandler, hasPrev, label) =>
+    renderarrowprev={(onClickHandler, hasPrev, label) =>
       hasPrev && (
         <button
           type="button"
@@ -48,7 +48,7 @@ const ServiceList = () => {
         </button>
       )
     }
-    renderArrowNext={(onClickHandler, hasNext, label) =>
+    renderarrownext={(onClickHandler, hasNext, label) =>
       hasNext && (
         <button
           type="button"

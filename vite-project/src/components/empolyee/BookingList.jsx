@@ -33,7 +33,7 @@ function BookingListEmployee(){
     },[])
     return(<>
     <div className="flex flex-col min-h-max items-center ">
-                <h1>My Bookings</h1>
+                <h1>My Orders</h1>
             <Card className="h-full w-full">
                 <table className='w-full min-w-max table-auto text-left'>
                     <thead>
@@ -56,7 +56,7 @@ function BookingListEmployee(){
                                     User
                                 </Typography>
                             </th>
-                            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                            {/* <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
                                 <Typography
                                     variant="small"
                                     color="blue-gray"
@@ -64,7 +64,7 @@ function BookingListEmployee(){
                                 >
                                     Employee
                                 </Typography>
-                            </th>
+                            </th> */}
 
                             <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
                                 <Typography
@@ -114,7 +114,7 @@ function BookingListEmployee(){
                                         </Typography>
                                     </td>
 
-                                    <td className={classes}>
+                                    {/* <td className={classes}>
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
@@ -122,7 +122,7 @@ function BookingListEmployee(){
                                         >
                                             {book.employeeDetails.username}
                                         </Typography>
-                                    </td>
+                                    </td> */}
                                     
                                     <td className={classes}>
                                         <Typography
