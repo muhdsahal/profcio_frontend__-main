@@ -14,6 +14,7 @@ function AvailableDates(props) {
   const employeeCharge = props.empdetails;
 
   const [bookedDates, setBookedDates] = useState([]);
+  const [absences, setAbsences] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const token = localStorage.getItem('token');
   const decode = jwtDecode(token);
@@ -28,6 +29,13 @@ function AvailableDates(props) {
           moment(dateInfo.booking_date).tz('Asia/Kolkata').toDate()
         );
         setBookedDates(bookedDatesArray);
+
+        // Fetch and set absence dates
+        const absenceResponse = await axios.get(`${base_url}/employee/employee_absences/${empId}/`);
+        const absenceDatesArray = absenceResponse.data.map((absenceDate) =>
+          moment(absenceDate.absence_date).tz('Asia/Kolkata').toDate()
+        );
+        setAbsences(absenceDatesArray);
       } catch (error) {
         console.error('Error fetching booking data:', error);
       }
@@ -39,6 +47,22 @@ function AvailableDates(props) {
   const isSunday = (date) => {
     return date.getDay() === 0; // Sunday is represented by 0 in JavaScript's getDay()
   };
+
+  const tileDisabled = ({ date }) => {
+    const isBooked = bookedDates.some(
+      (bookedDate) =>
+        bookedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
+    );
+
+    const isAbsence = absences.some(
+      (absenceDate) =>
+        absenceDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
+    );
+
+    return isBooked || isAbsence || date.getTime() <= new Date().setHours(0, 0, 0, 0) || isSunday(date);
+  };
+
+  
 
   const handleDateChange = (date) => {
     console.log(date, 'genuine date');
@@ -60,15 +84,29 @@ function AvailableDates(props) {
         return;
       }
 
+      // Check if userId and empId are equal, and no payment is required
+      if (userId === empId) {
+        // Mark absence directly without going to the payment process
+        await axios.post(`${base_url}/employee/employee_absence/`, {
+          user: userId,
+          employee: empId,
+          absence_date: formattedDate,
+        });
+
+        toast.success('Absence marked successfully!');
+        // You can redirect or update the UI as needed for successful absence marking
+        return;
+      }
+
+      // Payment required for cases where userId and empId are not equal
       const data = {
-        userId: userId,
-        empId: empId,
+        user: userId,
+        employee: empId,
         currency: 'INR',
         unit_amount: employeeCharge * 100,
         quantity: 1,
         mode: 'payment',
         date: formattedDate,
-        
       };
 
       const response = await axios.post(`${base_url}/employee/booking/payment/`, data);
@@ -81,38 +119,21 @@ function AvailableDates(props) {
     }
   };
 
-  const tileContent = ({ date, view }) => {
-    if (view === 'month') {
-      return (
-        <div style={{ position: 'absolute', bottom: '5px', left: '5px' }}>
-          {isSunday(date) && <span style={{ color: 'red' }}>Holiday</span>}
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <div>
       <h1>Available Dates</h1>
       <Calendar
         value={selectedDate}
         onChange={handleDateChange}
-        tileDisabled={({ date }) =>
-          bookedDates.some(
-            (bookedDate) => bookedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
-          ) ||
-          date.getTime() <= new Date().setHours(0, 0, 0, 0) || // Disable today and previous days
-          isSunday(date) // Disable Sundays
-        }
-        />
-       <h4 className='font-bold text-red-600' >Sunday Holiday</h4>
-        
+        tileDisabled={tileDisabled}
+      />
+      <h4 className='font-bold text-red-600'>Sunday Holiday</h4>
+
       <p>
         Selected Date: {selectedDate && selectedDate.toLocaleDateString()}
         {selectedDate && selectedDate.getTime() > new Date().setHours(0, 0, 0, 0) && (
           <Button color="blue" onClick={bookEmployee}>
-            Book Now
+            {userId === empId ? 'Mark Absence' : 'Book Now'}
           </Button>
         )}
       </p>

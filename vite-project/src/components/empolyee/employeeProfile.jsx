@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 
 import toast,{ Toaster } from "react-hot-toast";
 import { base_url } from "../../constants/constants";
-// import AvailableDates from "../Home/AvailableDates";
+import AvailableDates from "../Home/AvailableDates";
 
 
 function EmployeeProfile() {
@@ -307,7 +307,7 @@ function EmployeeProfile() {
                 </div>
               </Card>
             </div>
-            {/* <AvailableDates  empId={employee.id} role={employee.user_type}/> */}
+            <AvailableDates  empId={employee.id} role={employee.user_type}/>
                         {/* <p>{employee.user_type}</p> */}
           </div>
         </div>
