@@ -9,7 +9,7 @@ function SuccessFullPayment (){
     const userId = queryParameters.get("userId")
     const empId = queryParameters.get("empId")
     const date = queryParameters.get("date")
-    console.log(userId,empId,date);
+    console.log(userId,empId,date,'allldata in paymant');
     const [success,setSuccess] = useState(false)
     const [loading, setLoading] = useState(true);
     const [showLoadingComponent, setShowLoadingComponent] = useState(true);
@@ -24,9 +24,9 @@ function SuccessFullPayment (){
             const fetchData = async () => {
                 try{
                     const response = await axios.post(`${base_url}/employee/employee/booking/register/`, {
-                        userId,
-                        empId,
-                        date,
+                      userId: userId,
+                      empId: empId,
+                      date:  date,
                     });
                     console.log(response,'response of register');
                     if (response.status === 201){

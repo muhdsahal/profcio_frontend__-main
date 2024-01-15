@@ -44,9 +44,9 @@ function AvailableDates(props) {
     fetchBookingData();
   }, [userId]);
 
-  const isSunday = (date) => {
-    return date.getDay() === 0; // Sunday is represented by 0 in JavaScript's getDay()
-  };
+  // const isSunday = (date) => {
+  //   return date.getDay() === 0; // Sunday is represented by 0 in JavaScript's getDay()
+  // };
 
   const tileDisabled = ({ date }) => {
     const isBooked = bookedDates.some(
@@ -59,7 +59,7 @@ function AvailableDates(props) {
         absenceDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
     );
 
-    return isBooked || isAbsence || date.getTime() <= new Date().setHours(0, 0, 0, 0) || isSunday(date);
+    return isBooked || isAbsence || date.getTime() <= new Date().setHours(0, 0, 0, 0) ;
   };
 
   
@@ -79,10 +79,10 @@ function AvailableDates(props) {
       const formattedDate = moment(selectedDate).tz('Asia/Kolkata').format('YYYY-MM-DD');
 
       // Check if the selected date is a Sunday and prevent booking if true
-      if (isSunday(selectedDate)) {
-        toast.error('Booking is not allowed on Sundays!');
-        return;
-      }
+      // if (isSunday(selectedDate)) {
+      //   toast.error('Booking is not allowed on Sundays!');
+      //   return;
+      // }
 
       // Check if userId and empId are equal, and no payment is required
       if (userId === empId) {
@@ -97,18 +97,16 @@ function AvailableDates(props) {
         // You can redirect or update the UI as needed for successful absence marking
         return;
       }
-
-      // Payment required for cases where userId and empId are not equal
       const data = {
-        user: userId,
-        employee: empId,
+        userId: userId,
+        empId: empId,
         currency: 'INR',
         unit_amount: employeeCharge * 100,
         quantity: 1,
         mode: 'payment',
         date: formattedDate,
       };
-
+      console.log(data,'bkkkkdata');
       const response = await axios.post(`${base_url}/employee/booking/payment/`, data);
       window.location.href = response.data.message.url;
 
@@ -127,7 +125,7 @@ function AvailableDates(props) {
         onChange={handleDateChange}
         tileDisabled={tileDisabled}
       />
-      <h4 className='font-bold text-red-600'>Sunday Holiday</h4>
+      {/* <h4 className='font-bold text-red-600'>Sunday Holiday</h4> */}
 
       <p>
         Selected Date: {selectedDate && selectedDate.toLocaleDateString()}

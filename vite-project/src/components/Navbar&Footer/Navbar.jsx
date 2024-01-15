@@ -27,16 +27,18 @@ export default function ResponsiveNavBar() {
   const token = localStorage.getItem('token')
   const navigate = useNavigate()
   const [isLoggedIn, setisLoggedIn] = useState(false)
+  const [profilePhoto,setProfilPhoto] = useState('')
   useEffect(() => {
     if (token) {
       const decode = jwtDecode(token);
       setUserId(decode.user_id);
+      setProfilPhoto(decode.user_profile_photo)
       console.log(userId, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
       setisLoggedIn(!!localStorage.getItem('token'));
     }
   }, [token]);
 
-
+console.log(profilePhoto,'rrrrrrrrrrrrrrrrrrr');
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate("/login/")
@@ -157,7 +159,8 @@ export default function ResponsiveNavBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <img alt="img" src="https://bootdey.com/img/Content/avatar/avatar6.png" className='rounded-full w-12' />
+                <img alt="img" src={profilePhoto ?? "https://bootdey.com/img/Content/avatar/avatar6.png" }
+                className='rounded-full w-12' />
 
               </IconButton>
             </Tooltip>
