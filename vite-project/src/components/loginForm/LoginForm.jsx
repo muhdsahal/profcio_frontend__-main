@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode';
 import toast,{ Toaster } from "react-hot-toast";
-import { UserLoginURL } from "../../constants/constants"; 
+import { GoogleLoginURL, Gooogle_Access_Token, UserLoginURL } from "../../constants/constants"; 
 import Loader from "../Loading/Loading";
 import Signup from "../../pages/signup/Signup";
 import EmployeeSignupPage from "../../pages/employee/EmployeeSignupPage";
@@ -39,69 +39,106 @@ export function LoginForm(){
 
     //google Login handler
     const [guser, setgUser] = useState();
-
-   
-
-    useEffect(() => {
-        const GoogleAuth = async () => {
-            try {
-                if (!guser) return;
-                    
-
-                    // Fetch user info from Google
-                    const res = await axios.get(
-                        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${guser.access_token}`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${guser.access_token}`,
-                                Accept: "application/json",
-                            },
-                        }
-                    );
-
-                    // console.log(res.data, "goooogledataaa");
-                    const value = res.data;
-                    const values = {
-                        email: value.email,
-                        username: value.email,
-                        first_name: value.given_name,
-                        last_name: value.family_name,
-                        password: value.id,
-                    };
-
-                    // Send user info to your server for authentication
-                    console.log(values.email,"values");
-                    const response = await axios.post('http://127.0.0.1:8000/auth/googleauth/', values);
-                    console.log(response);
-                    const token = JSON.stringify(response.data);
-                    localStorage.setItem("token", token);
-                    handleLoading();
-                    toast.success("Signed with Google..!");
-                    navigate("/");
-                
-            } catch (error) {
-                // handleLoading();
-                console.log(error);
-                if (error.response) {
-                    toast.error(error.response.data.detail);
-                } else {
-                    toast.error("Google verification failed");
-                }
-            }
-        };
-
-        if (guser) {
-            GoogleAuth();
-        }
-    }, [guser]);
-
-     const handleGoogleLogin = useGoogleLogin({
+    let googleData = ''
+    const LoginWithGoogleAuth = useGoogleLogin({
         onSuccess: (codeResponse) => {
-            console.log("Google Login Success:", codeResponse);
-            setgUser(codeResponse);
+            googleData = codeResponse
+            console.log(googleData.access_token, 'googleDataTOken');
+            GoogleAuth();
         },
-        onError: (error) => console.log("Login Failed:", error),
+        onError: (error) => {
+            toast.error(error);
+            console.log("Login Failed:", error);
+        }
     });
+    const GoogleAuth = async () => {
+      try {
+          if (!googleData) return;
+          const tokenData = await axios.get(
+              `${Gooogle_Access_Token}access_token=${googleData.access_token}`,
+              {
+                  headers: {
+                      Authorization: `Bearer ${googleData.access_token}`,
+                      Accept: "application/json",
+                  },
+              }
+          );
+          const backend_access = googleData.access_token
+          console.log(backend_access, '<<<<<<<<<<<<<<<< google acccses token>>>>>>>>>>>>>>');
+          googleData = tokenData.data;
+          const googleUser = {
+              email: googleData.email,
+              access_token: backend_access
+          }
+          try {
+              const googleResponse = await axios.post(GoogleLoginURL, googleUser);
+              const response = googleResponse.data
+              if (response.status === 406) {
+                  setTimeout(() => {
+                      toast.error(response.message)
+                  }, 500);
+                  navigate('/login')
+              }
+              if (response.status === 403) {
+                  setTimeout(() => {
+                      toast.error(response.message)
+                  }, 500);
+                  navigate('/login')
+              }
+              if (response.status === 202) {
+                  setTimeout(() => {
+                      toast.error(response.message)
+                  }, 500);
+                  navigate('/login')
+              }
+              // if already signup with form work this 
+
+              if (response.status === 201) {
+                  setTimeout(() => {
+                      toast.success(response.message)
+                  }, 500);
+                  const data = (response.token)
+                  localStorage.setItem('token', JSON.stringify(data));
+
+                  console.log(data, '<<<<<accses>>>>>jwttoken');
+                  try {
+                      const token = jwtDecode(data.access)
+                      console.log(token, '>>>>>>>>>>>>>>decoded');
+                      const setUser = {
+                          "id": token.user_id,
+                          "email": token.email,
+                          "is_superuser": token.is_superuser,
+                          "user_type": token.user_type,
+                          "is_google": token.is_google,
+                          "is_active": token.is_active,
+                      }
+                      setgUser(setUser);
+                       if (token.is_active) {
+                          // toast.success('Login successfully!')
+                          navigate('/');
+                      }
+                      else {
+                          toast.error('Invalid Credentials!')
+                          navigate('/login');
+                      }
+
+                  } catch (error) {
+                      console.error('Error decoding JWT:', error);
+                  }
+
+              }
+          } catch (error) {
+              console.error('Error during signup:', error);
+              toast.error(error.message);
+          }
+      } catch (error) {
+          console.log(error.response);
+          toast.error(error.message);
+      }
+  };
+
+    
+    
 
     //email validation
     const validEmail = (email) => {
@@ -218,7 +255,7 @@ export function LoginForm(){
               <Button
                 variant="White"
                 fullWidth
-                onClick={()=>handleGoogleLogin()}
+                onClick={()=>LoginWithGoogleAuth()}
                 style={{backgroundColor: 'blue'}}
               >
                 Sign In with Google

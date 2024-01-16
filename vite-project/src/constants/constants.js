@@ -11,6 +11,7 @@ export const UserLoginURL = import.meta.env.VITE_USER_LOGIN_URL
 export const empRegisterURL = import.meta.env.VITE_EMPLOYEE_REGISTER_URL
 export const UserDetailsURL = import.meta.env.VITE_USER_DETAILS
 export const GoogleSignUpURL = import.meta.env.VITE_GOOGLE_SIGNUP
+export const Gooogle_Access_Token = import.meta.env.VITE_GOOGLE_ACCESS_TOKEN
 export const GoogleLoginURL = import.meta.env.VITE_GOOGLE_LOGIN
 export const EmployeeListingURL = import.meta.env.VITE_EMPLOYEE_LISING
 export const ServiceListURL = import.meta.env.VITE_SERVICE_LIST 
