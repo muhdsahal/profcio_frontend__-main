@@ -38,64 +38,70 @@ export function LoginForm(){
 
 
     //google Login handler
-    const [guser,setgUser] = useState();
+    const [guser, setgUser] = useState();
 
-    const handleGoogleLogin = useGoogleLogin({
-    onSuccess: (codeResponse) => setgUser(codeResponse),
-    onError: (error) => console.log("Login Failed:", error),
-});
-    
+   
 
-        useEffect(()=>{
-            const handleGoogleAuth = async () =>{
-                try{
-                    if(guser){
-                    handleLoading();
-                    const res = await axios.get(
-                    `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${guser.access_token}`,
-                    {
-                        headers : {
-                            Authorization: `Bearer ${guser.access_token}`,
-                            Accept : "application/json",
-                        },
-                      }
-                      
-                      )
+    useEffect(() => {
+        const GoogleAuth = async () => {
+            try {
+                if (!guser) return;
                     
-                    console.log(res.data,"goooogledataaa");
-                    const value = res.data
-                    const values ={
-                      email : value.email,
-                      username : value.email,
-                      first_name : value.given_name,
-                      last_name : value.family_name,
-                      password : value.id,
-                  }
-                    const response = await axios.post('http://127.0.0.1:8000/auth/googleauth/',values)
+
+                    // Fetch user info from Google
+                    const res = await axios.get(
+                        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${guser.access_token}`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${guser.access_token}`,
+                                Accept: "application/json",
+                            },
+                        }
+                    );
+
+                    // console.log(res.data, "goooogledataaa");
+                    const value = res.data;
+                    const values = {
+                        email: value.email,
+                        username: value.email,
+                        first_name: value.given_name,
+                        last_name: value.family_name,
+                        password: value.id,
+                    };
+
+                    // Send user info to your server for authentication
+                    console.log(values.email,"values");
+                    const response = await axios.post('http://127.0.0.1:8000/auth/googleauth/', values);
                     console.log(response);
                     const token = JSON.stringify(response.data);
-
-                    localStorage.setItem("token",token);
-
+                    localStorage.setItem("token", token);
                     handleLoading();
-                    toast.success("Signed with Google..!")
+                    toast.success("Signed with Google..!");
                     navigate("/");
-                }
-            }catch(err){
-                handleLoading();
-                console.log(err);
-                if (err.response.data){
-                    toast.error(err.response.data.email[0])
-                }else{
-                    toast.error("Google verification failed")
+                
+            } catch (error) {
+                // handleLoading();
+                console.log(error);
+                if (error.response) {
+                    toast.error(error.response.data.detail);
+                } else {
+                    toast.error("Google verification failed");
                 }
             }
         };
-        if (guser){
-          handleGoogleAuth();
-        } 
-      },[guser]);
 
+        if (guser) {
+            GoogleAuth();
+        }
+    }, [guser]);
+
+     const handleGoogleLogin = useGoogleLogin({
+        onSuccess: (codeResponse) => {
+            console.log("Google Login Success:", codeResponse);
+            setgUser(codeResponse);
+        },
+        onError: (error) => console.log("Login Failed:", error),
+    });
 
     //email validation
     const validEmail = (email) => {
@@ -160,22 +166,7 @@ export function LoginForm(){
       }
     };
 
-    const customGoogleLoginButton = (
-      <button
-        type="button"
-        className="flex items-center bg-light px-4 py-2 rounded"
-        onClick={()=>handleGoogleLogin()}
-      >
-        {/* <img
-          src={userImage}
-          alt="Google logo"
-          className="google-logo img-fluid"
-          width="22"
-          height="22"
-        /> */}
-        <span className="button-text ms-2">Continue with Google</span>
-      </button>
-    );
+    
 
     return (
       <div className="flex items-center justify-center h-screen">
@@ -223,11 +214,18 @@ export function LoginForm(){
               >
                 Sign In
               </Button>
+              <br />
+              <Button
+                variant="White"
+                fullWidth
+                onClick={()=>handleGoogleLogin()}
+                style={{backgroundColor: 'blue'}}
+              >
+                Sign In with Google
+              </Button>
               <Typography variant="small" className="mt-6 flex justify-center">
                 Don't have an account? <Link to="/signup">Signup</Link>
-                <div className="text-center" style={{ margin: '2.5rem' }}>
-                  {customGoogleLoginButton}
-                </div>
+              
                 <Link to="/password_reset/" className="text-sm sm:mt-0 mt-4 text-black font-bold flex justify-center">
                   Forgot password
                 </Link>

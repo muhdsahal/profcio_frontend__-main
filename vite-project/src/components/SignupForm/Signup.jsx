@@ -73,13 +73,7 @@ const handleSubmit = async (e) => {
       const response = await userAxiosInstance.post(userRegisterURL, formData);
 
       toast.success("Registration success..!");
-      // setFormData({
-      //   username: "",
-      //   email: "",
-      //   password: "",
-      //   user_type: "user",
-      // });
-      // setOther({ conf_Password: "", check: false });
+      
       handleLoading();
       navigate("/confirm");
     } catch (error) {

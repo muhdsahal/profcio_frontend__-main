@@ -94,7 +94,6 @@ function AvailableDates(props) {
         });
 
         toast.success('Absence marked successfully!');
-        // You can redirect or update the UI as needed for successful absence marking
         return;
       }
       const data = {
