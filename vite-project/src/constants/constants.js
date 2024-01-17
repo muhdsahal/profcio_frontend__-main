@@ -21,3 +21,7 @@ export const BookingUserSide = import.meta.env.VITE_BOOKING_LIST_USER
 export const BookingEmployeeSide = import.meta.env.VITE_BOOKING_LIST_EMPLOYEE
 export const forgotPasswordUrl = import.meta.env.VITE_FORGOT_PASSWORD
 export const ResetPasswordUrl = import.meta.env.VITE_RESET_PASSWORD
+
+//chat 
+export const WebSocket = import.meta.env.VITE_WEB_SOCKET
+export const Previos_Chat = import.meta.env.VITE_PREVIOUS_CHAT

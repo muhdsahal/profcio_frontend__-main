@@ -15,9 +15,15 @@ import Loader from '../Loading/Loading'
 import logo from '../../image/profcio__All.png'
 import { useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import LogoGoogle from '../../assets/glogo.png'
+// import { setUserDetails } from "../../Redux/Users";
+// import { useDispatch } from "react-redux";
+import { useApiContext } from "../../context/context";
+
 export function SimpleRegistrationForm() {
   const navigate = useNavigate();
   const [other, setOther] = useState({ conf_Password: "" });
+  const {setUserCredentials} = useApiContext()
   // form
   const [formData, setFormData] = useState({
     username: "",
@@ -141,21 +147,21 @@ const handleSubmit = async (e) => {
                         email: googleData.email,
                         password: googleData.id,
                     }
-                    console.log(loginData,'loginDataloginDataloginDataloginDataloginData++===>>');
                     const userToken = await axios.post(UserLoginURL, loginData);
                     console.log(userToken,'userTokenuserTokenuserTokenuserToken============>>>>>');
                     const data = userToken.data;
                     try {
                         const token = jwtDecode(data.access)
-                        const setUser = {
-                            "user_id": token.user_id,
-                            "email": token.email,
-                            "is_superuser": token.is_superuser,
-                            "user_type": token.user_type,
-                            "is_google": token.is_google,
-                            "is_active": token.is_active,
+                        const userData = {
+                            user_id: token.user_id,
+                            email: token.email,
+                            username : token.username,
+                            user_type: token.user_type,
+                            is_google: token.is_google,
+                            is_active: token.is_active,
                         }
-                        setGuser(setUser)
+                        setGuser(userData)
+                        setUserCredentials(userData)
                         localStorage.setItem('token', JSON.stringify(data));
                         navigate('/');
 
@@ -257,13 +263,32 @@ const handleSubmit = async (e) => {
                 />
               </div>
                   <br />
-              <Button variant="White" fullWidth color="lightseagreen" style={{backgroundColor: 'lightseagreen'}} onClick={handleSubmit}>
+              <Button variant="White" 
+                fullWidth
+                type="button"
+                className="flex items-center px-16 py-3 rounded" 
+                style={{backgroundColor: 'lightseagreen'}} onClick={handleSubmit}>
                 Signup
               </Button>
               <br />
-              <Button variant="White" fullWidth  style={{backgroundColor: 'blue'}} onClick={() => signUpWithGoogle()}>
-                Signup with Google
-              </Button>
+              
+              <Button
+            fullWidth
+            type="button"
+            className="flex items-center px-16 py-3 rounded"
+            onClick={()=>signUpWithGoogle()} 
+            style={{ backgroundColor: 'blue' }}
+              
+            >
+              <img
+              src={LogoGoogle}
+              alt="Google logo"
+              className="google-logo img-fluid"
+              width="22"
+              height="22"
+            />
+              <span className="button-text ms-2">Signup With Google</span>
+            </Button>
     
               <Typography color="black" className="mt-4 text-center font-normal">
                 Already have an account?{' '}

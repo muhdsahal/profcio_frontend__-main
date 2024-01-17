@@ -4,14 +4,14 @@ import Navbar from '../Navbar&Footer/Navbar'
 import FooterPage from '../Navbar&Footer/FooterPage'
 import ServiceListPage from './ServiceListPage';
 import emp from '../../image/constrution_image1.png'
-// import carMecanic from '../../image/image_car.png';
-// import Plumber from '../../image/Plumber.png';
-// import Civil from '../../image/civilone.png'
 import { Typography,Button } from "@material-tailwind/react";
+import {  useApiContext } from '../../context/context';
         
        
 
 function Home() {
+
+  const {userCredentials} = useApiContext()
 
   const customStyle = {
     fontFamily :'monospace'

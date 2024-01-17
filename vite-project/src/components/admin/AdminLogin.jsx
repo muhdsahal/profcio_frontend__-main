@@ -28,23 +28,9 @@ export function AdminLoginForm(){
     localStorage.removeItem('token')
     const navigate = useNavigate();
     const [user,setUser] = useState({email:"",password:"",user_type:"admin"});
-
-    
-    
-    // const handleForgotPassword = () =>{
-    //   const dataTosend = { email:user?.email };
-    //   navigate('/forgot_password',{state:{data:dataTosend}})
-    //   console.log(state,"forgot_password....<><><><><><><><><><><><>");
-    // }
-    // const handleForgotPassword = () =>{
-    //     navigate('/forgot_password/');
-    //     console.log("forgotpassword,<><><><><><><><");
-    // };
     //for loading 
     const [loading,setLoading] = useState(false);
     const handleLoading = () =>setLoading((cur)=>!cur);
-
-
     
     //email validation
     const validEmail = (email) => {

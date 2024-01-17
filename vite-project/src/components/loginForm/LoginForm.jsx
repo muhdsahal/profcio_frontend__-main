@@ -1,6 +1,6 @@
 // import { Card,Input,Button,Typography } from "@material-tailwind/react";
 import { useState,useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode';
 import toast,{ Toaster } from "react-hot-toast";
@@ -12,8 +12,7 @@ import { userGoogleLogin } from "../../services/userApis";
 import ForgotPassword from "../../pages/ForgotPassWord";
 import logo from '../../image/profcio__All.png'
 import login_img from  '../../image/login_illu.png'
-
-
+import LogoGoogle from '../../assets/glogo.png'
 import {
     Card,
     CardHeader,
@@ -25,12 +24,14 @@ import {
     Button,
   } from "@material-tailwind/react";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useApiContext } from "../../context/context"
 
 export function LoginForm(){
-    // localStorage.removeItem('token')
+    const location = useLocation()
+    let message = new URLSearchParams(location.search).get('message')
     const navigate = useNavigate();
     const [user,setUser] = useState({email:"",password:"",user_type:"user"});
-
+    const {setUserCredentials} = useApiContext()
  
     //for loading 
     const [loading,setLoading] = useState(false);
@@ -64,7 +65,6 @@ export function LoginForm(){
               }
           );
           const backend_access = googleData.access_token
-          console.log(backend_access, '<<<<<<<<<<<<<<<< google acccses token>>>>>>>>>>>>>>');
           googleData = tokenData.data;
           const googleUser = {
               email: googleData.email,
@@ -100,21 +100,20 @@ export function LoginForm(){
                   const data = (response.token)
                   localStorage.setItem('token', JSON.stringify(data));
 
-                  console.log(data, '<<<<<accses>>>>>jwttoken');
                   try {
                       const token = jwtDecode(data.access)
-                      console.log(token, '>>>>>>>>>>>>>>decoded');
-                      const setUser = {
-                          "id": token.user_id,
-                          "email": token.email,
-                          "is_superuser": token.is_superuser,
-                          "user_type": token.user_type,
-                          "is_google": token.is_google,
-                          "is_active": token.is_active,
+                      const userData = {
+                          id: token.user_id,
+                          email: token.email,
+                          username: token.username,
+                          user_type: token.user_type,
+                          is_google: token.is_google,
+                          is_active: token.is_active,
                       }
-                      setgUser(setUser);
+                      setgUser(userData);
+                      setUserCredentials(userData)
                        if (token.is_active) {
-                          // toast.success('Login successfully!')
+                          toast.success('Login successfully!')
                           navigate('/');
                       }
                       else {
@@ -181,7 +180,14 @@ export function LoginForm(){
                                          `Bearer ${response['access']}`
           const token = JSON.stringify(response.access);
           const decoded = jwtDecode(token);
-          console.log({response}, 'data response,.............................');
+          const userData = {
+            id: decoded.user_id,
+            email: decoded.email,
+            username: decoded.username,
+            user_type: decoded.user_type,
+            is_active: decoded.is_active,
+        }
+        setUserCredentials(userData)
           if (decoded.user_type !== 'user') {
             toast.error(`${decoded.user_type} not valid in this Login`);
           } else {
@@ -245,23 +251,35 @@ export function LoginForm(){
             <CardFooter className="pt-0">
               <Button
                 variant="White"
+                type="button"
+                className="flex items-center px-16 py-3 rounded"
                 fullWidth
                 onClick={handleLogin}
                 style={{backgroundColor: 'lightseagreen'}}
               >
-                Sign In
+              <span className="button-text ms-2 flex text-center">Log In</span>
               </Button>
               <br />
-              <Button
-                variant="White"
-                fullWidth
-                onClick={()=>LoginWithGoogleAuth()}
-                style={{backgroundColor: 'blue'}}
-              >
-                Sign In with Google
-              </Button>
+            <Button
+            fullWidth
+            type="button"
+            className="flex items-center px-16 py-3 rounded"
+            onClick={()=>LoginWithGoogleAuth()} 
+            style={{ backgroundColor: 'blue' }}
+              
+            >
+              <img
+              src={LogoGoogle}
+              alt="Google logo"
+              className="google-logo img-fluid"
+              width="22"
+              height="22"
+            />
+              <span className="button-text ms-2">Log In With Google</span>
+            </Button>
+
               <Typography variant="small" className="mt-6 flex justify-center">
-                Don't have an account? <Link to="/signup">Signup</Link>
+                Don't have an account? <Link  to="/signup">Signup</Link>
               
                 <Link to="/password_reset/" className="text-sm sm:mt-0 mt-4 text-black font-bold flex justify-center">
                   Forgot password

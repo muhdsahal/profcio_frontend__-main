@@ -1,4 +1,3 @@
-// import { Card,Input,Button,Typography } from "@material-tailwind/react";
 import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,13 +5,7 @@ import {jwtDecode} from 'jwt-decode';
 import toast,{ Toaster } from "react-hot-toast";
 import { UserLoginURL } from "../../constants/constants"; 
 import Loader from "../Loading/Loading";
-import Signup from "../../pages/signup/Signup";
-import EmployeeSignupPage from "../../pages/employee/EmployeeSignupPage";
-import { userGoogleLogin } from "../../services/userApis";
-import ForgotPassword from "../../pages/ForgotPassWord";
 import logo from '../../image/profcio__All.png'
-
-
 import {
     Card,
     CardHeader,
@@ -23,33 +16,15 @@ import {
     Checkbox,
     Button,
   } from "@material-tailwind/react";
+import {useApiContext} from '../../context/context'
 
 export function EmployeeLoginForm(){
     localStorage.removeItem('token')
     const navigate = useNavigate();
     const [user,setUser] = useState({email:"",password:"",user_type:"employee"});
-
-    const SignupButton = () => {
-      localStorage.getItem('token')
-        navigate("/employee/signup/")
-      
-    }
-    
-    // const handleForgotPassword = () =>{
-    //   const dataTosend = { email:user?.email };
-    //   navigate('/forgot_password',{state:{data:dataTosend}})
-    //   console.log(state,"forgot_password....<><><><><><><><><><><><>");
-    // }
-    // const handleForgotPassword = () =>{
-    //     navigate('/forgot_password/');
-    //     console.log("forgotpassword,<><><><><><><><");
-    // };
-    //for loading 
     const [loading,setLoading] = useState(false);
     const handleLoading = () =>setLoading((cur)=>!cur);
-
-
-   
+    const {setEmployeeCredentials} = useApiContext()
     //email validation
     const validEmail = (email) => {
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -71,7 +46,6 @@ export function EmployeeLoginForm(){
         return true;
     };
 
-// Assuming validForm() is a function that checks form validity
 const handleLogin = async (e) => {
   if (validForm()) {
     handleLoading();
@@ -92,8 +66,14 @@ const handleLogin = async (e) => {
                                      `Bearer ${response['access']}`
       const token = JSON.stringify(response.access);
       const decoded = jwtDecode(token);
-      console.log({response}, 'data response,.............................')
-
+      const employeeData = {
+        id: decoded.user_id,
+        email: decoded.email,
+        username : decoded.username,
+        user_type: decoded.user_type,
+        is_active: decoded.is_active,
+      }
+      setEmployeeCredentials(employeeData)
       if (decoded.user_type !== 'employee') {
         toast.error(`${decoded.user_type} not valid in this Login`);
       } else {
@@ -113,8 +93,6 @@ const handleLogin = async (e) => {
     }
   }
 };
-
-    
 
     return (
       <div className="flex items-center justify-center h-screen" >

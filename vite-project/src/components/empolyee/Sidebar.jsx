@@ -31,6 +31,7 @@ import {
 } from "@heroicons/react/24/outline";
 import logo from '../../image/profcio__All.png'
 import { jwtDecode } from "jwt-decode";
+import { useApiContext } from "../../context/context";
  
 export function SidebarWithSearch() {
   const token = localStorage.getItem('token')
@@ -38,6 +39,7 @@ export function SidebarWithSearch() {
   const userId = decode.user_id;
   const [open, setOpen] = useState(0);
   const navigate = useNavigate()
+  const {employeeCredentials} = useApiContext()
  
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -55,7 +57,7 @@ export function SidebarWithSearch() {
   const toBookings = () => {
     navigate(`/employee/booking_list/${userId}`)
   }
-    
+  console.log(employeeCredentials,'context is working ');
  
   return (
     <>
@@ -90,13 +92,6 @@ export function SidebarWithSearch() {
           </ListItem>
          
         </Accordion>
-        {/* <ListItem>
-          <ListItemPrefix>
-            <UserCircleIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          My Service
-        </ListItem> */}
-
         <ListItem  onClick={toProfile}>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
@@ -111,12 +106,6 @@ export function SidebarWithSearch() {
           Bookings
         </ListItem>
         
-        {/* <ListItem>
-          <ListItemPrefix>
-            <Cog6ToothIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Customers
-        </ListItem> */}
         <ListItem>
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
@@ -128,7 +117,7 @@ export function SidebarWithSearch() {
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Inbox
+          Chat
           <ListItemSuffix>
             <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
           </ListItemSuffix>

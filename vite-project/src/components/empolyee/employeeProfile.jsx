@@ -22,7 +22,7 @@ function EmployeeProfile() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/auth/user_profile/${userId}/`
+          `${base_url}/auth/user_profile/${userId}/`
         );
         setEmployee(response.data);
         setUpdatedEmployee(response.data);

@@ -15,7 +15,8 @@ import MenuItem from '@mui/material/MenuItem';
 import logo from "../../image/profcio__All.png"
 import { jwtDecode } from 'jwt-decode';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
-
+// import { resetState } from '../../Redux/Users';
+// import {  useDispatch } from 'react-redux';
 const pages = ['Home', 'Services', 'Employees'];
 const settings = [];
 
@@ -28,17 +29,18 @@ export default function ResponsiveNavBar() {
   const navigate = useNavigate()
   const [isLoggedIn, setisLoggedIn] = useState(false)
   const [profilePhoto,setProfilPhoto] = useState('')
+  // const dispatch = useDispatch()
   useEffect(() => {
     if (token) {
       const decode = jwtDecode(token);
       setUserId(decode.user_id);
       setProfilPhoto(decode.user_profile_photo)
-      console.log(userId, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
       setisLoggedIn(!!localStorage.getItem('token'));
     }
   }, [token]);
+  
 
-console.log(profilePhoto,'rrrrrrrrrrrrrrrrrrr');
+// console.log(profilePhoto,'rrrrrrrrrrrrrrrrrrr');
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate("/login/")
@@ -93,6 +95,7 @@ console.log(profilePhoto,'rrrrrrrrrrrrrrrrrrr');
               textDecoration: 'none',
             }}
           ></Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"

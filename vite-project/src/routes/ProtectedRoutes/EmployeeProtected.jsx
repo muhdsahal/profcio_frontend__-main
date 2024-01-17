@@ -11,7 +11,6 @@ function EmployeeProtected(){
 
     if(token){
         const decoded = jwtDecode(token);
-        console.log(decoded,'empoyeeeprotected');
         if(decoded.user_type === 'user'){
             return <Home />
         }else if(decoded.user_type === 'employee'){

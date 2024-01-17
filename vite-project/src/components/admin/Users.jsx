@@ -3,22 +3,12 @@ import React from "react";
 // import { UserBaseUrl,UserDetailsURL } from "../../constants/constants";
 import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast'
-
-import {
-    Card,
-    Typography,
-    Button,
-    List,
-    ListItem,
-    ListItemPrefix,
-    ListItemSuffix,
-    Chip,
-} from "@material-tailwind/react";
-
+import {Card,Typography,Button,} from "@material-tailwind/react";
+import Loader from "../Loading/Loading";
 
 function UserList() {
     const [userList, setUserList] = useState([])
-    const [loading, setLaoding] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [users,setUsers ] = useState([])
 
     useEffect(() => {
@@ -34,15 +24,17 @@ function UserList() {
             })
             .catch((error) => {
                 console.error("Error Fetching Data:", error);
-                setLaoding(false)
+                setLoading(false)
             })
 
     }, [])
 
+
     const handleBlockUnblock =(id,is_active) => {
         const apiUrl = `http://127.0.0.1:8000/auth/user_block_unblock/${id}/`
-    axios
-        .put(apiUrl,{ is_active: !is_active })
+        setLoading(true)
+        const data = { is_active: !is_active }
+    axios.patch(apiUrl,data)
         .then((response) => {
             setUserList((prevUserList) =>{
                 return prevUserList.map((user) => {
@@ -50,31 +42,20 @@ function UserList() {
                         return { ...user,is_active:!is_active };
                     }
                     return user;
-                })
+                });
             })
         })
         .catch((error)=>{
             console.error("Error Updating user status:",error);
         })
+        .finally(()=>{
+            setLoading(false)
+        })
     }
-
-    const SearchUser = async (keyword) => {
-        if(keyword){
-            try{
-                const SearchRequest = await axios.get(`http://127.0.0.1:8000/auth/userdetails/?search=${keyword}`)
-                setUsers(SearchRequest.data)
-            }catch(error){
-                console.log(error, 'an error showing ');
-                toast.error(error)
-            }
-        }
-    };
-
 
     return (
         <div className="flex flex-col min-h-screen items-center ">
-            
-            {/* <input onChange={(e) => SearchUser(e.target.value)} className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black' type="text" placeholder='  Search' /> */}
+                <h1>User List</h1>
             <Card className="h-full w-full">
                 <table className='w-full min-w-max table-auto text-left'>
                     <thead>
@@ -130,6 +111,8 @@ function UserList() {
                         </tr>
                     </thead>
                     <tbody>
+                        
+                     
                         {userList.map((user) => {
 
                             const classes =  "p-4 border-b border-blue-gray-50";
@@ -172,18 +155,24 @@ function UserList() {
                                             className="font-prompt-normal"
                                         >
                                             {user.user_type}
+                                            {user.is_active}
                                         </Typography>
                                     </td>
                                         <td className={classes}>
-                                        {user.is_active ? (
-                                            <Button className="bg-[#d11204] w-18" onClick={() => handleBlockUnblock(user.id, user.is_active)}>
-                                                Block
+                                            {loading ? (
+                                                <Loader />
+                                            ):(
+                                        !user.is_active ? (
+                                            <Button className="bg-[#2dcf5d] w-18" onClick={() => handleBlockUnblock(user.id, user.is_active)}>
+                                                Unblock
                                             </Button>
                                             ) : (
-                                            <Button className="bg-[#20d104] w-18" onClick={() => handleBlockUnblock(user.id, user.is_active)}>
-                                                <span className="-ml-2">Unblock</span>
+                                            <Button className="bg-[#e32b2e] w-18" onClick={() => handleBlockUnblock(user.id, user.is_active)}>
+                                                <span className="-ml-2">Block</span>
                                             </Button>
+                                            )
                                         )}
+                                            
                                     </td>
                                     
                                 </tr>
