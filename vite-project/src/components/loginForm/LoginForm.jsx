@@ -176,8 +176,8 @@ export function LoginForm(){
           localStorage.clear()
           localStorage.setItem('access_token',response.access)
           localStorage.setItem('refresh_token',response.refresh)
-          axios.defaults.headers.common['Authorization'] = 
-                                         `Bearer ${response['access']}`
+          axios.defaults.headers.common['Authorization'] = `Bearer ${response['access']}`
+                                         
           const token = JSON.stringify(response.access);
           const decoded = jwtDecode(token);
           const userData = {

@@ -9,6 +9,7 @@ import PrivateRoute from "./ProtectedRoutes/PrivateRoute";
 import ForgotPassword from "../pages/ForgotPassWord";
 import ResetPassword from "../pages/ResetPassword";
 import BookingListPage from "../pages/employee/BookingListPage";
+import ChatUser from "../components/Home/ChatUser";
 
 
 function EmployeeRoutes(){
@@ -29,6 +30,8 @@ function EmployeeRoutes(){
                 <Route path="/" element={<EmployeeHome />} />
                 <Route path="/profile/:userId" element={<EmployeeProfilePage />} />
                 <Route path="/booking_list/:userId" element={<BookingListPage />} />
+                <Route element={<ChatUser />} path="/chat" />
+
 
 
                 

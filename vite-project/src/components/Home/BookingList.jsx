@@ -2,24 +2,15 @@ import React,{useState,useEffect} from "react";
 import axios from "axios";
 import { BookingUserSide } from "../../constants/constants";
 import { jwtDecode } from "jwt-decode";
-import {
-    Card,
-    Typography,
-    Button,
-    List,
-    ListItem,
-    ListItemPrefix,
-    ListItemSuffix,
-    Chip,
-} from "@material-tailwind/react";
+import {Card,Typography} from "@material-tailwind/react";
 
 function BookingListUser(){
     const token = localStorage.getItem('token')
     const decode = jwtDecode(token)
     const userId = decode.user_id
-    console.log(userId,'userserserserserser');
     const [bookingList,setBookingList] = useState([])
     const [loading,setLoading] = useState(true)
+   
     useEffect(()=>{
         axios.get(`${BookingUserSide}${userId}`)
         .then((response)=>{
@@ -31,6 +22,8 @@ function BookingListUser(){
             setLoading(false)
         })
     },[])
+
+    
     return(<>
     <div className="flex flex-col min-h-max items-center ">
                 <h1>My Bookings</h1>
@@ -47,15 +40,7 @@ function BookingListUser(){
                                     Id
                                 </Typography>
                             </th>
-                            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                                <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-prompt-normal leading-none opacity-70"
-                                >
-                                    User
-                                </Typography>
-                            </th>
+                            
                             <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
                                 <Typography
                                     variant="small"
@@ -104,16 +89,7 @@ function BookingListUser(){
                                             {book.id}
                                         </Typography>
                                     </td>
-                                    <td className={classes}>
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-prompt-normal"
-                                        >
-                                            {book.userDetails.username}
-                                        </Typography>
-                                    </td>
-
+                                
                                     <td className={classes}>
                                         <Typography
                                             variant="small"

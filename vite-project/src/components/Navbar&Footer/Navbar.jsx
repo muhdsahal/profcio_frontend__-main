@@ -15,8 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import logo from "../../image/profcio__All.png"
 import { jwtDecode } from 'jwt-decode';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
-// import { resetState } from '../../Redux/Users';
-// import {  useDispatch } from 'react-redux';
+import blankImage from '../../assets/blankprofile.png'
 const pages = ['Home', 'Services', 'Employees'];
 const settings = [];
 
@@ -28,19 +27,17 @@ export default function ResponsiveNavBar() {
   const token = localStorage.getItem('token')
   const navigate = useNavigate()
   const [isLoggedIn, setisLoggedIn] = useState(false)
-  const [profilePhoto,setProfilPhoto] = useState('')
-  // const dispatch = useDispatch()
+
+
   useEffect(() => {
     if (token) {
       const decode = jwtDecode(token);
       setUserId(decode.user_id);
-      setProfilPhoto(decode.user_profile_photo)
       setisLoggedIn(!!localStorage.getItem('token'));
     }
   }, [token]);
   
 
-// console.log(profilePhoto,'rrrrrrrrrrrrrrrrrrr');
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate("/login/")
@@ -162,7 +159,7 @@ export default function ResponsiveNavBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <img alt="img" src={profilePhoto ?? "https://bootdey.com/img/Content/avatar/avatar6.png" }
+                <img alt="img" src={blankImage}
                 className='rounded-full w-12' />
 
               </IconButton>

@@ -24,7 +24,7 @@ function EmployeeList() {
     axios
       .get(EmployeeListingURL)
       .then((response) => {
-        setEmployees(response.data || []); // Ensure employees array is not undefined
+        setEmployees(response.data || []); 
       })
       .catch((error) => {
         console.error("Error fetching employee data:", error);
@@ -33,7 +33,7 @@ function EmployeeList() {
     axios
       .get(ServiceListURL)
       .then((response) => {
-        setServices(response.data || []); // Ensure services array is not undefined
+        setServices(response.data || []); 
       })
       .catch((error) => {
         console.error("Error fetching service data:", error);
@@ -80,8 +80,9 @@ function EmployeeList() {
         (employee.work &&
           employee.work.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (employee.charge && String(employee.charge).includes(searchQuery));
-
-      return cityMatches && serviceMatches && searchMatches;
+      const isActive = employee.is_active === true;
+  
+      return cityMatches && serviceMatches && searchMatches && isActive;
     });
     setFilteredEmployees(filtered);
   };
