@@ -33,7 +33,7 @@ function AdminProtected(){
             return <EmployeeHome />
         }
     }else{
-        navigate("/admin/admin_login/")
+        navigate("/admin_login")
     }
 }
 export default AdminProtected;

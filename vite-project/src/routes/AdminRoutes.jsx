@@ -3,7 +3,7 @@ import AdminHome from "../pages/admin/AdminHome";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./ProtectedRoutes/PrivateRoute";
 import AdminProtected from './ProtectedRoutes/AdminProtected'
-import AdminLoginPage from "../pages/admin/adminLoginPage";
+import AdminLoginPage from "../pages/login/adminLoginPage";
 import UserLists from "../pages/admin/UserList";
 import ServiceList from "../pages/admin/ServiceList";
 import ServiceCategoryPage from "../pages/admin/ServiceCategoryPage";

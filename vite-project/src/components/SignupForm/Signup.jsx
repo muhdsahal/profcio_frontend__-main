@@ -12,7 +12,7 @@ import {Card,
 
 import {GoogleSignUpURL, Gooogle_Access_Token, UserLoginURL, userRegisterURL} from '../../constants/constants'
 import Loader from '../Loading/Loading'
-import logo from '../../image/profcio__All.png'
+import logo from '../../assets/profcio__All.png'
 import { useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import LogoGoogle from '../../assets/glogo.png'

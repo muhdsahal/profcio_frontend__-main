@@ -20,6 +20,7 @@ import toast, { Toaster } from 'react-hot-toast';
 function CategoryService(){
     const [open,setOpen] = useState(false)
     const [editOpen,setEditOpen] = useState(false)
+    const [change,setChange] = useState(false)
     const handleOpenModal = () => setOpen((cur) => !cur);
     const editOpenModal = () => setEditOpen((cur) => !cur);
     const [categoryName,setCategoryName] = useState('')
@@ -44,7 +45,7 @@ function CategoryService(){
                 // setLaoding(false)
             })
 
-    }, [manageState])
+    }, [manageState,change])
 
 
     const CreateCategory = () => {
@@ -74,6 +75,8 @@ function CategoryService(){
         axios.post(ServiceCatergoryURL,formData)
         .then(resposnse => setCategory([...category,resposnse.data])),
         setCategoryName('')
+        toast.success("Categoty Created SuccessFully!")
+        setChange(!change)
         
         .catch(error => {
             console.log("error creating service",error);
@@ -84,7 +87,6 @@ function CategoryService(){
     
     const editHandleCategory = (e) => {
       const value= category.find((obj)=>obj.id===e)
-      // console.log(value,'kkkkkkkkkkkkkkkkkkkkkkvale');
       setCategoryName(value.name)
       console.log("Edit Handle Category: ", e);
     
@@ -131,6 +133,7 @@ function CategoryService(){
           setCategoryName('');
           console.log("Edit successful");
           toast.success("category edited successfully..!");
+          setChange(!change)
           setManageState(true)
         })
         .catch(error => {
@@ -146,6 +149,10 @@ function CategoryService(){
     };
     const buttonStyle = {
       backgroundColor: 'lightseagreen',
+      color: 'white', // Optionally, set text color
+    };
+    const cancelButton = {
+      backgroundColor: 'red',
       color: 'white', // Optionally, set text color
     };
     return(
@@ -234,6 +241,7 @@ function CategoryService(){
                         >
                           Edit
                         </Button>
+                        
                       </td>
                     </tr>
       
@@ -244,7 +252,7 @@ function CategoryService(){
                     
                   <Dialog
                       open={open}
-                      handler={handleOpenModal}
+                      onClose={handleOpenModal}
                       aria-labelledby="form-dialog-title"
                       maxWidth="xs"
                     >
@@ -264,7 +272,10 @@ function CategoryService(){
                         </CardContent>
                         <CardActions>
                           <Button style={buttonStyle} onClick={CreateCategory} fullWidth>
-                            Create Service
+                            Create 
+                          </Button>
+                          <Button style={cancelButton} onClick={handleOpenModal} fullWidth>
+                            Cancel
                           </Button>
                         </CardActions>
                       </Card>
@@ -273,7 +284,7 @@ function CategoryService(){
                       <Dialog
                         
                         open={editOpen}
-                        handler={editOpenModal}
+                        onClose={editOpenModal}
                         className="bg-transparent shadow-none bg-coolGray-50"
                         maxWidth="xl"
                       >
@@ -297,6 +308,10 @@ function CategoryService(){
                             <Button  style={buttonStyle}
                              onClick={CategoryEdit} fullWidth>
                               Edit Service
+                            </Button>
+                            <Button  style={cancelButton}
+                             onClick={editOpenModal} fullWidth>
+                              Cancel
                             </Button>
                           </CardActions>
                         </Card>

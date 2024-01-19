@@ -5,17 +5,17 @@ import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast'
 import {Card,Typography,Button,} from "@material-tailwind/react";
 import Loader from "../Loading/Loading";
+import { UserDetailsURL, User_Block_Unblock  } from "../../constants/constants";
 
 function UserList() {
     const [userList, setUserList] = useState([])
     const [loading, setLoading] = useState(false)
     const [users,setUsers ] = useState([])
-
+    
     useEffect(() => {
-        const apiUrl = "http://127.0.0.1:8000/auth/userdetails/";
 
         axios
-            .get(apiUrl)
+            .get(UserDetailsURL)
             .then((response) => {
                 const responseData = response.data;
                 setUserList(responseData)
@@ -29,12 +29,10 @@ function UserList() {
 
     }, [])
 
-
     const handleBlockUnblock =(id,is_active) => {
-        const apiUrl = `http://127.0.0.1:8000/auth/user_block_unblock/${id}/`
         setLoading(true)
         const data = { is_active: !is_active }
-    axios.patch(apiUrl,data)
+    axios.patch(`${User_Block_Unblock}/${id}/`,data)
         .then((response) => {
             setUserList((prevUserList) =>{
                 return prevUserList.map((user) => {
@@ -155,7 +153,6 @@ function UserList() {
                                             className="font-prompt-normal"
                                         >
                                             {user.user_type}
-                                            {user.is_active}
                                         </Typography>
                                     </td>
                                         <td className={classes}>

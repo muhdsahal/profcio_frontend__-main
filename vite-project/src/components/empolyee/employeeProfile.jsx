@@ -3,11 +3,9 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Typography, Card, Button, Input } from "@material-tailwind/react";
 import Grid from "@material-ui/core/Grid";
-
 import toast,{ Toaster } from "react-hot-toast";
 import { base_url } from "../../constants/constants";
 import AvailableDates from "../Home/AvailableDates";
-
 
 function EmployeeProfile() {
   const { userId } = useParams();
@@ -15,9 +13,6 @@ function EmployeeProfile() {
   const [editing, setEditing] = useState(false);
   const [updatedEmployee, setUpdatedEmployee] = useState({});
   const [imageFile, setImageFile] = useState(null);
-
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -96,11 +91,6 @@ function EmployeeProfile() {
       [name]: value,
     }));
   };
-  
-
-  
-
-  
 
   return (
     <div className=" flex justify-center pt-10 bg-gray-50" >

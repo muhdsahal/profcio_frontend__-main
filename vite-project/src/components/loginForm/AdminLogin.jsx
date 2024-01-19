@@ -1,17 +1,12 @@
 // import { Card,Input,Button,Typography } from "@material-tailwind/react";
 import { useState,useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode';
 import toast,{ Toaster } from "react-hot-toast";
-import { UserLoginURL } from "../../constants/constants"; 
+import { UserLoginURL } from "../../constants/constants";
 import Loader from "../Loading/Loading";
-import Signup from "../../pages/signup/Signup";
-import EmployeeSignupPage from "../../pages/employee/EmployeeSignupPage";
-import { userGoogleLogin } from "../../services/userApis";
-import ForgotPassword from "../../pages/ForgotPassWord";
-import logo from '../../image/profcio__All.png'
-
+import logo from '../../assets/profcio__All.png'
 
 import {
     Card,
@@ -25,7 +20,6 @@ import {
   } from "@material-tailwind/react";
 
 export function AdminLoginForm(){
-    localStorage.removeItem('token')
     const navigate = useNavigate();
     const [user,setUser] = useState({email:"",password:"",user_type:"admin"});
     //for loading 

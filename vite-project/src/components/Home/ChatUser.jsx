@@ -97,21 +97,21 @@ function ChatUser() {
                 <Card className=' border-[1px]  ml-5 mt-2  '>
 
                     <Card className="w-full ">
-                        <List className="min-h-20 max-h-full overflow-y-auto hidescroll">
+                        <List className="min-h-20 max-h-full overflow-y-auto hidescroll" >
                             {(ChatList.length === 0 ? <h1 className="text-center text-lg font-prompt-normal" style={{ paddingTop: '15px' }} >User not found</h1> :
                                 (ChatList.map((ListChat, index) => (
                                     (decode.email != ListChat.email ?
                                         <div >
-                                            <ListItem key={index} className='grid grid-cols-5'>
+                                            <ListItem key={index} className='grid grid-cols-5' >
                                                 <ListItemPrefix className='col-span-1'>
-                                                    {ListChat.profile_image ? (
-                                                        <Avatar variant="circular" alt="candice" src={ListChat.profile_image} />
+                                                    {ListChat.profile_photo ? (
+                                                        <Avatar variant="circular" alt="candice" src={ListChat.profile_photo} />
                                                     ) : (
                                                         <Avatar variant="circular" alt="candice" src={blankImage} />
                                                     )}
                                                 </ListItemPrefix>
-                                                <div className='col-span-2'>
-                                                    <Typography variant="h6" color="blue-gray">
+                                                <div className='col-span-2' >
+                                                    <Typography variant="h6" >
                                                         {ListChat.username}
                                                     </Typography>
 
@@ -121,7 +121,7 @@ function ChatUser() {
 
                                                 </div>
                                                 <div>
-                                                    <Menu>
+                                                    {/* <Menu>
                                                         <MenuHandler>
                                                             <FontAwesomeIcon icon={faEllipsisVertical} color='#051339' className=' w-5 h-5   rounded-full hover:text-[#000000]    hover:bg-gray-600 hover:bg-opacity-20 hover:cursor-pointer ' />
                                                         </MenuHandler>
@@ -129,7 +129,7 @@ function ChatUser() {
                                                             <MenuItem>Block</MenuItem>
                                                             <MenuItem>Archive</MenuItem>
                                                         </MenuList>
-                                                    </Menu>
+                                                    </Menu> */}
                                                 </div>
 
                                             </ListItem>
@@ -141,16 +141,16 @@ function ChatUser() {
                 </Card>
 
                 {(recipientDetails.length != 0 ? <Card className='ml-24 w-[60%] h-[35rem]   mt-2 border-[1px]'>
-                    <Card className=' w-full  rounded-b-none  h-20 bg-[#051339] '>
+                    <Card  className=' w-full  rounded-b-none  h-20' color='light-blue' style={{backgroundColor:"lightseagreen"}} >
                         <div className='flex'>
                             <div>
-                                {(recipientDetails.profile_image ? <img src={recipientDetails.profile_image} alt="profile photo" className='ml-4 rounded-md shadow-2xl  w-14 h-14  mt-4 ' /> :
+                                {(recipientDetails.profile_photo ? <img src={recipientDetails.profile_photo} alt="profile photo" className='ml-4 rounded-md shadow-2xl  w-14 h-14  mt-4 ' /> :
                                     <UserCircleIcon className="ml-10 rounded-full w-14 h-14  mt-4 text-[#FAFAFA] " />)}
                             </div>
                             <h1 className='font-prompt-normal ml-3 mt-7 text-[#FAFAFA] text-lg uppercase '>{recipientDetails.username}</h1>
-                            <FontAwesomeIcon icon={faVideoCamera} color='#FAFAFA' className=' absolute right-24 w-6 h-6 mt-7 rounded-full hover:text-[#c5c3c3]    e  ' />
+                            {/* <FontAwesomeIcon icon={faVideoCamera} color='#FAFAFA' className=' absolute right-24 w-6 h-6 mt-7 rounded-full hover:text-[#c5c3c3]    e  ' /> */}
 
-                            <Menu>
+                            {/* <Menu>
                                 <MenuHandler>
                                     <FontAwesomeIcon icon={faEllipsisVertical} color='#FAFAFA' className=' absolute right-10 w-6 h-6 mt-7 rounded-full hover:text-[#000000]    hover:bg-white hover:bg-opacity-100 hover:cursor-pointer ' />
                                 </MenuHandler>
@@ -158,9 +158,9 @@ function ChatUser() {
                                     <MenuItem>Block</MenuItem>
                                     <MenuItem>Archive</MenuItem>
                                 </MenuList>
-                            </Menu>
+                            </Menu> */}
                         </div>
-                    </Card>
+                    </Card>                     
                     <div className='overflow-y-auto max-h-[75%] z-50 hidescroll '>
 
                         <div className='mt-2 flex flex-col mb-5'>
@@ -169,7 +169,7 @@ function ChatUser() {
                                     <div className={`font-prompt-normal text-lg ${message.sender_email === decode.email ? 'text-white bg-[#324674df] float-right max-w-96 mr-4 ' : 'text-black bg-[#d4d2d2] float-left max-w-96 ml-4 '} rounded-md shadow-black w-fit`} style={{ overflow: 'hidden', wordWrap: 'break-word', whiteSpace: 'pre-wrap', paddingLeft: '8px', paddingRight: '8px', paddingBottom: '2px', paddingTop: '2px' }}>
                                         {message.message}
                                     </div>
-                                    <h1 className={`${message.sender_email === decode.email ? 'text-right mr-4' : 'text-left ml-4'} text-xs`}>11.30PM</h1>
+                                    {/* <h1 className={`${message.sender_email === decode.email ? 'text-left mr-4' : 'text-right ml-4'} text-xs`}></h1> */}
                                 </div>
                             ))}
                         </div>
@@ -178,7 +178,7 @@ function ChatUser() {
                       
                         {/* <FontAwesomeIcon icon={faAdd} color='#000000' className='  w-6 h-6 mt-4 ml-2 mr-2 rounded-full hover:text-[#000000]    hover:bg-white hover:bg-opacity-100 hover:cursor-pointer ' /> */}
                         <input type="text" value={messageText} onChange={(e) => setMessageText(e.target.value)} className='w-[80%] h-12  rounded-md  border-[1px] border-black font-prompt' placeholder='Type a message' style={{ paddingLeft: '20px' }} />
-                        <Button onClick={sendMessage} className='w-16 h-12 ml-4 bg-[#051339] -mt-1'>
+                        <Button onClick={sendMessage} className='w-16 h-12 ml-4 bg-[#4fd0ce] -mt-1'>
                             <FontAwesomeIcon icon={faPaperPlane} className=' text-[#FAFAFA]   w-6 h-6    rounded-full hover:text-[#aeaaaa] rotate-45  ' />
 
                         </Button>

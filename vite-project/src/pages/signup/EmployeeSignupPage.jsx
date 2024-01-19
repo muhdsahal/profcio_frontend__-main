@@ -1,5 +1,5 @@
 import React from "react";
-import { EmployeeRegistrationForm } from "../../components/SignupForm/EmployeeSignup";
+import { EmployeeRegistrationForm } from "../../components/SignupForm/EmployeeSignup"; 
 
 function EmployeeSignupPage(){
     return(

@@ -14,7 +14,6 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import { ServiceListURL, ServiceCatergoryURL } from '../../constants/constants';
 import toast, { Toaster } from 'react-hot-toast';
-import CloseIcon from '@mui/icons-material/Close';
 
 
 Modal.setAppElement('#root');
@@ -22,6 +21,7 @@ Modal.setAppElement('#root');
 const ServiceListPage = () => {
 
   const [open, setOpen] = React.useState(false);
+  const[change, setChange] = useState(false)
   const [editOpen, seteditOpen] = React.useState(false);
   const handleOpenModal = () => setOpen((cur) => !cur);
   const editOpenModal = () => seteditOpen((cur) => !cur);
@@ -33,6 +33,8 @@ const ServiceListPage = () => {
   const [editServiceData, seteditServiceData] = useState([])
   const [editService_id, seteditService_id] = useState('')
   const [services, setServices] = useState([]);
+  const [isAvailable, setIsAvailable] = useState(true);
+
 
 
   const handleFileInputChange = (e) => {
@@ -43,28 +45,37 @@ const ServiceListPage = () => {
     setserviceImage(file);
   };
 
-
-
-
-
+ 
+  
+  const tokenDataString = localStorage.getItem("access_token");
   useEffect(() => {
-    axios
-      .get(ServiceListURL)
-      .then((response) => {
-        setServices(response.data)
-      })
-      .catch((error) => {
-        console.error("Error Fetching Data:", error);
-        // setLaoding(false)
-      })
-
-  }, [])
-
-
-
-
-
-
+    const fetchService = async () => {
+      try{
+        
+        const response = await fetch(ServiceListURL,{
+          method:"GET",
+          headers:{
+            Authorization: `Bearer ${tokenDataString}`,
+            "Content-type":"application/json"
+          },
+        })
+        const responseData  = await response.json()
+        setServices(responseData)
+      }catch(err){
+        console.error(err, "Error in useEffect");
+      }
+    }
+    // axios
+    //   .get(ServiceListURL)
+    //   .then((response) => {
+    //     setServices(response.data)
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error Fetching Data:", error);
+    //     // setLaoding(false)
+    //   })
+    fetchService()
+  }, [change])
 
   useEffect(() => {
     // Fetch category options when the component mounts
@@ -78,9 +89,8 @@ const ServiceListPage = () => {
   }, []);
 
 
+  const serviceCreate = async() => {
 
-  const serviceCreate = () => {
-   
     if (!serviceName.trim()) {
       toast.error("Service name cannot be empty");
       return;
@@ -130,22 +140,48 @@ const ServiceListPage = () => {
     formData.append('description', serviceDiscription);
     formData.append('category', serviceCategory);
     formData.append('service_image', serviceImage);
+    try{
 
-    axios.post(ServiceListURL, formData)
-      .then(response => {setServices([...services, response.data]),
-        setserviceName(''),
+      const response = await fetch(ServiceListURL,{
+        method : "POST",
+        headers :{
+          Authorization : `Bearer ${tokenDataString}`
+
+      },
+      body : formData
+    });
+    // console.log(responseData,'responseDataresponseDataresponseData');
+    if(!response.ok){
+      toast.error("an error occured while creating !")
+      
+    }else{
+      setserviceName(''),
         setserviceDiscription(''),
         setserviceCategory(''),
         setserviceImage(null),
-        console.log('daata successfull')
-        toast.success("service createed Successfully")
-      })
-        .catch(error => {
-          console.error('Error creating service:', error);
-          // Handle error display or other actions as needed
-        });
+      toast.success("Service Created SuccessFully")
+      setChange(!change)
+    }
+
+  }catch(err){
+    console.error(err, "Error forund during");
+  }
+    // axios.post(ServiceListURL, formData)
+    //   .then(response => {setServices([...services, response.data]),
+    //     setserviceName(''),
+    //     setserviceDiscription(''),
+    //     setserviceCategory(''),
+    //     setserviceImage(null),
+    //     console.log('daata successfull')
+    //     toast.success("service createed Successfully")
+    //   })
+        // .catch(error => {
+        //   console.error('Error creating service:', error);
+        //   // Handle error display or other actions as needed
+        // });
     handleOpenModal()
   }
+
 
   const editHandleService = (e) => {
     seteditService_id(e)
@@ -190,10 +226,7 @@ const ServiceListPage = () => {
     toast.error("category  name cannot be empty")
     return
   }
-  // if (services.some(service => service.name === serviceName)) {
-  //     toast.error("Service name already exists. Please choose a different name.");
-  //     return;
-  // }
+  
 
   if (!serviceDiscription.trim()) {
       toast.error("Service description cannot be empty");
@@ -213,6 +246,7 @@ const ServiceListPage = () => {
         setserviceImage(null),
         toast.success("Service Edited  successfully!"),
         console.log(' edit successfull')
+        setChange(!change)
         })
         .catch(error => {
         console.error('Error editing service:', error);
@@ -221,6 +255,8 @@ const ServiceListPage = () => {
     editOpenModal()
 
   }
+
+  
   
   const getSortedServices = () => {
     return services.slice().sort((a, b) => a.id - b.id);
@@ -293,6 +329,7 @@ const ServiceListPage = () => {
                   Action
                 </Typography>
               </th>
+              
             </tr>
           </thead>
 
@@ -337,6 +374,7 @@ const ServiceListPage = () => {
                     Edit
                   </Button>
                 </td>
+                
               </tr>
 
             ))}

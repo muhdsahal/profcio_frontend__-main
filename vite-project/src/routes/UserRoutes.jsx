@@ -12,9 +12,8 @@ import SuccessFullPayment from "../components/Home/payment/Success";
 import CanceledPayment from "../components/Home/payment/fail";
 import ForgotPassword from "../pages/ForgotPassWord";
 import ResetPassword from "../pages/ResetPassword";
-import BookingListUser from "../components/Home/BookingList";
 import BookingListPage from "../pages/Home/BookingListPage";
-import ChatUser from "../components/Home/ChatUser";
+import ChatPageUser from "../pages/Home/ChatPageUser";
 function UserRoutes(){
     return(
         <Routes>
@@ -35,7 +34,7 @@ function UserRoutes(){
                     <Route element={<BookingListPage/>} path="/booking_list/:userId"/>
                     <Route element={<SuccessFullPayment />} path="/employeedetails/payment/success/" />
                     <Route element={<CanceledPayment />} path="/employeedetails/payment/canceled/" />
-                    <Route element={<ChatUser />} path="/chat" />
+                    <Route element={<ChatPageUser />} path="/chat" />
 
                     
 

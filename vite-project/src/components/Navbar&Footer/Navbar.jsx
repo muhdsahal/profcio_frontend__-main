@@ -12,7 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import logo from "../../image/profcio__All.png"
+import logo from "../../assets/profcio__All.png"
 import { jwtDecode } from 'jwt-decode';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 import blankImage from '../../assets/blankprofile.png'
@@ -53,6 +53,9 @@ export default function ResponsiveNavBar() {
   const toBookings = () => {
     navigate(`/booking_list/${userId}`)
   }
+  const toChat = () => {
+    navigate('/chat')
+  }
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -71,7 +74,7 @@ export default function ResponsiveNavBar() {
 
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: 'lightseagreen' }} >
+    <AppBar position="static" sx={{ backgroundColor: 'black' }} className='placeholder-opacity-70' >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to='/'>
@@ -135,8 +138,8 @@ export default function ResponsiveNavBar() {
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               <Link to={'/'}
-                className='font-Kantumruy'
-                style={{ fontSize: '16px', color: 'black' }}>
+                className='font-bold animated-gradien text-transparent bg-clip-text bg-gradient-to-r from-light-green-400 via-emerald-400 to-blue-600'
+                style={{ fontSize: '16px' }}>
                 Home</Link>
             </Button>
 
@@ -146,8 +149,8 @@ export default function ResponsiveNavBar() {
             >
               <Link
                 to={'/employeelist/'}
-                className='font-Kantumruy'
-                style={{ fontSize: '16px', color: 'black' }}
+                className='font-bold animated-gradien text-transparent bg-clip-text bg-gradient-to-r from-light-green-400 via-emerald-400 to-blue-600'
+                style={{ fontSize: '16px' }}
               >
                 employees
               </Link>
@@ -204,12 +207,20 @@ export default function ResponsiveNavBar() {
                   onClick={toBookings}
                   className="bg-green-500 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
                 >My Bookings
-                </Button> </span>}
+                </Button> 
+                <br />
+                <Button
+                  onClick={toChat}
+                  className="bg-green-500 text-blue font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-green-600"
+                  >Chat
+                </Button>
+                </span>}
 
             </Menu>
           </Box>
         </Toolbar>
       </Container>
+
     </AppBar>
   );
 }

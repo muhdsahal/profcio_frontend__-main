@@ -26,12 +26,10 @@ export function Sidebar() {
 
   const handleUserList = () =>{
     navigate("/admin/users/")
-
   }
-
   const handleLogout = () =>{
     localStorage.removeItem('token')
-    navigate('/admin/admin_login/')
+    navigate('/admin_login/')
   }
   const handleService = () =>{
     navigate('/admin/services/')
@@ -39,7 +37,6 @@ export function Sidebar() {
   const handleCategory = () =>{
     navigate("/admin/category/")
   }
-
   const handleBooking = () =>{
     navigate("/admin/booking/")
   }
@@ -69,7 +66,7 @@ export function Sidebar() {
             <ListItemPrefix>
               <WorkIcon className="h-5 w-5" />
             </ListItemPrefix>
-            Services
+            Services Banner
           </ListItem>
           <ListItem onClick={handleUserList}>
             <ListItemPrefix>
@@ -95,12 +92,7 @@ export function Sidebar() {
           </ListItemPrefix>
           Booking
         </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <Cog6ToothIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Banner
-        </ListItem>
+
         <ListItem onClick={handleLogout}>
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />

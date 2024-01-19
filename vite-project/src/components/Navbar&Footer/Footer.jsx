@@ -1,7 +1,7 @@
-import { Typography } from "@material-tailwind/react";
-import logo from "../../image/profcio__All.png"
-// import { useNavigate,Link } from "react-router-dom";
-import Button from "@material-tailwind/react";
+import React from "react";
+import { Typography,Button } from "@material-tailwind/react";
+import logo from "../../assets/profcio__All.png"
+import { Link, useNavigate } from "react-router-dom";
 const LINKS = [
   {
     title: "Product",
@@ -17,26 +17,20 @@ const LINKS = [
   },
 ];
  
-const currentYear = new Date().getFullYear();
-
+function ProfcioFooter() {
+  const navigate = useNavigate()
+  const becomeEmployee = () =>{
+    navigate('/employee_signup')
+    
+  }
  
-export function ProfcioFooter() {
-  // const navigate =useNavigate()
-
-  // const toEmployee = () =>{
-  //   navigate("/employee")
-  // }
   return (
-    <footer className="relative w-full" style={{ backgroundColor: 'lightseagreen', color: 'black' }}>
+    <footer className="relative w-full" style={{ backgroundColor: 'black', color: 'black' }}>
       <div className="mx-auto w-full max-w-7xl px-8">
         <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
           <img src={logo} alt="logo" width="150" height="100" />
-          {/* <Link to="/employee/employee_login">
-            <Button>
-              Click Here
-            </Button>
-          </Link> */}
           <div className="grid grid-cols-3 justify-between gap-4">
+          
             {LINKS.map(({ title, items }) => (
               <ul key={title}>
                 <Typography
@@ -62,13 +56,15 @@ export function ProfcioFooter() {
             ))}
           </div>
         </div>
+        <Link to={"/employee_signup"}>
+                <Button className="btn-gradiant bg-gradient-to-r from-light-green-400 via-emerald-400 to-blue-600 mt-10">Become A Employee</Button>
+        </Link>
         <div className="mt-12 flex w-full flex-col items-center justify-center border-t border-blue-gray-50 py-4 md:flex-row md:justify-between">
           <Typography
             variant="small"
             className="mb-4 text-center font-normal text-blue-gray-900 md:mb-0"
           >
-            &copy; {currentYear} <a href="https://material-tailwind.com/">Material Tailwind</a>. All
-            Rights Reserved.
+            
           </Typography>
           <div className="flex gap-4 text-blue-gray-900 sm:justify-center">
             <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100">
@@ -118,3 +114,4 @@ export function ProfcioFooter() {
     </footer>
   );
 }
+export default ProfcioFooter

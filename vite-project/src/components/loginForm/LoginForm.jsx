@@ -1,17 +1,16 @@
-// import { Card,Input,Button,Typography } from "@material-tailwind/react";
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode';
 import toast,{ Toaster } from "react-hot-toast";
 import { GoogleLoginURL, Gooogle_Access_Token, UserLoginURL } from "../../constants/constants"; 
 import Loader from "../Loading/Loading";
-import Signup from "../../pages/signup/Signup";
-import EmployeeSignupPage from "../../pages/employee/EmployeeSignupPage";
-import { userGoogleLogin } from "../../services/userApis";
-import ForgotPassword from "../../pages/ForgotPassWord";
-import logo from '../../image/profcio__All.png'
-import login_img from  '../../image/login_illu.png'
+// import Signup from "../../pages/signup/Signup";
+// import EmployeeSignupPage from "../../pages/employee/EmployeeSignupPage";
+// import { userGoogleLogin } from "../../services/userApis";
+// import ForgotPassword from "../../pages/ForgotPassWord";
+import logo from '../../assets/profcio__All.png'
+import login_img from  '../../assets/login_illu.png'
 import LogoGoogle from '../../assets/glogo.png'
 import {
     Card,
@@ -20,7 +19,6 @@ import {
     CardFooter,
     Typography,
     Input,
-    Checkbox,
     Button,
   } from "@material-tailwind/react";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -44,7 +42,6 @@ export function LoginForm(){
     const LoginWithGoogleAuth = useGoogleLogin({
         onSuccess: (codeResponse) => {
             googleData = codeResponse
-            console.log(googleData.access_token, 'googleDataTOken');
             GoogleAuth();
         },
         onError: (error) => {

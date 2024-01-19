@@ -7,9 +7,9 @@ import {Card,
     Button,
     Typography } from "@material-tailwind/react";
 
-import {empRegisterURL} from '../../constants/constants'
-import Loader from '../Loading/Loading'
-import citiesData from "./locations.json";
+import { empRegisterURL } from "../../constants/constants";
+import Loader from "../Loading/Loading";
+import citiesData from "../../components/empolyee/locations.json"
 
 export function EmployeeRegistrationForm(){
     const navigate = useNavigate()
@@ -462,7 +462,7 @@ export function EmployeeRegistrationForm(){
         </Button>
         <Typography color="gray" className="mt-4 text-center font-normal">
           Already have an account?{" "}
-          <Link to="/employee/employee_login" color="blue">Login</Link>
+          <Link to="/employee_login" color="blue">Login</Link>
         </Typography>
       </div>
     </div>

@@ -13,6 +13,9 @@ import ForgotPassword from "./pages/ForgotPassWord";
 import ResetPassword from "./pages/ResetPassword";
 import UserType from "./components/Home/UserType";
 import PrivateRoute from "./routes/ProtectedRoutes/PrivateRoute";
+import EmployeeLoginPage from "./pages/login/EmployeeLoginPage";
+import AdminLoginPage from "./pages/login/adminLoginPage";
+import EmployeeSignupPage from "./pages/employee/EmployeeSignupPage";
 
 function App() {
   return (
@@ -22,9 +25,12 @@ function App() {
           <Route  element={<PrivateRoute />}>
             <Route path="/" element={<Home />} />
             <Route path="/signup" exact element={<Signup />}/>
+            <Route path="/employee_signup" exact element={<EmployeeSignupPage />}/>
             <Route path="/confirm" exact element={<ConfirmMail />}/>
-            <Route path="/login/" exact element={<Login />}/>
-            <Route path="/usertype/" exact element={<UserType />}/>
+            <Route path="/login" exact element={<Login />}/>
+            <Route path="/employee_login" exact element={<EmployeeLoginPage />}/>
+            <Route path="/admin_login" exact element={<AdminLoginPage />}/>
+            <Route path="/usertype" exact element={<UserType />}/>
             <Route path="/password_reset/" element={<ForgotPassword />} />
             <Route path="/reset_password/:uid/:token" element={<ResetPassword />} />
           </Route>

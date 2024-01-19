@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode';
 import toast,{ Toaster } from "react-hot-toast";
-import { UserLoginURL } from "../../constants/constants"; 
+import { UserLoginURL } from "../../constants/constants";
 import Loader from "../Loading/Loading";
-import logo from '../../image/profcio__All.png'
+import logo from '../../assets/profcio__All.png'
 import {
     Card,
     CardHeader,
@@ -16,10 +16,9 @@ import {
     Checkbox,
     Button,
   } from "@material-tailwind/react";
-import {useApiContext} from '../../context/context'
+import { useApiContext } from "../../context/context";
 
 export function EmployeeLoginForm(){
-    localStorage.removeItem('token')
     const navigate = useNavigate();
     const [user,setUser] = useState({email:"",password:"",user_type:"employee"});
     const [loading,setLoading] = useState(false);
@@ -133,7 +132,7 @@ const handleLogin = async (e) => {
           </Button>
             <Typography variant="small" className="mt-6 flex justify-center" >
               Don&apos;t have an account?
-              <Link to="/employee/signup/">
+              <Link to="/employee_signup/">
                  Signup
               </Link>
 

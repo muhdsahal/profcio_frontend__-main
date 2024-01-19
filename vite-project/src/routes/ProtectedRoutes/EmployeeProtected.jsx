@@ -19,7 +19,7 @@ function EmployeeProtected(){
             return <AdminHome />
         }
     }else{
-        navigate("/employee/employee_login/")
+        navigate("/employee_login/")
     }
        
 }

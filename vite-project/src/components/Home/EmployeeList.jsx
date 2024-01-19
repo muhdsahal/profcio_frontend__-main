@@ -4,6 +4,7 @@ import { Button, Input } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { EmployeeListingURL, ServiceListURL } from "../../constants/constants";
 import CitiesData from "../../components/empolyee/locations.json"
+import { jwtDecode } from "jwt-decode";
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
@@ -12,7 +13,20 @@ function EmployeeList() {
   const [selectedCity, setSelectedCity] = useState("");
   const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState("");
+  const [userId , setUserId] = useState('');
+  const token = localStorage.getItem('token')
+  const [isLoggedIn, setisLoggedIn] = useState(false)
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    if (token) {
+      const decode = jwtDecode(token);
+      setUserId(decode.user_id);
+      setisLoggedIn(!!localStorage.getItem('token'));
+    }
+  }, [token]);
+
 
   const cityOptions = CitiesData.cities.map((city) => ({
     value: city.City,
@@ -141,14 +155,21 @@ function EmployeeList() {
               <p className="text-gray-700 mb-2">₹{employee.charge}</p>
               <p className="text-gray-600">{employee.place}</p>
               <div className="mt-4">
-                <Button
+                  <Button
                   color="blue"
                   ripple="light"
                   className="px-4 py-2 rounded"
-                  onClick={() => navigate(`/employeedetails/${employee.id}/`)}
-                >
+                  onClick={() => {
+                    if(isLoggedIn){
+                      navigate(`/employeedetails/${employee.id}/`)
+                    } else {
+                      navigate('/login');
+                    }
+                  }}
+                  >
                   Book Now
                 </Button>
+                  
               </div>
             </div>
           </div>

@@ -29,7 +29,7 @@ import {
   CubeTransparentIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import logo from '../../image/profcio__All.png'
+import logo from '../../assets/profcio__All.png'
 import { jwtDecode } from "jwt-decode";
 import { useApiContext } from "../../context/context";
  
@@ -46,7 +46,7 @@ export function SidebarWithSearch() {
   };
    const handleLogout = () =>{
     localStorage.removeItem('token')
-    navigate('/employee/employee_login/')
+    navigate('/employee_login/')
     
    }
    function toProfile() {
@@ -57,7 +57,11 @@ export function SidebarWithSearch() {
   const toBookings = () => {
     navigate(`/employee/booking_list/${userId}`)
   }
-  console.log(employeeCredentials,'context is working ');
+
+  const toChat = () => {
+    navigate('/employee/chat')
+  }
+  // console.log(employeeCredentials,'context is working ');
  
   return (
     <>
@@ -66,11 +70,11 @@ export function SidebarWithSearch() {
         <img src={logo} alt="logo" color='green' width="150" height="100" />
       </div>
       
-        <Typography variant="h5" color="pink">
+        <Typography variant="h4" style={{color:'lightseagreen'}}>
           Employee Dashboard
         </Typography>
       <div className="p-2">
-        <Input icon={<MagnifyingGlassIcon className="h-5 w-5" />} label="Search" />
+        {/* <Input icon={<MagnifyingGlassIcon className="h-5 w-5" />} label="Search" /> */}
       </div>
       <List>
         <Accordion
@@ -113,7 +117,7 @@ export function SidebarWithSearch() {
           Reviews
         </ListItem>
         {/* <hr className="my-2 border-blue-gray-50" /> */}
-        <ListItem>
+        <ListItem onClick={toChat}>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>

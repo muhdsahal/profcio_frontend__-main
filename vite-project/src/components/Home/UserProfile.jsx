@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import toast,{ Toaster } from "react-hot-toast";
 import { base_url } from "../../constants/constants";
-import blankImage from '../../assets/blankprofile.png'
 
 function UserProfile() {
   const [user, setUser] = useState(null);
@@ -143,7 +142,7 @@ function UserProfile() {
                             type="text"
                             name="email"
                             value={updatedUser.email}
-                            //onChange={handleInputChange}
+                            // onChange={handleInputChange}
                             placeholder="Email"
                           />
                           <Input

@@ -1,5 +1,5 @@
 import React from "react";
-import { EmployeeLoginForm } from "../../components/empolyee/EmployeeLogin";
+import { EmployeeLoginForm } from "../../components/loginForm/EmployeeLogin";
 
 function EmployeeLoginPage(){
     return(
