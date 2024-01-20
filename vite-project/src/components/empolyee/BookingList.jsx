@@ -1,6 +1,6 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { BookingEmployeeSide } from "../../constants/constants";
+import { BookingEmployeeSide, BookingStatusUpdate } from "../../constants/constants";
 import { jwtDecode } from "jwt-decode";
 import {
     Card,
@@ -13,32 +13,59 @@ import {
     Chip,
 } from "@material-tailwind/react";
 
-function BookingListEmployee(){
+function BookingListEmployee() {
     const token = localStorage.getItem('token')
     const decode = jwtDecode(token)
     const userId = decode.user_id
-    console.log(userId,'userserserserserser');
-    const [bookingList,setBookingList] = useState([])
-    const [loading,setLoading] = useState(true)
-    useEffect(()=>{
+    console.log(userId, 'userserserserserser');
+    const [bookingList, setBookingList] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    const [ManagePage, setManagePage] = useState(false)
+    useEffect(() => {
+        setManagePage(false)
         axios.get(`${BookingEmployeeSide}${userId}`)
-        .then((response)=>{
-            const responseData = response.data
-            setBookingList(responseData)
+            .then((response) => {
+                const responseData = response.data
+                setBookingList(responseData)
+            })
+            .catch((error) => {
+                console.error("an error occured data fectcing..", error);
+                setLoading(false)
+            })
+    }, [ManagePage])
+
+    const bookData = (userId) => {
+        if (bookingList.length !== 0) {
+            return <h1> My Bookings </h1>
+        } else {
+            return <h1>No Bookings Found</h1>
+
+        }
+    }
+
+    const UpdateStatusBooking = (event, book_id) => {
+        const value = event.target.value
+        const data = { booking_status: value }
+        axios.patch(`${BookingStatusUpdate}${book_id}/`, data).then((response) => {
+            if (response.status === 200) {
+                console.log(' status updated succesfully');
+                setManagePage(true)
+
+            }
+        }).catch((error) => {
+            console.log(error);
         })
-        .catch((error)=>{
-            console.error("an error occured data fectcing..",error);
-            setLoading(false)
-        })
-    },[])
-    return(<>
-    <div className="flex flex-col min-h-max items-center ">
-                <h1>My Orders</h1>
+        console.log(event.target.value, book_id, '===================ashique Debug>>>>>>>>>>>>>>>>>>>>>>>>');
+    }
+    return (<>
+        <div className="flex flex-col min-h-max items-center ">
+            {bookData(userId)}
             <Card className="h-full w-full">
                 <table className='w-full min-w-max table-auto text-left'>
                     <thead>
                         <tr>
-                        <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
                                 <Typography
                                     variant="small"
                                     color="blue-gray"
@@ -56,15 +83,7 @@ function BookingListEmployee(){
                                     User
                                 </Typography>
                             </th>
-                            {/* <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                                <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-prompt-normal leading-none opacity-70"
-                                >
-                                    Employee
-                                </Typography>
-                            </th> */}
+
 
                             <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
                                 <Typography
@@ -85,17 +104,35 @@ function BookingListEmployee(){
                                     Price
                                 </Typography>
                             </th>
-                            
+                            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                                <Typography
+                                    variant="small"
+                                    color="blue-gray"
+                                    className="font-prompt-normal leading-none opacity-70"
+                                >
+                                    Status
+                                </Typography>
+                            </th>
+                            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                                <Typography
+                                    variant="small"
+                                    color="blue-gray"
+                                    className="font-prompt-normal leading-none opacity-70"
+                                >
+                                    Update Status
+                                </Typography>
+                            </th>
+
                         </tr>
                     </thead>
                     <tbody>
                         {bookingList.map((book) => {
 
-                            const classes =  "p-4 border-b border-blue-gray-50";
+                            const classes = "p-4 border-b border-blue-gray-50";
 
                             return (
                                 <tr key={book.id}>
-                                <td className={classes}>
+                                    <td className={classes}>
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
@@ -114,16 +151,6 @@ function BookingListEmployee(){
                                         </Typography>
                                     </td>
 
-                                    {/* <td className={classes}>
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-prompt-normal"
-                                        >
-                                            {book.employeeDetails.username}
-                                        </Typography>
-                                    </td> */}
-                                    
                                     <td className={classes}>
                                         <Typography
                                             variant="small"
@@ -139,11 +166,35 @@ function BookingListEmployee(){
                                             color="blue-gray"
                                             className="font-prompt-normal"
                                         >
-                                            ₹{book.price}
+                                            ₹ {book.price}
                                         </Typography>
                                     </td>
-                                       
-                                    
+                                    <td className={classes} >
+                                       {(book.booking_status ==='pending'? <Typography
+                                            className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#42cef5]" 
+                                        >
+                                            {book.booking_status}
+                                        </Typography>  :'')}
+                                        {(book.booking_status ==='ongoing'? <Typography
+                                            className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#e4f046]" 
+                                        >
+                                            {book.booking_status}
+                                        </Typography>  :'')}
+                                        {(book.booking_status ==='completed'? <Typography
+                                            className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#0ee865]" 
+                                        >
+                                            {book.booking_status}
+                                        </Typography>  :'')}
+                                    </td>
+                                    <td className={classes}>
+                                        <select onChange={(e) => UpdateStatusBooking(e, book.id)} name="" id="" className="border-[1px] p-1 border-gray-300 rounded-md">
+                                            <option value="pending">pending</option>
+                                            <option value="ongoing">ongoing</option>
+                                            <option value="completed">completed</option>
+                                        </select>
+
+                                    </td>
+
                                 </tr>
                             );
                         })}

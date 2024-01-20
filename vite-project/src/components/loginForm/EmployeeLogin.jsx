@@ -2,23 +2,14 @@ import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode';
-import toast,{ Toaster } from "react-hot-toast";
+import {Card,CardBody,CardFooter,Typography,Input,Button,} from "@material-tailwind/react";
 import { UserLoginURL } from "../../constants/constants";
+import {ToastContainer,toast} from 'react-toastify';
 import Loader from "../Loading/Loading";
 import logo from '../../assets/profcio__All.png'
-import {
-    Card,
-    CardHeader,
-    CardBody,
-    CardFooter,
-    Typography,
-    Input,
-    Checkbox,
-    Button,
-  } from "@material-tailwind/react";
 import { useApiContext } from "../../context/context";
 
-export function EmployeeLoginForm(){
+function EmployeeLoginForm(){
     const navigate = useNavigate();
     const [user,setUser] = useState({email:"",password:"",user_type:"employee"});
     const [loading,setLoading] = useState(false);
@@ -29,7 +20,6 @@ export function EmployeeLoginForm(){
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         return regex.test(email);
     };
-    
     //form valiadation
     const validForm = () =>{
         if(user.email.trim()==""){
@@ -77,8 +67,8 @@ const handleLogin = async (e) => {
         toast.error(`${decoded.user_type} not valid in this Login`);
       } else {
         localStorage.setItem("token", token);
-        toast.success(`Welcome ${decoded.username}....!!`);
         navigate("/employee/");
+        toast.success(`Welcome ${decoded.username}....!!`);
       }
 
     } catch (error) {
@@ -145,7 +135,8 @@ const handleLogin = async (e) => {
             </Typography>
           </CardFooter>
         </Card>
-        <Toaster />
+        <ToastContainer />
       </div>
     );
     }    
+export default EmployeeLoginForm;

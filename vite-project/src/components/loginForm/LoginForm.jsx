@@ -2,19 +2,14 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode';
-import toast,{ Toaster } from "react-hot-toast";
+import {ToastContainer,toast} from 'react-toastify';
 import { GoogleLoginURL, Gooogle_Access_Token, UserLoginURL } from "../../constants/constants"; 
 import Loader from "../Loading/Loading";
-// import Signup from "../../pages/signup/Signup";
-// import EmployeeSignupPage from "../../pages/employee/EmployeeSignupPage";
-// import { userGoogleLogin } from "../../services/userApis";
-// import ForgotPassword from "../../pages/ForgotPassWord";
 import logo from '../../assets/profcio__All.png'
 import login_img from  '../../assets/login_illu.png'
 import LogoGoogle from '../../assets/glogo.png'
 import {
     Card,
-    CardHeader,
     CardBody,
     CardFooter,
     Typography,
@@ -24,7 +19,7 @@ import {
 import { useGoogleLogin } from "@react-oauth/google";
 import { useApiContext } from "../../context/context"
 
-export function LoginForm(){
+function LoginForm(){
     const location = useLocation()
     let message = new URLSearchParams(location.search).get('message')
     const navigate = useNavigate();
@@ -110,8 +105,8 @@ export function LoginForm(){
                       setgUser(userData);
                       setUserCredentials(userData)
                        if (token.is_active) {
-                          toast.success('Login successfully!')
                           navigate('/');
+                         toast.success(' Google Login successfully Completed!')
                       }
                       else {
                           toast.error('Invalid Credentials!')
@@ -186,7 +181,7 @@ export function LoginForm(){
         }
         setUserCredentials(userData)
           if (decoded.user_type !== 'user') {
-            toast.error(`${decoded.user_type} not valid in this Login`);
+            toast.error(`this usertype ${decoded.user_type} not valid in this Login`);
           } else {
             toast.success(`Welcome ${decoded.username}....!!`);
             localStorage.setItem('token', token);
@@ -286,7 +281,8 @@ export function LoginForm(){
           </Card>
         </div>
       </div>
-      <Toaster />
+      <toast />
     </div>
     );
     }    
+export default LoginForm;

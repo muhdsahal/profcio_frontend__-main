@@ -20,7 +20,7 @@ const pages = ['Home', 'Services', 'Employees'];
 const settings = [];
 
 
-export default function ResponsiveNavBar() {
+function ResponsiveNavBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [userId , setUserId] = useState('');
@@ -224,3 +224,4 @@ export default function ResponsiveNavBar() {
     </AppBar>
   );
 }
+export default ResponsiveNavBar

@@ -3,7 +3,8 @@ import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode';
-import toast,{ Toaster } from "react-hot-toast";
+import {ToastContainer,toast} from 'react-toastify';
+
 import { UserLoginURL } from "../../constants/constants";
 import Loader from "../Loading/Loading";
 import logo from '../../assets/profcio__All.png'
@@ -19,7 +20,7 @@ import {
     Button,
   } from "@material-tailwind/react";
 
-export function AdminLoginForm(){
+function AdminLoginForm(){
     const navigate = useNavigate();
     const [user,setUser] = useState({email:"",password:"",user_type:"admin"});
     //for loading 
@@ -128,7 +129,8 @@ const handleLogin = async (e) => {
             
           </CardFooter>
         </Card>
-        <Toaster />
+        <ToastContainer />
       </div>
     );
     }    
+export default AdminLoginForm;

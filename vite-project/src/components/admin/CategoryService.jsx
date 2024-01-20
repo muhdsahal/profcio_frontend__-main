@@ -14,7 +14,8 @@ import {
 import axios  from "axios";
 import Modal from 'react-modal';
 import { ServiceCatergoryURL } from "../../constants/constants";
-import toast, { Toaster } from 'react-hot-toast';
+import {ToastContainer,toast} from 'react-toastify';
+;
 
 //Modal.setAppElement('')
 function CategoryService(){
@@ -316,7 +317,7 @@ function CategoryService(){
                           </CardActions>
                         </Card>
                       </Dialog>
-                      <Toaster/>
+                      <ToastContainer/>
                     </div>
       
 

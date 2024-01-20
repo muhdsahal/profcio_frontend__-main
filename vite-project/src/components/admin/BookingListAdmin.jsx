@@ -1,42 +1,43 @@
-import { useState, useEffect } from "react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BookingListUrl } from "../../constants/constants";
 import axios from "axios";
-import toast, { Toaster } from 'react-hot-toast'
+import {ToastContainer,toast} from 'react-toastify';
+import {Card, Typography,} from "@material-tailwind/react";
+import { red } from "@mui/material/colors";
 
-import {
-    Card,
-    Typography,
-    Button,
-    List,
-    ListItem,
-    ListItemPrefix,
-    ListItemSuffix,
-    Chip,
-} from "@material-tailwind/react";
-
-
-function BookingList() {
-    const [BookingList, setBookingList] = useState([])
+function BookingListAdmin() {
+    const [bookingList, setBookingList] = useState([])
     const [loading, setLaoding] = useState(true)
+    const [ManagePage, setManagePage] = useState(false)
+
 
     useEffect(() => {
+        setManagePage(false)
         axios
             .get(BookingListUrl)
             .then((response) => {
                 const responseData = response.data;
                 setBookingList(responseData)
+                setLaoding(false)
             })
             .catch((error) => {
                 console.error("Error Fetching Data:", error);
                 setLaoding(false)
             })
-    }, [])
-
+    }, [ManagePage])
+    
+    const bookData = () => {
+        if(!bookingList){
+            return <h1>No Bookings Found</h1>
+        }else{
+            return <h1> My Bookings </h1>
+            
+        }
+    }
     
     return (
         <div className="flex flex-col min-h-screen items-center ">
-            {/* <input onChange={(e) => SearchUser(e.target.value)} className='w-96 rounded-lg h-11 ml-16 border-2 border-gray-300  font-roboto-mono text-black' type="text" placeholder='  Search' /> */}
+                    {bookData()}
             <Card className="h-full w-full">
                 <table className='w-full min-w-max table-auto text-left'>
                     <thead>
@@ -88,11 +89,20 @@ function BookingList() {
                                     Price
                                 </Typography>
                             </th>
+                            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                                <Typography
+                                    variant="small"
+                                    color="blue-gray"
+                                    className="font-prompt-normal leading-none opacity-70"
+                                >
+                                    Booking Status
+                                </Typography>
+                            </th>
                             
                         </tr>
                     </thead>
                     <tbody>
-                        {BookingList.map((book) => {
+                        {bookingList.map((book) => {
 
                             const classes =  "p-4 border-b border-blue-gray-50";
 
@@ -145,6 +155,26 @@ function BookingList() {
                                             ₹{book.price}
                                         </Typography>
                                     </td>
+                                    <td className={classes} >
+                                       {(book.booking_status ==='pending'? <Typography
+                                            // variant="small"
+                                            className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#42cef5]" 
+                                        >
+                                            {book.booking_status}
+                                        </Typography>  :'')}
+                                        {(book.booking_status ==='ongoing'? <Typography
+                                            // variant="small"
+                                            className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#e4f046]" 
+                                        >
+                                            {book.booking_status}
+                                        </Typography>  :'')}
+                                        {(book.booking_status ==='completed'? <Typography
+                                            // variant="small"
+                                            className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#0ee865]" 
+                                        >
+                                            {book.booking_status}
+                                        </Typography>  :'')}
+                                    </td>
                                        
                                     
                                 </tr>
@@ -157,4 +187,4 @@ function BookingList() {
     );
 
 }
-export default BookingList;
+export default BookingListAdmin;

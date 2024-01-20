@@ -7,7 +7,7 @@ import AdminLoginPage from "../pages/login/adminLoginPage";
 import UserLists from "../pages/admin/UserList";
 import ServiceList from "../pages/admin/ServiceList";
 import ServiceCategoryPage from "../pages/admin/ServiceCategoryPage";
-import BookingPage from "../components/admin/Booking";
+import BookingPage from "../pages/admin/BookingPage";
 function AdminRoutes() {
     return (
         <Routes>

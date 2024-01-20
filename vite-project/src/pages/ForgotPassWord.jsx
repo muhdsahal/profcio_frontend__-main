@@ -8,7 +8,7 @@ import {
   Input,
   Button,
 } from "@material-tailwind/react";
-import { Toaster } from "react-hot-toast";
+import { ToastContainer } from 'react-toastify';
 import {  ResetPasswordUrl } from "../constants/constants"; // Make sure to import your ResetPasswordUrl
 import { useNavigate } from "react-router-dom";
 
@@ -70,7 +70,7 @@ function ForgotPassword() {
           {message && <p>{message}</p>}
         </CardFooter>
       </Card>
-      <Toaster />
+      <ToastContainer />
     </div>
   );
 }

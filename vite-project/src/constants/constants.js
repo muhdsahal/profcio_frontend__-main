@@ -20,6 +20,9 @@ export const ServiceCatergoryURL = import.meta.env.VITE_SERVICE_CATEGORY
 export const BookingListUrl = import.meta.env.VITE_BOOKING_LIST
 export const BookingUserSide = import.meta.env.VITE_BOOKING_LIST_USER
 export const BookingEmployeeSide = import.meta.env.VITE_BOOKING_LIST_EMPLOYEE
+export const BookingStatusUpdate = import.meta.env.VITE_BOOKING_STATUS_UPDATE
+
+
 export const forgotPasswordUrl = import.meta.env.VITE_FORGOT_PASSWORD
 export const ResetPasswordUrl = import.meta.env.VITE_RESET_PASSWORD
 

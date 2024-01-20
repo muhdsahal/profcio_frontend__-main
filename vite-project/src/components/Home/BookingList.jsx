@@ -22,12 +22,18 @@ function BookingListUser(){
             setLoading(false)
         })
     },[])
-
-    
+    const bookData = (userId) => {
+        if(bookingList.length!== 0 ){
+            return <h1>My Bookings </h1>;
+        }else{
+            return <h1>No Bookings Found</h1>;  
+        }
+    }
+    console.log(bookData,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
     return(<>
     <div className="flex flex-col min-h-max items-center ">
-                <h1>My Bookings</h1>
-            <Card className="h-full w-full">
+                {bookData(userId)}
+            <Card className="w-full " style={{height:"350px"}}>
                 <table className='w-full min-w-max table-auto text-left'>
                     <thead>
                         <tr>
@@ -68,6 +74,15 @@ function BookingListUser(){
                                     className="font-prompt-normal leading-none opacity-70"
                                 >
                                     Price
+                                </Typography>
+                            </th>
+                            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                                <Typography
+                                    variant="small"
+                                    color="blue-gray"
+                                    className="font-prompt-normal leading-none opacity-70"
+                                >
+                                    Booking Status
                                 </Typography>
                             </th>
                             
@@ -117,6 +132,26 @@ function BookingListUser(){
                                         >
                                             ₹{book.price}
                                         </Typography>
+                                    </td>
+                                    <td className={classes} >
+                                       {(book.booking_status ==='pending'? <Typography
+                                            // variant="small"
+                                            className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#42cef5]" 
+                                        >
+                                            {book.booking_status}
+                                        </Typography>  :'')}
+                                        {(book.booking_status ==='ongoing'? <Typography
+                                            // variant="small"
+                                            className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#e4f046]" 
+                                        >
+                                            {book.booking_status}
+                                        </Typography>  :'')}
+                                        {(book.booking_status ==='completed'? <Typography
+                                            // variant="small"
+                                            className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#0ee865]" 
+                                        >
+                                            {book.booking_status}
+                                        </Typography>  :'')}
                                     </td>
                                        
                                     

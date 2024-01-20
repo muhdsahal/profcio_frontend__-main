@@ -4,7 +4,7 @@ import { UserCircleIcon } from '@heroicons/react/24/solid'
 import { Avatar, Button, Card, List, ListItem, ListItemPrefix, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react';
 import React, { useEffect, useRef, useState } from "react";
 import { w3cwebsocket as W3CWebSocket, client } from "websocket";
-import toast, { Toaster } from 'react-hot-toast'
+import {ToastContainer,toast} from 'react-toastify';
 import axios from 'axios';
 import { useApiContext } from '../../context/context';
 import { Previos_Chat, WebSocket, UserDetailsURL } from '../../constants/constants';

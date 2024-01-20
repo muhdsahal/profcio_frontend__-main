@@ -39,17 +39,8 @@ function ConfirmMail(){
                   your <br /> address.
                 </p>
               </div>
-              {/* <Link to='/forgot_password' className="text-sm sm:mt-0 mt-4 text-black font-bold flex justify-center"> Forgot password </Link> */}
-              
-              
               <div className="flex justify-center ">
                 <div className="flex justify-between sm:text-lg text-sm">
-                  {/* <button
-                    // onClick={ReSend}
-                    className="rounded-full border-purple-400 border-2 font-bold sm:px-10 px-6  my-2 text-purple-400 xs:me-0 ms-3"
-                  >
-                    Resend Email
-                  </button> */}
                   <button
                     onClick={Gmail}
                     color="black"

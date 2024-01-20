@@ -4,7 +4,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { jwtDecode } from 'jwt-decode';
 import { Button } from '@material-tailwind/react';
-import toast, { Toaster } from 'react-hot-toast';
+import {ToastContainer,toast} from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { base_url } from '../../constants/constants';
 import moment from 'moment-timezone';
@@ -134,7 +134,7 @@ function AvailableDates(props) {
           </Button>
         )}
       </p>
-      <Toaster />
+      <ToastContainer />
     </div>
   );
 }

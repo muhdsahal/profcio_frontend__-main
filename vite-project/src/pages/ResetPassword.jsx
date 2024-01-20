@@ -8,7 +8,7 @@ import {
   Button,
 } from "@material-tailwind/react";
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
+import {toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { base_url } from '../constants/constants';
 
@@ -116,7 +116,7 @@ const validatePassword = (password) => {
             </Button>
           </CardFooter>
         </Card>
-        <Toaster />
+        <ToastContainer />
       </div>
     </>
   );

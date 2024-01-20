@@ -56,9 +56,9 @@ function ProfcioFooter() {
             ))}
           </div>
         </div>
-        <Link to={"/employee_signup"}>
-                <Button className="btn-gradiant bg-gradient-to-r from-light-green-400 via-emerald-400 to-blue-600 mt-10">Become A Employee</Button>
-        </Link>
+        
+                <Button  onClick={becomeEmployee}className="btn-gradiant bg-gradient-to-r from-light-green-400 via-emerald-400 to-blue-600 mt-10">Become A Employee</Button>
+        
         <div className="mt-12 flex w-full flex-col items-center justify-center border-t border-blue-gray-50 py-4 md:flex-row md:justify-between">
           <Typography
             variant="small"

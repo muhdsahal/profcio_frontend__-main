@@ -1,5 +1,6 @@
 import React,{ useState ,useEffect} from "react";
-import toast,{ Toaster } from "react-hot-toast";
+import {ToastContainer,toast} from 'react-toastify';
+
 import { useNavigate ,Link} from "react-router-dom";
 import axios from 'axios'
 import {Card,
@@ -467,7 +468,7 @@ export function EmployeeRegistrationForm(){
       </div>
     </div>
   </Card>
-  <Toaster />
+  <ToastContainer />
 </div>
 
      );

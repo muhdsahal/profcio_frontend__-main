@@ -32,6 +32,7 @@ import {
 import logo from '../../assets/profcio__All.png'
 import { jwtDecode } from "jwt-decode";
 import { useApiContext } from "../../context/context";
+import { toast,ToastContainer } from "react-toastify";
  
 export function SidebarWithSearch() {
   const token = localStorage.getItem('token')
@@ -46,6 +47,7 @@ export function SidebarWithSearch() {
   };
    const handleLogout = () =>{
     localStorage.removeItem('token')
+    toast.success("Log Outed Successfully")
     navigate('/employee_login/')
     
    }

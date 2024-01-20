@@ -3,7 +3,7 @@ import axios from "axios";
 import { Card, Button, Input, Typography } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import toast,{ Toaster } from "react-hot-toast";
+import {toast, ToastContainer } from 'react-toastify';
 import { base_url } from "../../constants/constants";
 
 function UserProfile() {
@@ -248,9 +248,7 @@ function UserProfile() {
                 </div>
               </Card>
             </div>
-            <div className="w-full lg:w-4/12 xl:w-5/12 xxl:w-6/12 px-4">
-              {/* ... Rest of the code remains unchanged */}
-            </div>
+           <ToastContainer />           
           </div>
         </div>
       )}

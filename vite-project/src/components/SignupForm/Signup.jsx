@@ -1,6 +1,7 @@
 
 import { useState,useRef } from "react";
-import toast,{ Toaster } from "react-hot-toast";
+import {ToastContainer,toast} from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate,Link } from "react-router-dom";
 import axios from 'axios'
@@ -16,11 +17,9 @@ import logo from '../../assets/profcio__All.png'
 import { useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import LogoGoogle from '../../assets/glogo.png'
-// import { setUserDetails } from "../../Redux/Users";
-// import { useDispatch } from "react-redux";
 import { useApiContext } from "../../context/context";
 
-export function SimpleRegistrationForm() {
+function SimpleRegistrationForm() {
   const navigate = useNavigate();
   const [other, setOther] = useState({ conf_Password: "" });
   const {setUserCredentials} = useApiContext()
@@ -297,11 +296,12 @@ const handleSubmit = async (e) => {
             </form>
           </Card>
     
-          <Toaster />
+          <ToastContainer />
         </div>
       );
 
 }
+export default SimpleRegistrationForm;
 
 
 
@@ -340,162 +340,3 @@ const handleSubmit = async (e) => {
 
 
 
-
-// import { useState } from "react";
-// import toast, { Toaster } from "react-hot-toast";
-// import 'react-toastify/dist/ReactToastify.css';
-// import { useNavigate, Link } from "react-router-dom";
-// import axios from 'axios'
-// import { Card, Input, Button, Typography } from "@material-tailwind/react";
-// import { userRegisterURL } from '../../constants/constants'
-// import Loader from '../Loading/Loading'
-// import logo from '../../image/profcio__All.png'
-// import { useFormik } from 'formik';
-// import * as Yup from 'yup';
-
-// export function SimpleRegistrationForm() {
-//   const navigate = useNavigate();
-
-//   // form validation schema
-//   const validationSchema = Yup.object({
-//     username: Yup.string().required("Username should not be empty"),
-//     email: Yup.string().email("Invalid email address").required("Email should not be empty"),
-//     password: Yup.string().required("Password should not be empty"),
-//     conf_Password: Yup.string()
-//       .oneOf([Yup.ref('password'), null], 'Passwords must match')
-//       .required('Please confirm password'),
-//   });
-
-//   // Formik hook
-//   const formik = useFormik({
-//     initialValues: {
-//       username: "",
-//       email: "",
-//       password: "",
-//       conf_Password: "",
-//     },
-//     validationSchema,
-//     onSubmit: async (values) => {
-//       handleLoading();
-//       try {
-//         const response = await axios.post(userRegisterURL, values);
-//         const user_type = response.data.user_type;
-//         toast.success("Registration success..!");
-//         formik.resetForm(); // Reset form after successful submission
-//         handleLoading();
-//         navigate("/confirm");
-//       } catch (error) {
-//         handleLoading();
-//         if (error.response && error.response.data) {
-//           if (error.response.data.email) {
-//             toast.error(error.response.data.email[0]);
-//           }
-//           if (error.response.data.username) {
-//             toast.error(error.response.data.username[0]);
-//           }
-//         } else {
-//           toast.error("An error occurred during registration..");
-//         }
-//       }
-//     },
-//   });
-
-//   const [loading, setLoading] = useState(false);
-//   const handleLoading = () => setLoading((cur) => !cur);
-
-//   const toLogin = () => {
-//     navigate('/login');
-//   };
-
-//   return (
-//     <div className="flex items-center justify-center h-screen bg-black text-white">
-//       {loading && <Loader />}
-
-//       <Card className="text-center bg-transparent shadow-none">
-//         <Typography variant="h4" color="white">
-//           Sign Up
-//         </Typography>
-
-//         <Typography color="white" className="mt-1 font-normal">
-//           Welcome To Profcio ! Enter your details to register.
-//           <div className="flex justify-center items-center screen" >
-//             <img src={logo} alt="logo" width="130" height="150" className="w-35 h-20" />
-//           </div>
-//         </Typography>
-
-//         <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96" onSubmit={formik.handleSubmit}>
-//           <div className="mb-1 flex flex-col gap-6">
-//             <Input
-//               size="lg"
-//               placeholder="Enter your username"
-//               value={formik.values.username}
-//               name="username"
-//               onChange={formik.handleChange}
-//               onBlur={formik.handleBlur}
-//               className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-//               labelProps={{
-//                 className: 'before:content-none after:content-none',
-//               }}
-//             />
-//             {formik.touched.username && formik.errors.username && <div>{formik.errors.username}</div>}
-
-//             <Input
-//               size="lg"
-//               placeholder="Enter your email"
-//               value={formik.values.email}
-//               name="email"
-//               onChange={formik.handleChange}
-//               onBlur={formik.handleBlur}
-//               className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-//               labelProps={{
-//                 className: 'before:content-none after:content-none',
-//               }}
-//             />
-//             {formik.touched.email && formik.errors.email && <div>{formik.errors.email}</div>}
-
-//             <Input
-//               size="lg"
-//               placeholder="Enter your password"
-//               type="password"
-//               value={formik.values.password}
-//               name="password"
-//               onChange={formik.handleChange}
-//               onBlur={formik.handleBlur}
-//               className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-//               labelProps={{
-//                 className: 'before:content-none after:content-none',
-//               }}
-//             />
-//             {formik.touched.password && formik.errors.password && <div>{formik.errors.password}</div>}
-
-//             <Input
-//               size="lg"
-//               placeholder="Enter your confirm password"
-//               type="password"
-//               value={formik.values.conf_Password}
-//               name="conf_Password"
-//               onChange={formik.handleChange}
-//               onBlur={formik.handleBlur}
-//               className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-//               labelProps={{
-//                 className: 'before:content-none after:content-none',
-//               }}
-//             />
-//             {formik.touched.conf_Password && formik.errors.conf_Password && <div>{formik.errors.conf_Password}</div>}
-//           </div>
-//           <br />
-//           <Button type="submit" variant="White" fullWidth className="bg-rose-500 text-gray-700">
-//             Signup
-//           </Button>
-
-//           <Typography color="white" className="mt-4 text-center font-normal">
-//             Already have an account?{' '}
-//             <Link to="/login">Login</Link>
-//           </Typography>
-//         </form>
-//       </Card>
-
-//       <Toaster />
-//     </div>
-//   );
-// }

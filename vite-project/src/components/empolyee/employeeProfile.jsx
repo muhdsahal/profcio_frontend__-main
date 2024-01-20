@@ -3,7 +3,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Typography, Card, Button, Input } from "@material-tailwind/react";
 import Grid from "@material-ui/core/Grid";
-import toast,{ Toaster } from "react-hot-toast";
+import {ToastContainer,toast} from 'react-toastify';
+
 import { base_url } from "../../constants/constants";
 import AvailableDates from "../Home/AvailableDates";
 

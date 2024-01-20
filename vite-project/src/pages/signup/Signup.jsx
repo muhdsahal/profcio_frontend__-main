@@ -1,9 +1,9 @@
-import { SimpleRegistrationForm } from "../../components/SignupForm/Signup";
+import SimpleRegistrationForm from "../../components/SignupForm/Signup"
 
 function Signup(){
   return(
     <div>
-        <SimpleRegistrationForm></SimpleRegistrationForm>
+        <SimpleRegistrationForm />
     </div>
   )
 }

@@ -18,13 +18,11 @@ import { jwtDecode } from 'jwt-decode';
 
 function AdminProtected(){
     const token =localStorage.getItem('token');
-    console.log(token,"adminprotected");
     const navigate = useNavigate()
 
 
     if(token){
         const decoded = jwtDecode(token);
-        console.log(decoded,'adminprotectred');
         if (decoded.user_type === 'admin' && decoded.is_admin){
             return <Outlet />
         }else if(decoded.user_type === 'user'){

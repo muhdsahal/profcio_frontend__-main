@@ -13,7 +13,8 @@ import {
 import axios from 'axios';
 import Modal from 'react-modal';
 import { ServiceListURL, ServiceCatergoryURL } from '../../constants/constants';
-import toast, { Toaster } from 'react-hot-toast';
+import {ToastContainer,toast} from 'react-toastify';
+;
 
 
 Modal.setAppElement('#root');
@@ -539,7 +540,7 @@ const ServiceListPage = () => {
           </Card>
         </Dialog>
       </>
-      <Toaster />
+      <ToastContainer />
     </div>
   );
 };

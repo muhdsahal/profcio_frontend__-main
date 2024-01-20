@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
-import React from "react";
-// import { UserBaseUrl,UserDetailsURL } from "../../constants/constants";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import toast, { Toaster } from 'react-hot-toast'
+import {ToastContainer,toast} from 'react-toastify';
 import {Card,Typography,Button,} from "@material-tailwind/react";
 import Loader from "../Loading/Loading";
 import { UserDetailsURL, User_Block_Unblock  } from "../../constants/constants";
@@ -39,12 +37,14 @@ function UserList() {
                     if(user.id === id){
                         return { ...user,is_active:!is_active };
                     }
+                    
                     return user;
                 });
             })
         })
         .catch((error)=>{
             console.error("Error Updating user status:",error);
+            toast.error("Error Updating user status:");
         })
         .finally(()=>{
             setLoading(false)
@@ -109,12 +109,8 @@ function UserList() {
                         </tr>
                     </thead>
                     <tbody>
-                        
-                     
                         {userList.map((user) => {
-
                             const classes =  "p-4 border-b border-blue-gray-50";
-
                             return (
                                 <tr key={user.id}>
                                 <td className={classes}>
@@ -169,14 +165,13 @@ function UserList() {
                                             </Button>
                                             )
                                         )}
-                                            
                                     </td>
-                                    
                                 </tr>
                             );
                         })}
                     </tbody>
                 </table>
+                <ToastContainer />
             </Card>
         </div>
     );
