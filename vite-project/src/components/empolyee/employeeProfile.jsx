@@ -4,16 +4,16 @@ import { useParams } from "react-router-dom";
 import { Typography, Card, Button, Input } from "@material-tailwind/react";
 import Grid from "@material-ui/core/Grid";
 import {ToastContainer,toast} from 'react-toastify';
-
-import { base_url } from "../../constants/constants";
+import { ServiceListURL, base_url } from "../../constants/constants";
 import AvailableDates from "../Home/AvailableDates";
-
+import CitiesData from '../../components/empolyee/locations.json'
 function EmployeeProfile() {
   const { userId } = useParams();
   const [employee, setEmployee] = useState(null);
   const [editing, setEditing] = useState(false);
   const [updatedEmployee, setUpdatedEmployee] = useState({});
   const [imageFile, setImageFile] = useState(null);
+  const [service,setService] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +30,23 @@ function EmployeeProfile() {
   
     fetchData();
   }, [userId]);
+  
+  useEffect(()=>{
+    axios.get(ServiceListURL)
+    .then((response)=>{
+      setService(response.data || [])
+    })
+    .catch((error)=>{
+      console.error("an error during fetch data",error);
+    })
+  },[])
 
+
+
+  const cityOptions = CitiesData.cities.map((city) => ({
+    value: city.City,
+    label: city.City,
+  }));
 
   const handleEditClick = () => {
     setEditing(true);
@@ -57,9 +73,12 @@ function EmployeeProfile() {
       formData.append("work", updatedEmployee.work);
       formData.append("experience", updatedEmployee.experience);
       formData.append("charge", updatedEmployee.charge);
-  
+      
+      Object.entries(formData).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      formData.append("place", updatedEmployee.place);
       const authToken = localStorage.getItem("access_token");
-      console.log(authToken,'authTokenauthTokenauthTokenauthTokenauthTokenauthToken');
   
       const response = await axios.put(
         `${base_url}/auth/user_profile/${userId}/`,  
@@ -157,14 +176,38 @@ function EmployeeProfile() {
                             onChange={handleInputChange}
                             placeholder="Phone Number"
                           />
-                          <Input
-                            label="work"
-                            type="text"
-                            name="work"
-                            value={updatedEmployee.work}
-                            // onChange={handleInputChange}
-                            placeholder="Work"
-                          />
+                          <div className="flex gap-4 md:w-86 h-10">
+                          <select name="place"  id="" 
+                          className="border-[1px] border-[#747676]"
+                          value = {updatedEmployee.work}
+                          // onChange={handleInputChange}
+
+                          >
+                            <option value="">Select Your Work</option>
+                            {service.map((item)=>(
+                              <option key={item.value} value={item.value}>
+                              {item.name}
+                            </option>
+                            ))}
+                          </select>
+                        </div>
+                         
+                         <div className="flex gap-4 md:w-86 h-10">
+                          <select name="place"  id="" 
+                          className="border-[1px] border-[#747676]"
+                          value = {updatedEmployee.place}
+                          onChange={handleInputChange}
+
+                          >
+                            <option value="">Select Your Location</option>
+                            {cityOptions.map((option)=>(
+                              <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                            ))}
+                          </select>
+                        </div>
+                       
                           <Input
                             label="experience"
                             type="text"
@@ -249,6 +292,19 @@ function EmployeeProfile() {
                                   type="work"
                                   name="work"
                                   value={employee.work}
+                                  />
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography
+                                  variant="h4"
+                                  className="text-center text-blueGray-700"
+                                >
+                                   <Input
+                                  label="place"
+                                  type="place"
+                                  name="place"
+                                  value={employee.place}
                                   />
                                 </Typography>
                               </Grid>

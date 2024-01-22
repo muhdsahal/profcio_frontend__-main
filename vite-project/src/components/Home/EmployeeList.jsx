@@ -18,8 +18,7 @@ function EmployeeList() {
   const token = localStorage.getItem('token')
   const [isLoggedIn, setisLoggedIn] = useState(false)
   const navigate = useNavigate();
-
-
+  
   useEffect(() => {
     if (token) {
       const decode = jwtDecode(token);

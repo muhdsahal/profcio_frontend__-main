@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {toast, ToastContainer } from 'react-toastify';
 import { base_url } from "../../constants/constants";
-
+import CitiesData   from  '../../components/empolyee/locations.json'
 function UserProfile() {
   const [user, setUser] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -29,6 +29,11 @@ function UserProfile() {
 
     fetchData();
   }, [userId]);
+
+  const cityOptions = CitiesData.cities.map((city) => ({
+    value: city.City,
+    label: city.City,
+  }));
 
   const handleEditClick = () => {
     setEditing(true);
@@ -56,7 +61,6 @@ function UserProfile() {
       formData.append("place", updatedUser.place);
   
       const authToken = localStorage.getItem("access_token");
-      console.log(authToken, "dkfhksdzjgfdgjgfdgsjfgh");
       const response = await axios.put(
         `${base_url}/auth/user_profile/${userId}/`,  
         formData,
@@ -152,13 +156,22 @@ function UserProfile() {
                             onChange={handleInputChange}
                             // placeholder="Phone Number"
                           />
-                          <Input
-                            label="place"
-                            type="text"
-                            name="work"
-                            value={updatedUser.place}
-                            onChange={handleInputChange}
-                          />
+
+                          <div className="flex gap-4 md:w-86 h-10">
+                          <select name="place"  id="" 
+                          className="border-[1px] border-[#747676]"
+                          value = {updatedUser.place}
+                          onChange={handleInputChange}
+
+                          >
+                            <option value="">Select Your Location</option>
+                            {cityOptions.map((option)=>(
+                              <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                            ))}
+                          </select>
+                        </div>
 
                           <div className="flex justify-between">
                             <Button
@@ -223,9 +236,9 @@ function UserProfile() {
                                   className="text-center text-blueGray-700"
                                 >
                                    <Input
-                                  label="work"
-                                  type="work"
-                                  name="work"
+                                  label="place"
+                                  type="place"
+                                  name="place"
                                   value={user.place}
                                   />
                                 </Typography>

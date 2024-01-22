@@ -8,13 +8,13 @@ import {Card,
     Button,
     Typography } from "@material-tailwind/react";
 
-import { empRegisterURL } from "../../constants/constants";
+import { empRegisterURL ,ServiceListURL } from "../../constants/constants";
 import Loader from "../Loading/Loading";
 import citiesData from "../../components/empolyee/locations.json"
 
 export function EmployeeRegistrationForm(){
     const navigate = useNavigate()
-    const serviceListURL  =  'http://127.0.0.1:8000/service/service_list/'
+    // const serviceListURL  =  'http://127.0.0.1:8000/service/service_list/'
 
     const cityOptions = citiesData.cities.map((city) => ({
       value: city.City,
@@ -128,18 +128,15 @@ export function EmployeeRegistrationForm(){
     }
         
           useEffect(() => {
-            // Fetch the list of services from the API
-            axios.get(serviceListURL)
+            axios.get(ServiceListURL)
               .then(response => {
                 setServiceList(response.data);
-                // setDataLoaded(true)
-                // Assuming the API returns an array of service names
+                
               })
               .catch(error => {
                 console.error('Error fetching service list:', error);
               });
-          }, []); // Empty dependency array to run the effect only once when the component mounts
-          // console.log(serviceList,'serviceListURL');
+          }, []); 
 
           const handleProfilePhotoChange = (e) => {
             const file = e.target.files[0];
@@ -174,33 +171,13 @@ export function EmployeeRegistrationForm(){
           if (formData.profile_photo) {
             formDataObj.append("profile_photo", formData.profile_photo);
           }
-            
-            // const response = await axios.post(empRegisterURL,formDataObj);
-            // console.log(response.data,"dataaaaaaaaaaaaaaaaaaa");
-            // toast.success("Registraion success..!")
+          
             const response = await axios.post(empRegisterURL, formDataObj, {
               headers: {
                 'Content-Type': 'multipart/form-data',
               },
             });
             toast.success("Registraion success..!")
-
-
-        // setFormData({
-        //   username:"",
-        //   email:"",
-        //   password:"",
-        //   user_type : "employee",
-        //   phone_number:'+91'+'',
-        //   work : "",
-        //   place : "",
-        //   description : "",
-        //   experience : 0,
-        //   charge:0,
-        //   profile_photo:null,
-         
-          
-        // })
         setOther({conf_Password:""})
         handleLoading();
         console.log('registration successfull ',response.data);
@@ -355,9 +332,7 @@ export function EmployeeRegistrationForm(){
           <div className="flex gap-6">
 
           <div className="flex gap md:w-86 h-10">
-          {/* <Typography  color="blue-gray-200" className="-mb-3">
-               Select Your Place 
-          </Typography> */}
+       
           <br />
 
               <select
@@ -378,9 +353,7 @@ export function EmployeeRegistrationForm(){
               </select>
           </div>
           <div className="flex gap-4 md:w-86 h-10">
-          {/* <Typography  color="blue-gray-200" className="-mb-3">
-              Enter Your Work 
-          </Typography> */}
+       
           <br />
           <select className='border-[1px] border-[#747676]'
             value={formData.work}
