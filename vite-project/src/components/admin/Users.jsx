@@ -16,7 +16,9 @@ function UserList() {
             .get(UserDetailsURL)
             .then((response) => {
                 const responseData = response.data;
+                console.log(responseData,'responseDataresponseDataresponseDataresponseDataresponseData');
                 setUserList(responseData)
+                
 
                 
             })

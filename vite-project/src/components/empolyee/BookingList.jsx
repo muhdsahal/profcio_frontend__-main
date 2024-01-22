@@ -17,7 +17,6 @@ function BookingListEmployee() {
     const token = localStorage.getItem('token')
     const decode = jwtDecode(token)
     const userId = decode.user_id
-    console.log(userId, 'userserserserserser');
     const [bookingList, setBookingList] = useState([])
     const [loading, setLoading] = useState(true)
 

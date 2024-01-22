@@ -14,6 +14,7 @@ function EmployeeProfile() {
   const [editing, setEditing] = useState(false);
   const [updatedEmployee, setUpdatedEmployee] = useState({});
   const [imageFile, setImageFile] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,7 +46,6 @@ function EmployeeProfile() {
     try {
       const formData = new FormData();
 
-      // Append profile_photo if an imageFile is selected
       if (imageFile) {
         formData.append("profile_photo", imageFile, imageFile.name);
       }
@@ -58,16 +58,16 @@ function EmployeeProfile() {
       formData.append("experience", updatedEmployee.experience);
       formData.append("charge", updatedEmployee.charge);
   
-      const authToken = localStorage.getItem("token");
-      const tok = JSON.parse(authToken);
+      const authToken = localStorage.getItem("access_token");
+      console.log(authToken,'authTokenauthTokenauthTokenauthTokenauthTokenauthToken');
   
       const response = await axios.put(
-        `http://127.0.0.1:8000/auth/user_profile/${userId}/`,  // Use PATCH instead of PUT
+        `${base_url}/auth/user_profile/${userId}/`,  
         formData,
         {
           headers: {
+            Authorization: `Bearer ${authToken}`,
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${tok.access}`,
           },
         }
       );

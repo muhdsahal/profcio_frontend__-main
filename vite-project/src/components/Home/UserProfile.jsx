@@ -17,7 +17,7 @@ function UserProfile() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/auth/user_profile/${userId}/`
+          `${base_url}/auth/user_profile/${userId}/`
         );
         setUser(response.data);
         setupdatedUser(response.data);
@@ -37,7 +37,7 @@ function UserProfile() {
   const handleCancelEdit = () => {
     setEditing(false);
     setupdatedUser(user);
-    setImageFile(null); // Clear the imageFile state
+    setImageFile(null); 
   };
 
   const handleUpdateProfile = async () => {
@@ -55,16 +55,15 @@ function UserProfile() {
       formData.append("phone_number", updatedUser.phone_number);
       formData.append("place", updatedUser.place);
   
-      const authToken = localStorage.getItem("token");
-      const tok = JSON.parse(authToken);
-  
+      const authToken = localStorage.getItem("access_token");
+      console.log(authToken, "dkfhksdzjgfdgjgfdgsjfgh");
       const response = await axios.put(
-        `http://127.0.0.1:8000/auth/user_profile/${userId}/`,  // Use PATCH instead of PUT
+        `${base_url}/auth/user_profile/${userId}/`,  
         formData,
         {
           headers: {
+            Authorization: `Bearer ${authToken}`,
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${tok.access}`,
           },
         }
       );

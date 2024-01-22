@@ -7,8 +7,7 @@ function EmployeeListUser (){
     return(
         <div>
             <Navbar />
-            <EmployeeList />
-            <br />
+            <EmployeeList className="flex flex-wrap gap-14"/>
             <ProfcioFooter />
         </div>
     )

@@ -48,7 +48,7 @@ export function SidebarWithSearch() {
    const handleLogout = () =>{
     localStorage.removeItem('token')
     toast.success("Log Outed Successfully")
-    navigate('/employee_login/')
+    navigate('/employee_login')
     
    }
    function toProfile() {
@@ -93,7 +93,7 @@ export function SidebarWithSearch() {
                 <PresentationChartBarIcon className="h-5 w-5" />
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
-                Dashboard
+                Home Page
               </Typography>
           </ListItem>
          
@@ -136,6 +136,7 @@ export function SidebarWithSearch() {
         </ListItem>
       </List>
     </Card>
+    <ToastContainer/>
     </>
   );
 }
