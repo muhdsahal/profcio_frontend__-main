@@ -42,9 +42,15 @@ function BookingListEmployee() {
         }
     }
 
-    const UpdateStatusBooking = (event, book_id) => {
+    const UpdateStatusBooking = (event, book_id,booking_date) => {
         const value = event.target.value
+
+        if (value === 'completed' && new Date() < new Date(booking_date)) {
+            toast.error('Cannot mark as completed before the booking date');
+            return;
+        }
         const data = { booking_status: value }
+
         axios.patch(`${BookingStatusUpdate}${book_id}/`, data).then((response) => {
             if (response.status === 200) {
                 toast.success(' status updated succesfully');
@@ -54,7 +60,6 @@ function BookingListEmployee() {
         }).catch((error) => {
             console.log(error);
         })
-        console.log(event.target.value, book_id, '===================ashique Debug>>>>>>>>>>>>>>>>>>>>>>>>');
     }
     return (<>
         <div className="flex flex-col min-h-max items-center ">
@@ -185,7 +190,7 @@ function BookingListEmployee() {
                                         </Typography>  :'')}
                                     </td>
                                     <td className={classes}>
-                                        <select onChange={(e) => UpdateStatusBooking(e, book.id)} name="" id="" className="border-[1px] p-1 border-gray-300 rounded-md">
+                                        <select onChange={(e) => UpdateStatusBooking(e, book.id,book.booking_date)} name="" id="" className="border-[1px] p-1 border-gray-300 rounded-md">
                                             <option value="pending">pending</option>
                                             <option value="ongoing">ongoing</option>
                                             <option value="completed">completed</option>

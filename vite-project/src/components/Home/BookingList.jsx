@@ -32,7 +32,7 @@ function BookingListUser(){
             setLoading(false)
         })
     },[])
-    
+
     const bookData = (userId) => {
         if(bookingList.length!== 0 ){
             return <h1>My Bookings </h1>;
@@ -50,12 +50,11 @@ function BookingListUser(){
         reviewRatingForm.append("user",userId)
         reviewRatingForm.append("review_text",reviewText)
         reviewRatingForm.append("rating",rating)
-        for (const [key,value] of reviewRatingForm.entries()){
-            console.log(`${key}::::${value}`);
-        }
+        // for (const [key,value] of reviewRatingForm.entries()){
+        //     console.log(`${key}::::${value}`);
+        // }
         try {
           await axios.post(apiUrl, reviewRatingForm).then((res)=>{
-            console.log(res.data, "------------------------>>>>>>");
           })
           setReviewText('');
           setRating(null);
@@ -68,7 +67,7 @@ function BookingListUser(){
     return(<>
     <div className="flex flex-col min-h-max items-center ">
                 {bookData(userId)}
-            <Card className="w-full " style={{height:"350px"}}>
+            <Card className="w-full " >
                 <table className='w-full min-w-max table-auto text-left'>
                     <thead>
                         <tr>
@@ -196,7 +195,7 @@ function BookingListUser(){
                                     </td>
                                     {book.booking_status === 'completed' && (
                                     <td className={classes}>
-                                        {book.is_review ? (
+                                        {book.is_reviewed ? (
                                             <Typography
                                             className="font-prompt-normal"
                                             color="blue-gray"
@@ -224,6 +223,7 @@ function BookingListUser(){
                 </table>
             </Card>
         </div>
+        
         <Dialog
         open={open}
         onClose={handleOpenModal}

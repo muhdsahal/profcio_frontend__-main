@@ -1,6 +1,8 @@
 // axiosUtils.js
+import {  useNavigate } from "react-router-dom";
 import { base_url } from "../constants/constants";
 import axios from "axios";
+
 
 const axiosInstance = axios.create({
     base_url
@@ -35,6 +37,9 @@ axiosInstance.interceptors.response.use(
     // Handle error responses
     if (error.response && error.response.status === 401) {
       // Redirect to login page or perform other actions for unauthorized access
+      localStorage.removeItem("token")
+      const navigate = useNavigate()
+      // navigate("/login")
       console.log("Unauthorized access. Redirecting to login...");
     }
     
