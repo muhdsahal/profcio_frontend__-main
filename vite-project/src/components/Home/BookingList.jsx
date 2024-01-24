@@ -1,8 +1,9 @@
 import React,{useState,useEffect} from "react";
 import axios from "axios";
-import { BookingUserSide } from "../../constants/constants";
+import { BookingUserSide, base_url } from "../../constants/constants";
 import { jwtDecode } from "jwt-decode";
-import {Card,Typography} from "@material-tailwind/react";
+import { Button, Card, CardActions, CardContent, Dialog, Input, TextField, Typography } from "@mui/material";
+import StarRating from "./ReviewRating/StarRating";
 
 function BookingListUser(){
     const token = localStorage.getItem('token')
@@ -10,7 +11,16 @@ function BookingListUser(){
     const userId = decode.user_id
     const [bookingList,setBookingList] = useState([])
     const [loading,setLoading] = useState(true)
-   
+    const [reviewText, setReviewText] = useState('');
+    const [rating, setRating] = useState(null);
+    const [reviewEmpId, setReviewEmpid] = useState(null);
+    const [open,setOpen] = useState(false)
+
+    const handleOpenModal = (id) => {
+        setReviewEmpid(id);
+        setOpen((prevOpen) => !prevOpen);
+    };
+
     useEffect(()=>{
         axios.get(`${BookingUserSide}${userId}`)
         .then((response)=>{
@@ -22,6 +32,7 @@ function BookingListUser(){
             setLoading(false)
         })
     },[])
+    
     const bookData = (userId) => {
         if(bookingList.length!== 0 ){
             return <h1>My Bookings </h1>;
@@ -29,7 +40,31 @@ function BookingListUser(){
             return <h1>No Bookings Found</h1>;  
         }
     }
-    console.log(bookData,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+   
+    const handleReviewSubmit = async (e) => {
+        e.preventDefault();
+        setOpen(!open)
+        const apiUrl = `${base_url}/employee/review/`
+        const reviewRatingForm = new FormData
+        reviewRatingForm.append("employee",reviewEmpId)
+        reviewRatingForm.append("user",userId)
+        reviewRatingForm.append("review_text",reviewText)
+        reviewRatingForm.append("rating",rating)
+        for (const [key,value] of reviewRatingForm.entries()){
+            console.log(`${key}::::${value}`);
+        }
+        try {
+          await axios.post(apiUrl, reviewRatingForm).then((res)=>{
+            console.log(res.data, "------------------------>>>>>>");
+          })
+          setReviewText('');
+          setRating(null);
+        } catch (error) {
+          console.error('Error submitting review:', error);
+        }
+      };
+
+
     return(<>
     <div className="flex flex-col min-h-max items-center ">
                 {bookData(userId)}
@@ -85,6 +120,15 @@ function BookingListUser(){
                                     Booking Status
                                 </Typography>
                             </th>
+                            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                                <Typography
+                                    variant="small"
+                                    color="blue-gray"
+                                    className="font-prompt-normal leading-none opacity-70"
+                                >
+                                    Review
+                                </Typography>
+                            </th>
                             
                         </tr>
                     </thead>
@@ -135,25 +179,43 @@ function BookingListUser(){
                                     </td>
                                     <td className={classes} >
                                        {(book.booking_status ==='pending'? <Typography
-                                            // variant="small"
                                             className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#42cef5]" 
                                         >
                                             {book.booking_status}
                                         </Typography>  :'')}
                                         {(book.booking_status ==='ongoing'? <Typography
-                                            // variant="small"
                                             className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#e4f046]" 
                                         >
                                             {book.booking_status}
                                         </Typography>  :'')}
                                         {(book.booking_status ==='completed'? <Typography
-                                            // variant="small"
                                             className="font-prompt-normal border-[1px] border-[#b3b5b5] pl-2 pr-2 rounded-full w-fit  bg-[#0ee865]" 
                                         >
                                             {book.booking_status}
                                         </Typography>  :'')}
                                     </td>
-                                       
+                                    {book.booking_status === 'completed' && (
+                                    <td className={classes}>
+                                        {book.is_review ? (
+                                            <Typography
+                                            className="font-prompt-normal"
+                                            color="blue-gray"
+                                          >
+                                            Review Submitted
+                                          </Typography>
+                                        ):(
+
+                                        <Button
+                                            variant="small"
+                                            color="blue"
+                                            onClick={() => handleOpenModal(book.employeeDetails.id)}
+                                        >
+                                            Review
+                                        </Button>
+                                        )}
+                                      
+                                    </td>
+                                )}
                                     
                                 </tr>
                             );
@@ -162,6 +224,33 @@ function BookingListUser(){
                 </table>
             </Card>
         </div>
+        <Dialog
+        open={open}
+        onClose={handleOpenModal}
+        aria-labelledby="form-dialog-title"
+        fullWidth
+      >
+        <Card >
+        <CardContent className="h-full">
+        <Typography variant="h4" className="flex gap-4">
+            Write Review
+          </Typography>
+          <label className="flex flex-row gap-3">
+            Rating:
+            <StarRating rating={rating} onRatingChange={(newRating) => setRating(newRating)} />
+          </label>
+          <div className="flex flex-row gap-3">
+            Review:
+            <TextField  fullWidth value={reviewText} onChange={(e) => setReviewText(e.target.value)} />
+          </div>
+          </CardContent>
+          </Card>
+          <CardActions>
+          <Button className="bg-green" variant="contained" onClick={handleReviewSubmit} fullWidth>
+            Create 
+          </Button>
+        </CardActions>
+      </Dialog>
     </>)
 }
 export default BookingListUser

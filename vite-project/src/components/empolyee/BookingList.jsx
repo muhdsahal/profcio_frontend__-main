@@ -12,7 +12,7 @@ import {
     ListItemSuffix,
     Chip,
 } from "@material-tailwind/react";
-
+import {ToastContainer,toast} from 'react-toastify';
 function BookingListEmployee() {
     const token = localStorage.getItem('token')
     const decode = jwtDecode(token)
@@ -39,7 +39,6 @@ function BookingListEmployee() {
             return <h1> My Bookings </h1>
         } else {
             return <h1>No Bookings Found</h1>
-
         }
     }
 
@@ -48,7 +47,7 @@ function BookingListEmployee() {
         const data = { booking_status: value }
         axios.patch(`${BookingStatusUpdate}${book_id}/`, data).then((response) => {
             if (response.status === 200) {
-                console.log(' status updated succesfully');
+                toast.success(' status updated succesfully');
                 setManagePage(true)
 
             }
@@ -200,6 +199,7 @@ function BookingListEmployee() {
                     </tbody>
                 </table>
             </Card>
+            <ToastContainer />
         </div>
     </>)
 }

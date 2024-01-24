@@ -15,7 +15,7 @@ import axios  from "axios";
 import Modal from 'react-modal';
 import { ServiceCatergoryURL } from "../../constants/constants";
 import {ToastContainer,toast} from 'react-toastify';
-;
+
 
 //Modal.setAppElement('')
 function CategoryService(){

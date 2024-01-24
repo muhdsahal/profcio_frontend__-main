@@ -35,6 +35,8 @@ function UserRoutes(){
                     <Route element={<SuccessFullPayment />} path="/employeedetails/payment/success/" />
                     <Route element={<CanceledPayment />} path="/employeedetails/payment/canceled/" />
                     <Route element={<ChatPageUser />} path="/chat" />
+                    {/* <Route element={<ReviewForm />} path="/review" /> */}
+                    
 
                     
 
