@@ -10,7 +10,7 @@ import ForgotPassword from "../pages/ForgotPassWord";
 import ResetPassword from "../pages/ResetPassword";
 import BookingListPage from "../pages/employee/BookingListPage";
 import ChatPageEmployee from "../pages/employee/ChatPageEmployee";
-
+import CustomerPage from "../pages/employee/CustomerPage";
 
 function EmployeeRoutes(){
     return(
@@ -30,6 +30,7 @@ function EmployeeRoutes(){
                 <Route path="/" element={<EmployeeHome />} />
                 <Route path="/profile/:userId" element={<EmployeeProfilePage />} />
                 <Route path="/booking_list/:userId" element={<BookingListPage />} />
+                <Route path="/customer/:userId" element={<CustomerPage />} />
                 <Route path="/chat" element={<ChatPageEmployee />} />
             </Route>
         </Routes>

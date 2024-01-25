@@ -16,6 +16,7 @@ import logo from "../../assets/profcio__All.png"
 import { jwtDecode } from 'jwt-decode';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 import blankImage from '../../assets/blankprofile.png'
+import { base_url } from '../../constants/constants';
 const pages = ['Home', 'Services', 'Employees'];
 const settings = [];
 
@@ -37,7 +38,6 @@ function ResponsiveNavBar() {
     }
   }, [token]);
   
-
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate("/login/")
@@ -162,9 +162,8 @@ function ResponsiveNavBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <img alt="img" src={blankImage}
-                className='rounded-full w-12' />
-
+                  <img alt="img" src={blankImage}
+                  className='rounded-full w-12' />
               </IconButton>
             </Tooltip>
             <Menu
