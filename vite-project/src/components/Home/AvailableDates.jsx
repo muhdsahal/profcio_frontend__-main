@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Button } from '@material-tailwind/react';
 import {ToastContainer,toast} from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { base_url } from '../../constants/constants';
+import { EmpUrl, base_url } from '../../constants/constants';
 import moment from 'moment-timezone';
 
 function AvailableDates(props) {
@@ -24,14 +24,14 @@ function AvailableDates(props) {
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
-        const response = await axios.get(`${base_url}/employee/employee/${empId}/book/`);
+        const response = await axios.get(`${EmpUrl}/employee/${empId}/book/`);
         const bookedDatesArray = response.data.map((dateInfo) =>
           moment(dateInfo.booking_date).tz('Asia/Kolkata').toDate()
         );
         setBookedDates(bookedDatesArray);
 
         // Fetch and set absence dates
-        const absenceResponse = await axios.get(`${base_url}/employee/employee_absences/${empId}/`);
+        const absenceResponse = await axios.get(`${EmpUrl}/employee_absences/${empId}/`);
         const absenceDatesArray = absenceResponse.data.map((absenceDate) =>
           moment(absenceDate.absence_date).tz('Asia/Kolkata').toDate()
         );
@@ -44,9 +44,7 @@ function AvailableDates(props) {
     fetchBookingData();
   }, [userId]);
 
-  // const isSunday = (date) => {
-  //   return date.getDay() === 0; // Sunday is represented by 0 in JavaScript's getDay()
-  // };
+
 
   const tileDisabled = ({ date }) => {
     const isBooked = bookedDates.some(
@@ -106,16 +104,10 @@ function AvailableDates(props) {
 
       const formattedDate = moment(selectedDate).tz('Asia/Kolkata').format('YYYY-MM-DD');
 
-      // Check if the selected date is a Sunday and prevent booking if true
-      // if (isSunday(selectedDate)) {
-      //   toast.error('Booking is not allowed on Sundays!');
-      //   return;
-      // }
-
       // Check if userId and empId are equal, and no payment is required
       if (userId === empId) {
         // Mark absence directly without going to the payment process
-        await axios.post(`${base_url}/employee/employee_absence/`, {
+        await axios.post(`${EmpUrl}/employee_absence/`, {
           user: userId,
           employee: empId,
           absence_date: formattedDate,
@@ -133,8 +125,7 @@ function AvailableDates(props) {
         mode: 'payment',
         date: formattedDate,
       };
-      console.log(data,'bkkkkdata');
-      const response = await axios.post(`${base_url}/employee/booking/payment/`, data);
+      const response = await axios.post(`${EmpUrl}/booking/payment/`, data);
       window.location.href = response.data.message.url;
 
       return response.data;
@@ -155,7 +146,6 @@ function AvailableDates(props) {
         tileStyle={tileStyle} // Add the tileStyle prop
 
       />
-      {/* <h4 className='font-bold text-red-600'>Sunday Holiday</h4> */}
 
       <p>
         Selected Date: {selectedDate && selectedDate.toLocaleDateString()}
