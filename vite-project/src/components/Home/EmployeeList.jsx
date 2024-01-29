@@ -150,7 +150,7 @@ function EmployeeList() {
               alt={`Profile photo of ${employee.username}`}
               className="w-full h-48 object-cover"
             />
-            <div className="p-4 animated-gradien bg-gradient-to-r  from-light-green-400 via-emerald-400 to-blue-600 ">
+            <div >
               <h4 className="text-xl font-semibold mb-2">{employee.username}</h4>
               <h4 className="text-xl font-semibold mb-2">{employee.work}</h4>
               <p className="text-gray-700 mb-2">₹{employee.charge}</p>

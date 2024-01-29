@@ -62,7 +62,35 @@ function AvailableDates(props) {
     return isBooked || isAbsence || date.getTime() <= new Date().setHours(0, 0, 0, 0) ;
   };
 
+
+  const tileClassName = ({ date }) => {
+    const isBooked = bookedDates.some((bookedDate) =>
+      bookedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
+    );
+
+    const isAbsence = absences.some((absenceDate) =>
+      absenceDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
+    );
+
+    return {
+      booked: isBooked,
+      absent: isAbsence,
+    };
+  };
   
+  const tileStyle = ({ date, className }) => {
+    const classes = className.split(' ');
+    return {
+      ...classes.reduce((styles, cls) => {
+        if (cls === 'booked') {
+          styles.border = '2px solid red';
+        } else if (cls === 'absent') {
+          styles.border = '2px solid blue';
+        }
+        return styles;
+      }, {}),
+    };
+  };
 
   const handleDateChange = (date) => {
     console.log(date, 'genuine date');
@@ -123,6 +151,9 @@ function AvailableDates(props) {
         value={selectedDate}
         onChange={handleDateChange}
         tileDisabled={tileDisabled}
+        tileClassName={tileClassName} // Add the tileClassName prop
+        tileStyle={tileStyle} // Add the tileStyle prop
+
       />
       {/* <h4 className='font-bold text-red-600'>Sunday Holiday</h4> */}
 

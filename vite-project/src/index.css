@@ -32,3 +32,10 @@ body {
   animation: slideBackground 15s linear infinite;
 }
 
+/* .react-calendar .month-container .day .day-content.booked-date {
+  border: 2px solid red;
+}
+
+.react-calendar .month-container .day .day-content.absent-date {
+  border: 2px solid blue;
+} */
