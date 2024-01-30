@@ -33,7 +33,7 @@ function BookingListUser() {
 
     useEffect(() => {
         setmanagePage(false)
-        axios.get(`${EmpUrl}/review/`)
+        axios.get(`${EmpUrl}review/`)
             .then((response) => {
                 const responseData = response.data
                 setreviewList(responseData)
@@ -72,7 +72,7 @@ function BookingListUser() {
         reviewRatingForm.append("rating", rating)
 
         try {
-            await axios.post(`${EmpUrl}/review/`, reviewRatingForm).then((res) => {
+            await axios.post(`${EmpUrl}review/`, reviewRatingForm).then((res) => {
             })
             toast.success("Review Submitted ")
             setReviewText('');
@@ -97,7 +97,7 @@ function BookingListUser() {
             review_text: ratingReviewEditText,
             rating:ratingEditReview
         }
-        axios.patch(`${EmpUrl}/review_edit/${editDatas.id}/`,data).then((response)=>{
+        axios.patch(`${EmpUrl}review_edit/${editDatas.id}/`,data).then((response)=>{
             if (response.status ===200) {
               toast.success("Review Updated")
             }

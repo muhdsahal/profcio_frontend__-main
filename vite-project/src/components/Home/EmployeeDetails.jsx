@@ -6,7 +6,7 @@ import { ListItem, Rating, Typography } from '@mui/material';
 import { Button, ListItemPrefix } from '@material-tailwind/react';
 import { Box, } from '@mui/material';
 import AvailableDates from './AvailableDates';
-import { base_url } from '../../constants/constants';
+import { Auth_Url, EmpUrl, base_url } from '../../constants/constants';
 import blankImage from '../../assets/blankprofile.png'
 import ChatIcon from '@mui/icons-material/Chat';
 
@@ -15,13 +15,12 @@ function EmployeeDetails() {
   const [bookingData, setBookingData] = useState([])
   const [reviewData, setReViewData] = useState([])
   const navigate = useNavigate()
-
   const { id } = useParams();
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
-        const response = await axios.get(`${base_url}/auth/employeelisting/${id}/`);
+        const response = await axios.get(`${Auth_Url}employeelisting/${id}/`);
         setEmployeeData(response.data);
       } catch (error) {
         console.error('Error fetching employee data:', error);
@@ -35,7 +34,7 @@ function EmployeeDetails() {
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
-        const response = await axios.get(`${base_url}/employee/employee/${id}/book/`);
+        const response = await axios.get(`${EmpUrl}employee/${id}/book/`);
         setBookingData(response.data);
 
       } catch (error) {
@@ -49,7 +48,7 @@ function EmployeeDetails() {
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axios.get(`${base_url}/employee/review/${id}`);
+        const response = await axios.get(`${EmpUrl}review/${id}`);
         setReViewData(response.data);
         console.log(response.data, 'reviewdataaaaaaaaaaaaaaa');
       } catch (error) {
@@ -132,13 +131,13 @@ function EmployeeDetails() {
       <p>Loading...</p>)}
     <section>
       <div className="flex justify-center">
-        <Typography variant='h5' className="text-black text-3xl font-poppins font-medium">
-          Ratings And Reviews
-        </Typography>
+        <h3  className="text-black text-3xl font-poppins font-medium">
+        Reviews And Ratings
+        </h3>
       </div>
 
       {reviewData.map((review, index) => (
-        <div key={index} className="border rounded-md p-6 md:flex-col max-h-96 overflow-y-auto">
+        <div key={index} className=" rounded-md md:flex-col max-h-96 overflow-y-auto">
           <div className="container w-full mb-6 p-6 border shadow-xl rounded-md">
             <div className="w-full flex justify-between">
               <ListItem>

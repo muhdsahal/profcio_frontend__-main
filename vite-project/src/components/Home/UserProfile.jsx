@@ -4,7 +4,7 @@ import { Card, Button, Input, Typography } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {toast, ToastContainer } from 'react-toastify';
-import { base_url } from "../../constants/constants";
+import { Auth_Url, base_url } from "../../constants/constants";
 import CitiesData   from  '../../components/empolyee/locations.json'
 function UserProfile() {
   const [user, setUser] = useState(null);
@@ -17,7 +17,7 @@ function UserProfile() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${base_url}/auth/user_profile/${userId}/`
+          `${Auth_Url}user_profile/${userId}/`
         );
         setUser(response.data);
         setupdatedUser(response.data);
@@ -62,7 +62,7 @@ function UserProfile() {
   
       const authToken = localStorage.getItem("access_token");
       const response = await axios.put(
-        `${base_url}/auth/user_profile/${userId}/`,  
+        `${Auth_Url}user_profile/${userId}/`,  
         formData,
         {
           headers: {

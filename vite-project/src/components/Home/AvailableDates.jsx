@@ -4,7 +4,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { jwtDecode } from 'jwt-decode';
 import { Button } from '@material-tailwind/react';
-import {ToastContainer,toast} from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { EmpUrl, base_url } from '../../constants/constants';
 import moment from 'moment-timezone';
@@ -24,14 +24,16 @@ function AvailableDates(props) {
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
-        const response = await axios.get(`${EmpUrl}/employee/${empId}/book/`);
+        const response = await axios.get(`${EmpUrl}employee/${empId}/book/`);
+        console.log(response.data, 'userside booking');
         const bookedDatesArray = response.data.map((dateInfo) =>
           moment(dateInfo.booking_date).tz('Asia/Kolkata').toDate()
         );
         setBookedDates(bookedDatesArray);
 
         // Fetch and set absence dates
-        const absenceResponse = await axios.get(`${EmpUrl}/employee_absences/${empId}/`);
+        const absenceResponse = await axios.get(`${EmpUrl}employee_absences/${empId}/`);
+        console.log(absenceResponse, 'absenceResponse');
         const absenceDatesArray = absenceResponse.data.map((absenceDate) =>
           moment(absenceDate.absence_date).tz('Asia/Kolkata').toDate()
         );
@@ -57,7 +59,7 @@ function AvailableDates(props) {
         absenceDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
     );
 
-    return isBooked || isAbsence || date.getTime() <= new Date().setHours(0, 0, 0, 0) ;
+    return isBooked || isAbsence || date.getTime() <= new Date().setHours(0, 0, 0, 0);
   };
 
 
@@ -69,21 +71,19 @@ function AvailableDates(props) {
     const isAbsence = absences.some((absenceDate) =>
       absenceDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
     );
-
-    return {
-      booked: isBooked,
-      absent: isAbsence,
-    };
+    
+    return isBooked ? 'booked' : isAbsence ? 'absent' : '';
   };
-  
+
   const tileStyle = ({ date, className }) => {
     const classes = className.split(' ');
+
     return {
       ...classes.reduce((styles, cls) => {
         if (cls === 'booked') {
-          styles.border = '2px solid red';
+          styles.backgroundColor = 'red';
         } else if (cls === 'absent') {
-          styles.border = '2px solid blue';
+          styles.backgroundColor = 'blue';
         }
         return styles;
       }, {}),
@@ -107,7 +107,7 @@ function AvailableDates(props) {
       // Check if userId and empId are equal, and no payment is required
       if (userId === empId) {
         // Mark absence directly without going to the payment process
-        await axios.post(`${EmpUrl}/employee_absence/`, {
+        await axios.post(`${EmpUrl}employee_absence/`, {
           user: userId,
           employee: empId,
           absence_date: formattedDate,
@@ -125,7 +125,7 @@ function AvailableDates(props) {
         mode: 'payment',
         date: formattedDate,
       };
-      const response = await axios.post(`${EmpUrl}/booking/payment/`, data);
+      const response = await axios.post(`${EmpUrl}booking/payment/`, data);
       window.location.href = response.data.message.url;
 
       return response.data;
@@ -142,9 +142,8 @@ function AvailableDates(props) {
         value={selectedDate}
         onChange={handleDateChange}
         tileDisabled={tileDisabled}
-        tileClassName={tileClassName} // Add the tileClassName prop
-        tileStyle={tileStyle} // Add the tileStyle prop
-
+        tileClassName={tileClassName}
+        tileStyle={tileStyle}
       />
 
       <p>

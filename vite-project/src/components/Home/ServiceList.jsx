@@ -9,7 +9,6 @@ const ServiceList = () => {
 
 
   useEffect(() => {
-    // Fetch category options when the component mounts
     axios.get(ServiceCatergoryURL)
       .then(response => {
         setCategoryOptions(response.data);
