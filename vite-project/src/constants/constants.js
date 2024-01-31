@@ -21,7 +21,7 @@ export const BookingListUrl = import.meta.env.VITE_BOOKING_LIST
 export const BookingUserSide = import.meta.env.VITE_BOOKING_LIST_USER
 export const BookingEmployeeSide = import.meta.env.VITE_BOOKING_LIST_EMPLOYEE
 export const BookingStatusUpdate = import.meta.env.VITE_BOOKING_STATUS_UPDATE
-
+export const AdminDashboardUrl = import.meta.env.VITE_ADMIN_DASHBOARD
 
 export const forgotPasswordUrl = import.meta.env.VITE_FORGOT_PASSWORD
 export const ResetPasswordUrl = import.meta.env.VITE_RESET_PASSWORD

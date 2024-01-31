@@ -11,6 +11,7 @@ import { Previos_Chat, WebSocket, UserDetailsURL } from '../../constants/constan
 import { jwtDecode } from 'jwt-decode';
 import blankImage from '../../assets/blankprofile.png'
 import { useLocation } from 'react-router-dom';
+import { timeAgo } from '../../Helpers/TimeManage';
 
 function ChatUser() {
     const token = localStorage.getItem('token')
@@ -24,6 +25,8 @@ function ChatUser() {
     const [messages, setMessages] = useState([]);
     const [ChatList, setChatList] = useState([])
     const [recipientDetails, setrecipientDetails] = useState([])
+    const [checkUser, setCheckUser] = useState('')
+
 
 
 
@@ -53,6 +56,7 @@ function ChatUser() {
                     {
                         message: dataFromServer.message,
                         sender_email: dataFromServer.senderUsername,
+                        
                     },
                 ]);
             }
@@ -83,9 +87,17 @@ function ChatUser() {
         if (chatFound) {
             setrecipientDetails(chatFound)
         }
-        console.log(chatFound, '================================>>>');
     }
     useEffect(() => {
+        if (decode) {
+            if (decode.user_type === 'employee') {
+                setCheckUser('user')    
+            }
+            else if(decode.user_type === 'user')
+            {
+                setCheckUser('employee')  
+            }
+        }
         axios.get(UserDetailsURL).then((response) => {
             setChatList(response.data)
             // if (userdata) {
@@ -107,6 +119,7 @@ function ChatUser() {
 
     return (
         <div>
+                <h1 className='flex text-center justify-center'>Chat</h1>
             <div className='flex'>
                 <Card className=' border-[1px]  ml-5 mt-2  '>
 
@@ -116,7 +129,7 @@ function ChatUser() {
                                 (ChatList.map((ListChat, index) => (
                                     (decode.email != ListChat.email ?
                                         <div >
-                                            <ListItem key={index} className='grid grid-cols-5' >
+                                           {(ListChat.user_type === checkUser? <ListItem key={index} className='grid grid-cols-5' >
                                                 <ListItemPrefix className='col-span-1'>
                                                     {ListChat.profile_photo ? (
                                                         <Avatar variant="circular" alt="candice" src={ListChat.profile_photo} />
@@ -136,7 +149,7 @@ function ChatUser() {
                                                 </div>
                                              
 
-                                            </ListItem>
+                                            </ListItem>:'')}
                                         </div> : null)
                                 ))))}
                         </List>
@@ -162,8 +175,10 @@ function ChatUser() {
                                 <div key={message.id} className={message.sender_email === decode.email ? 'mt-2 mr-auto' : 'mt-2 ml-auto ' }>
                                     <div className={`font-prompt-normal text-lg max-w-32 ${message.sender_email === decode.email ? 'text-white bg-[#324674df]  max-w-96 mr-4 ' : 'text-black bg-[#d4d2d2] max-w-96 ml-4 '} rounded-md shadow-black w-fit`} style={{ fontWeight: "bold", overflow: 'hidden', wordWrap: 'break-word', whiteSpace: 'pre-wrap', paddingLeft: '8px', paddingRight: '8px', paddingBottom: '2px', paddingTop: '2px' }}>
                                         {message.message}
-                                    </div>
-                                    <h1 className={`${message.sender_email === decode.email ? 'text-right mr-4' : 'text-left ml-4'} text-xs`}></h1>
+                                    </div>             
+                                    <h1 className={`${message.sender_email === decode.email ? 'text-right mr-4 float-right ' : 'text-left ml-4 float-left'} text-xs`}>{timeAgo(message.timestamp) == "NaN years ago"
+                        ? "just now"
+                        : timeAgo(message.timestamp)}</h1>
                                 </div>
                             ))}
                         </div>
@@ -174,10 +189,8 @@ function ChatUser() {
                         <input type="text" value={messageText} onChange={(e) => setMessageText(e.target.value)} className='w-[80%] h-12  rounded-md  border-[1px] border-black font-prompt' placeholder='Type a message' style={{ paddingLeft: '20px' }} />
                         <Button onClick={sendMessage} className='  bg-[hsl(0,0%,0%)] '>
                             <FontAwesomeIcon icon={faPaperPlane} className=' text-[#FAFAFA]  h-4 rounded-full hover:text-[#aeaaaa] rotate-45  ' />
-
                         </Button>
                     </div>
-
                 </Card> : '')}
             </div>
         </div>

@@ -25,7 +25,6 @@ function AvailableDates(props) {
     const fetchBookingData = async () => {
       try {
         const response = await axios.get(`${EmpUrl}employee/${empId}/book/`);
-        console.log(response.data, 'userside booking');
         const bookedDatesArray = response.data.map((dateInfo) =>
           moment(dateInfo.booking_date).tz('Asia/Kolkata').toDate()
         );
@@ -33,7 +32,6 @@ function AvailableDates(props) {
 
         // Fetch and set absence dates
         const absenceResponse = await axios.get(`${EmpUrl}employee_absences/${empId}/`);
-        console.log(absenceResponse, 'absenceResponse');
         const absenceDatesArray = absenceResponse.data.map((absenceDate) =>
           moment(absenceDate.absence_date).tz('Asia/Kolkata').toDate()
         );
@@ -51,6 +49,7 @@ function AvailableDates(props) {
   const tileDisabled = ({ date }) => {
     const isBooked = bookedDates.some(
       (bookedDate) =>
+      
         bookedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
     );
 
@@ -59,7 +58,7 @@ function AvailableDates(props) {
         absenceDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
     );
 
-    return isBooked || isAbsence || date.getTime() <= new Date().setHours(0, 0, 0, 0);
+    return isBooked || isAbsence||date.getTime() <= new Date().setHours(0, 0, 0, 0);
   };
 
 
@@ -71,12 +70,11 @@ function AvailableDates(props) {
     const isAbsence = absences.some((absenceDate) =>
       absenceDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
     );
-    
     return isBooked ? 'booked' : isAbsence ? 'absent' : '';
   };
 
-  const tileStyle = ({ date, className }) => {
-    const classes = className.split(' ');
+  const tileStyle = ({ date, tileClassName }) => {
+    const classes = tileClassName.split(' ');
 
     return {
       ...classes.reduce((styles, cls) => {
@@ -91,7 +89,6 @@ function AvailableDates(props) {
   };
 
   const handleDateChange = (date) => {
-    console.log(date, 'genuine date');
     setSelectedDate(date);
   };
 

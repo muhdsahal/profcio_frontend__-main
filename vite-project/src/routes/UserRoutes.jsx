@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Home from "../pages/Home/Home";
 import { Route,Routes } from "react-router-dom";
 import UserProtected from "./ProtectedRoutes/UserProtected";
@@ -15,6 +15,67 @@ import ResetPassword from "../pages/ResetPassword";
 import BookingListPage from "../pages/Home/BookingListPage";
 import ChatPageUser from "../pages/Home/ChatPageUser";
 function UserRoutes(){
+    
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:8000/ws/notifications/");
+
+    socket.onopen = (event) => {
+      console.log("WebSocket connection opened:", event);
+    };
+
+    socket.onmessage = (event) => {
+      console.log("WebSocket message received:", event);
+
+      // Parse the message data if needed
+      const messageData = JSON.parse(event.data);
+      console.log(messageData, "message data");
+
+      // Show a notification
+      showNotification(messageData.message);
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    socket.onclose = (event) => {
+      console.log("WebSocket connection closed:", event);
+    };
+
+    // Function to show a notification
+    const showNotification = (message) => {
+      if ("Notification" in window) {
+        console.log(message, "message---------------------->>>>>");
+        const currentPermission = Notification.permission;
+
+        if (currentPermission === "granted") {
+          console.log(message, "message---------------------->>>>>");
+
+          // Permission already granted, create a notification
+          new Notification("New Message", {
+            body: message,
+          });
+        } else if (currentPermission !== "denied") {
+          // Permission not granted or denied, request it
+          Notification.requestPermission().then((permission) => {
+            console.log(message, "message---------------------->>>>>");
+
+            if (permission === "granted") {
+              // Permission granted, create a notification
+              new Notification("New Message", {
+                body: message,
+              });
+            }
+          });
+        }
+      }
+    };
+
+    // Clean up the WebSocket connection on component unmount
+    return () => {
+      socket.close();
+    };
+  }, []); 
     return(
         <Routes>
             <Route exact element={<PrivateRoute />}>

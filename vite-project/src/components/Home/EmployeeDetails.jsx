@@ -16,7 +16,7 @@ function EmployeeDetails() {
   const [reviewData, setReViewData] = useState([])
   const navigate = useNavigate()
   const { id } = useParams();
-
+    
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
@@ -50,7 +50,6 @@ function EmployeeDetails() {
       try {
         const response = await axios.get(`${EmpUrl}review/${id}`);
         setReViewData(response.data);
-        console.log(response.data, 'reviewdataaaaaaaaaaaaaaa');
       } catch (error) {
         console.error('Error fetching Review data:', error);
       }
@@ -66,6 +65,7 @@ function EmployeeDetails() {
   const HandleChat = (event) => {
     navigate("/chat",{state:{data:event}})
   }
+  
   return (<>
     <div>
       <h1 className='flex text-center justify-center'>EmployeeDetails</h1>
@@ -158,7 +158,7 @@ function EmployeeDetails() {
                 </div>
               </ListItem>
             </div>
-            <Rating ratedColor="amber" value={review.rating} readonly />
+            <Rating ratedColor="amber" value={review.rating} readOnly />
             <div className="flex gap-2 mb-2">
               <p className="font-poppins font-medium">{review.review_text}</p>
             </div>

@@ -24,6 +24,10 @@ export function Sidebar() {
 
   const navigate = useNavigate()
 
+  const toAdminHome = () => {
+    navigate("/admin/adminhome/")
+  }
+
   const handleUserList = () =>{
     navigate("/admin/users/")
   }
@@ -49,8 +53,8 @@ export function Sidebar() {
         </Typography>
       </div>
       <List>
-        <ListItem>
-          <ListItemPrefix>
+        <ListItem onClick={toAdminHome}>
+          <ListItemPrefix >
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
           Dashboard
